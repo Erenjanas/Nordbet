@@ -613,7 +613,7 @@
         .game-history-item.win { background: rgba(16,185,129,0.1); }
         .game-history-item.loss { background: rgba(239,68,68,0.1); }
     </style>
-<base target="_blank">
+<base target="_self">
 <base target="_blank">
 </head>
 <body class="min-h-screen flex flex-col justify-between relative">
@@ -689,10 +689,10 @@
                 <div id="balance" class="balance-counter px-6 py-2.5 rounded-xl text-amber-400 font-bold tracking-wide text-lg">
                     ₺ 124.850
                 </div>
-                <button onclick="redirectToWhatsApp()" class="btn-premium px-6 py-2.5 rounded-xl shadow-lg transition-all transform hover:scale-105 flex items-center gap-2 text-sm">
+                <button onclick="redirectToWhatsApp('deposit')" class="btn-premium px-6 py-2.5 rounded-xl shadow-lg transition-all transform hover:scale-105 flex items-center gap-2 text-sm">
                     <i class="fas fa-wallet"></i> YATIR
                 </button>
-                <button onclick="redirectToWhatsApp()" class="bg-slate-800 hover:bg-slate-700 text-white font-medium px-6 py-2.5 rounded-xl border border-slate-700 transition-all transform hover:scale-105 flex items-center gap-2 text-sm hover:border-slate-500">
+                <button onclick="redirectToWhatsApp('withdraw')" class="bg-slate-800 hover:bg-slate-700 text-white font-medium px-6 py-2.5 rounded-xl border border-slate-700 transition-all transform hover:scale-105 flex items-center gap-2 text-sm hover:border-slate-500">
                     <i class="fas fa-hand-holding-usd"></i> ÇEK
                 </button>
             </div>
@@ -1344,15 +1344,13 @@
                         </div>
                     </div>
                     <iframe id="live-slot-iframe" 
-                        src="https://free-slots.games/book-of-ra-deluxe/" 
+                        src="https://great.com/slots/" 
                         class="live-iframe" 
                         style="width: 100%; height: 650px; border: none; display: block;"
-                        referrerpolicy="no-referrer"
+                        referrerpolicy="no-referrer-when-downgrade"
                         loading="eager"
-                        title="VIP Canlı Slot - Book of Ra Deluxe"
-                        allow="fullscreen; autoplay; clipboard-write; encrypted-media"
-                        scrolling="auto"
-                        frameborder="0"
+                        title="VIP Canlı Slot"
+                        allow="fullscreen"
                         onload="document.getElementById('slot-loading').style.opacity='0'; setTimeout(()=>{document.getElementById('slot-loading').style.display='none'}, 500)">
                     </iframe>
                 </div>
@@ -1694,8 +1692,21 @@
         }
 
         // === REDIRECT ===
-        function redirectToWhatsApp() {
-            window.open('https://wa.me/', '_blank');
+        function redirectToWhatsApp(type) {
+            const phone = '+6395697826';
+            let message = '';
+
+            if (type === 'deposit') {
+                message = 'NORDbet için bakiye eklemek istiyorum';
+            } else if (type === 'withdraw') {
+                const balance = document.getElementById('balance').textContent.trim();
+                message = 'Anlık kasam ' + balance + ' ve bakiyemi çekmek istiyorum';
+            } else {
+                message = 'NORDbet ile ilgili destek istiyorum';
+            }
+
+            const url = 'https://wa.me/' + phone.replace(/\D/g, '') + '?text=' + encodeURIComponent(message);
+            window.open(url, '_blank');
         }
 
         // === BALANCE MANAGEMENT ===
