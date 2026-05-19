@@ -72,9 +72,11 @@
         }
         
         #mega-win-screen {
-            position: fixed; inset: 0; background: rgba(2, 6, 23, 0.94);
+            position: fixed;
+            inset: 0; background: rgba(2, 6, 23, 0.94);
             z-index: 9999; display: flex; flex-direction: column; align-items: center;
-            justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+            justify-content: center; opacity: 0;
+            pointer-events: none; transition: opacity 0.3s ease;
         }
         #mega-win-screen.active { opacity: 1; pointer-events: auto; }
         .mega-win-text {
@@ -89,7 +91,8 @@
         }
 
         .confetti {
-            position: fixed; width: 8px; height: 8px;
+            position: fixed;
+            width: 8px; height: 8px;
             animation: confettiFall 2.2s linear infinite; pointer-events: none; z-index: 10000;
         }
         @keyframes confettiFall {
@@ -97,9 +100,84 @@
             100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
         }
 
-        /* RULET ÇARK EFEKTİ */
-        .roulette-wheel-spin { animation: wheelSpin 2s cubic-bezier(0.1, 0.8, 0.1, 1) forwards; }
-        @keyframes wheelSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(1440deg); } }
+        /* YENİ GERÇEKÇİ RULET ANIMASYONU */
+        .wheel-container {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: #1e293b;
+            border: 8px solid #d4af37;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.6);
+            overflow: hidden;
+        }
+        .real-wheel {
+            width: 100%;
+            height: 100%;
+            background: conic-gradient(
+                #15803d 0deg 9.7deg, #b91c1c 9.7deg 19.4deg, #0f172a 19.4deg 29.1deg, #b91c1c 29.1deg 38.8deg, #0f172a 38.8deg 48.5deg,
+                #b91c1c 48.5deg 58.2deg, #0f172a 58.2deg 67.9deg, #b91c1c 67.9deg 77.6deg, #0f172a 77.6deg 87.3deg, #b91c1c 87.3deg 97deg,
+                #0f172a 97deg 106.7deg, #b91c1c 106.7deg 116.4deg, #0f172a 116.4deg 126.1deg, #b91c1c 126.1deg 135.8deg, #0f172a 135.8deg 145.5deg,
+                #b91c1c 145.5deg 155.2deg, #0f172a 155.2deg 164.9deg, #b91c1c 164.9deg 174.6deg, #0f172a 174.6deg 184.3deg, #b91c1c 184.3deg 194deg,
+                #0f172a 194deg 203.7deg, #b91c1c 203.7deg 213.4deg, #0f172a 213.4deg 223.1deg, #b91c1c 223.1deg 232.8deg, #0f172a 232.8deg 242.5deg,
+                #b91c1c 242.5deg 252.2deg, #0f172a 252.2deg 261.9deg, #b91c1c 261.9deg 271.6deg, #0f172a 271.6deg 281.3deg, #b91c1c 281.3deg 291deg,
+                #0f172a 291deg 300.7deg, #b91c1c 300.7deg 310.4deg, #0f172a 310.4deg 320.1deg, #b91c1c 320.1deg 329.8deg, #0f172a 329.8deg 339.5deg,
+                #b91c1c 339.5deg 349.2deg, #0f172a 349.2deg 360deg
+            );
+            border-radius: 50%;
+            transition: transform 4s cubic-bezier(0.1, 0.8, 0.1, 1);
+        }
+        .roulette-ball {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: #ffffff;
+            border-radius: 50%;
+            top: 25px;
+            left: 103px;
+            box-shadow: 0 0 8px #fff;
+            transform-origin: 7px 85px;
+            transition: transform 4s cubic-bezier(0.1, 0.8, 0.3, 1);
+        }
+
+        /* ZEUS DEDE ANIMASYONU */
+        .zeus-character {
+            font-size: 80px;
+            filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.6));
+            animation: zeusFloat 2s ease-in-out infinite alternate;
+        }
+        @keyframes zeusFloat {
+            0% { transform: translateY(0px) rotate(0deg); }
+            100% { transform: translateY(-12px) rotate(2deg); }
+        }
+        .zeus-baston {
+            display: inline-block;
+            transform-origin: bottom center;
+            animation: bastonVur 1s ease-in-out infinite alternate;
+        }
+        @keyframes bastonVur {
+            0% { transform: rotate(-5deg); }
+            100% { transform: rotate(10deg); filter: brightness(1.4); }
+        }
+
+        /* LIVE KRUPİYE ALANI */
+        .krupiye-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid #3b82f6;
+            background: linear-gradient(to bottom, #1e3a8a, #0f172a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+            animation: dealerBreathe 3s ease-in-out infinite alternate;
+        }
+        @keyframes dealerBreathe {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
@@ -146,14 +224,14 @@
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
                     <div id="bonanza-board-wrapper" class="lg:col-span-2 bg-gradient-to-br from-pink-900/30 via-purple-950/30 to-slate-950 p-6 rounded-2xl border border-pink-500/20 text-center relative overflow-hidden">
                         <div class="flex justify-between items-center mb-4 px-2">
-                            <span class="text-xs uppercase tracking-wider text-pink-400 font-bold"><i class="fas fa-cookie-bite mr-1"></i> Sweet Bonanza Board</span>
+                            <span id="bonanza-title" class="text-xs uppercase tracking-wider text-pink-400 font-bold"><i class="fas fa-cookie-bite mr-1"></i> Sweet Bonanza Board</span>
                             <div id="bonanza-multiplier-display" class="hidden bg-pink-600 text-white text-xs font-black px-3 py-1 rounded-full animate-bounce"></div>
                         </div>
                         <div class="grid grid-cols-4 gap-3 max-w-md mx-auto bg-black/40 p-4 rounded-xl border border-pink-500/10" id="bonanza-grid"></div>
                     </div>
                     <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800">
                         <h3 class="text-lg font-bold text-pink-400 mb-1"><i class="fas fa-candy-cane"></i> Sweet Bonanza VIP</h3>
-                        <p class="text-xs text-slate-400 mb-4">En az 4 adet eşleşmede patlar ve çarpan bombası indirir!</p>
+                        <p class="text-xs text-slate-400 mb-4">3 Adet Bonus (`🍭`) Sembolü Yakala, 10 Freespin Kazan ve Devasa Çarpanları Topla!</p>
                         <div class="mb-4">
                             <label class="text-xs text-slate-500 block mb-1">Bahis Tutarı (₺)</label>
                             <input id="bonanzaBetAmount" type="number" value="1000" class="w-full bg-slate-900 p-3 rounded-xl border border-slate-800 text-pink-400 font-bold focus:outline-none">
@@ -168,16 +246,22 @@
 
             <div id="game-gatesolympus" class="game-container hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
-                    <div id="olympus-board-wrapper" class="lg:col-span-2 bg-gradient-to-br from-amber-950/20 via-slate-900 to-purple-950/20 p-6 rounded-2xl border border-amber-500/20 text-center relative overflow-hidden">
-                        <div class="flex justify-between items-center mb-4 px-2">
-                            <span class="text-xs uppercase tracking-wider text-amber-400 font-bold"><i class="fas fa-bolt mr-1"></i> Gates of Olympus</span>
-                            <div id="olympus-lightning-text" class="hidden bg-amber-500 text-slate-950 text-xs font-black px-3 py-1 rounded-full animate-pulse">⚡ ZEUS ŞİMŞEĞİ ÇAKTI!</div>
+                    <div id="olympus-board-wrapper" class="lg:col-span-2 bg-gradient-to-br from-amber-950/20 via-slate-900 to-purple-950/20 p-6 rounded-2xl border border-amber-500/20 text-center relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div class="w-full">
+                            <div class="flex justify-between items-center mb-4 px-2">
+                                <span id="olympus-title" class="text-xs uppercase tracking-wider text-amber-400 font-bold"><i class="fas fa-bolt mr-1"></i> Gates of Olympus</span>
+                                <div id="olympus-lightning-text" class="hidden bg-amber-500 text-slate-950 text-xs font-black px-3 py-1 rounded-full animate-pulse">⚡ ZEUS ŞİMŞEĞİ ÇAKTI!</div>
+                            </div>
+                            <div class="grid grid-cols-4 gap-3 max-w-sm mx-auto bg-black/50 p-4 rounded-xl border border-amber-500/10" id="olympus-grid"></div>
                         </div>
-                        <div class="grid grid-cols-4 gap-3 max-w-md mx-auto bg-black/50 p-4 rounded-xl border border-amber-500/10" id="olympus-grid"></div>
+                        <div class="flex flex-col items-center justify-center p-2 min-w-[120px]">
+                            <div class="zeus-character">🧙‍♂️<span class="zeus-baston">🪄</span></div>
+                            <div class="text-[10px] text-amber-400 font-bold tracking-widest uppercase mt-2 bg-slate-950 px-2 py-1 rounded border border-amber-500/30 shadow-md">OLYMPUS ZEUS</div>
+                        </div>
                     </div>
                     <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800">
                         <h3 class="text-lg font-bold text-amber-400 mb-1">⚡ Gates of Olympus VIP</h3>
-                        <p class="text-xs text-slate-400 mb-4">Dede şimşek çaktırdığında global katlayıcı küreler iner (2x - 250x).</p>
+                        <p class="text-xs text-slate-400 mb-4">3 Adet Dede Emojisi (`⚡`) yan yana gelince tam **10 FREESPIN** tetiklenir! Global çarpanlar (2x - 250x) kasayı uçurur.</p>
                         <div class="mb-4">
                             <label class="text-xs text-slate-500 block mb-1">Bahis Tutarı (₺)</label>
                             <input id="olympusBetAmount" type="number" value="1000" class="w-full bg-slate-900 p-3 rounded-xl border border-slate-800 text-amber-400 font-bold focus:outline-none">
@@ -192,16 +276,16 @@
 
             <div id="game-bigbass" class="game-container hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
-                    <div class="lg:col-span-2 bg-gradient-to-br from-emerald-950/40 via-slate-900 to-cyan-950/30 p-6 rounded-2xl border border-emerald-500/20 text-center">
+                    <div id="bigbass-board-wrapper" class="lg:col-span-2 bg-gradient-to-br from-emerald-950/40 via-slate-900 to-cyan-950/30 p-6 rounded-2xl border border-emerald-500/20 text-center">
                         <div class="flex justify-between items-center mb-4 px-2">
-                            <span class="text-xs uppercase tracking-wider text-emerald-400 font-bold"><i class="fas fa-water mr-1"></i> Big Bass Netting</span>
+                            <span id="bigbass-title" class="text-xs uppercase tracking-wider text-emerald-400 font-bold"><i class="fas fa-water mr-1"></i> Big Bass Netting</span>
                             <div id="bigbass-catch-display" class="hidden bg-emerald-600 text-white text-xs font-black px-3 py-1 rounded-full animate-bounce">🎣 BALIKÇI ÖDÜLLERİ TOPLADI!</div>
                         </div>
                         <div class="grid grid-cols-4 gap-3 max-w-md mx-auto bg-black/40 p-4 rounded-xl border border-emerald-500/10" id="bigbass-grid"></div>
                     </div>
                     <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800">
                         <h3 class="text-lg font-bold text-emerald-400 mb-1"><i class="fas fa-fish"></i> Big Bass Bonanza VIP</h3>
-                        <p class="text-xs text-slate-400 mb-4">Balıkçı sembolü ekrana indiği an sudaki tüm balıkların nakit ödüllerini çeker!</p>
+                        <p class="text-xs text-slate-400 mb-4">3 Adet Yeşil Balık (`🎣`) bulunca **10 Freespin** başlar. Balıkçı sembolü nakit ödülleri katlayarak çeker!</p>
                         <div class="mb-4">
                             <label class="text-xs text-slate-500 block mb-1">Bahis Tutarı (₺)</label>
                             <input id="bigbassBetAmount" type="number" value="1000" class="w-full bg-slate-900 p-3 rounded-xl border border-slate-800 text-emerald-400 font-bold focus:outline-none">
@@ -216,16 +300,16 @@
 
             <div id="game-sugarrush" class="game-container hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
-                    <div class="lg:col-span-2 bg-gradient-to-br from-purple-900/30 via-fuchsia-950/30 to-slate-950 p-6 rounded-2xl border border-purple-500/20 text-center">
+                    <div id="sugarrush-board-wrapper" class="lg:col-span-2 bg-gradient-to-br from-purple-900/30 via-fuchsia-950/30 to-slate-950 p-6 rounded-2xl border border-purple-500/20 text-center">
                         <div class="flex justify-between items-center mb-4 px-2">
-                            <span class="text-xs uppercase tracking-wider text-purple-400 font-bold"><i class="fas fa-ice-cream mr-1"></i> Sugar Rush Spots</span>
+                            <span id="sugarrush-title" class="text-xs uppercase tracking-wider text-purple-400 font-bold"><i class="fas fa-ice-cream mr-1"></i> Sugar Rush Spots</span>
                             <div id="sugarrush-spot-display" class="hidden bg-purple-600 text-white text-xs font-black px-3 py-1 rounded-full animate-pulse">🍇 X2 MULTIPLIER SPOT!</div>
                         </div>
                         <div class="grid grid-cols-4 gap-3 max-w-md mx-auto bg-black/40 p-4 rounded-xl border border-purple-500/10" id="sugarrush-grid"></div>
                     </div>
                     <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800">
                         <h3 class="text-lg font-bold text-purple-400 mb-1">🧸 Sugar Rush 1000</h3>
-                        <p class="text-xs text-slate-400 mb-4">Jelibonlar patladıkça arkalarında katlanan çarpan izleri bırakır!</p>
+                        <p class="text-xs text-slate-400 mb-4">3 Adet Ayıcık (`🧸`) ile **10 Freespin** tetiklenir. Jelibonlar patladıkça çarpan izleri kalıcı olur!</p>
                         <div class="mb-4">
                             <label class="text-xs text-slate-500 block mb-1">Bahis Tutarı (₺)</label>
                             <input id="sugarrushBetAmount" type="number" value="1000" class="w-full bg-slate-900 p-3 rounded-xl border border-slate-800 text-purple-400 font-bold focus:outline-none">
@@ -240,22 +324,26 @@
 
             <div id="game-roulette" class="game-container hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
-                    <div class="lg:col-span-2 bg-slate-950 p-6 rounded-2xl border border-red-500/20 text-center relative overflow-hidden">
-                        <div class="w-48 h-48 mx-auto rounded-full border-4 border-amber-500 flex items-center justify-center bg-radial from-slate-900 to-black relative shadow-2xl" id="roulette-wheel-container">
-                            <div class="absolute text-center" id="roulette-status-text">
-                                <i class="fas fa-circle-dot text-4xl text-red-500 animate-pulse"></i>
-                                <div class="text-xs font-bold mt-1 text-slate-400">BAHİS BEKLENİYOR</div>
-                            </div>
+                    <div class="lg:col-span-2 bg-slate-950 p-6 rounded-2xl border border-red-500/20 text-center relative overflow-hidden flex flex-col items-center">
+                        <div class="wheel-container mb-4">
+                            <div class="real-wheel" id="mainRouletteWheel"></div>
+                            <div class="roulette-ball" id="mainRouletteBall"></div>
                         </div>
-                        <div class="flex justify-center gap-4 mt-6">
-                            <div class="bg-red-600 text-white px-4 py-2 rounded-xl text-xs font-bold">Kırmızı (2x)</div>
-                            <div class="bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold">Siyah (2x)</div>
-                            <div class="bg-emerald-600 text-white px-4 py-2 rounded-xl text-xs font-bold">Sıfır (35x)</div>
+                        
+                        <div id="roulette-status-text" class="text-center bg-slate-900/90 px-4 py-2 rounded-xl border border-slate-800">
+                            <i class="fas fa-circle-dot text-xl text-red-500 animate-pulse"></i>
+                            <div class="text-xs font-bold mt-1 text-slate-300" id="rouletteResultDisplay">BAHİS BEKLENİYOR</div>
+                        </div>
+                        
+                        <div class="flex justify-center gap-3 mt-4 w-full max-w-xs">
+                            <div class="bg-red-600 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow flex-1">Kırmızı (2x)</div>
+                            <div class="bg-slate-800 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow flex-1">Siyah (2x)</div>
+                            <div class="bg-emerald-600 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow flex-1">Sıfır (35x)</div>
                         </div>
                     </div>
                     <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800">
                         <h3 class="text-lg font-bold text-red-500 mb-1">🎰 Canlı Avrupa Ruleti VIP</h3>
-                        <p class="text-xs text-slate-400 mb-4">Rengini seç, bahsini koy ve büyük çarkı döndür.</p>
+                        <p class="text-xs text-slate-400 mb-4">Gerçek fiziksel kurallı çarkı döndür, kazanan sayıya top tam olarak otursun.</p>
                         <div class="mb-3">
                             <label class="text-xs text-slate-500 block mb-1">Bahis Türü Seç</label>
                             <select id="rouletteType" class="w-full bg-slate-900 p-3 rounded-xl border border-slate-800 text-white text-xs font-medium focus:outline-none">
@@ -275,19 +363,25 @@
 
             <div id="game-blackjack" class="game-container hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
-                    <div class="lg:col-span-2 bg-gradient-to-br from-blue-950/20 to-slate-950 p-6 rounded-2xl border border-blue-500/20 min-h-[280px] flex flex-col justify-between">
-                        <div>
-                            <div class="text-xs text-slate-400 font-semibold mb-2 flex items-center gap-2"><i class="fas fa-user-tie text-blue-400"></i> KRUPİYE ELİ: <span id="dealer-score" class="text-white font-bold">0</span></div>
-                            <div id="dealer-cards" class="flex gap-2 min-h-[50px]"></div>
+                    <div class="lg:col-span-2 bg-gradient-to-br from-blue-950/20 to-slate-950 p-6 rounded-2xl border border-blue-500/20 min-h-[300px] flex flex-col justify-between relative overflow-hidden">
+                        <div class="flex items-center gap-4 border-b border-blue-900/40 pb-3 mb-2">
+                            <div class="krupiye-avatar">👩‍💼</div>
+                            <div>
+                                <div class="text-[10px] text-blue-400 font-bold uppercase tracking-wider">VIP LIVE DEALER</div>
+                                <div class="text-xs text-slate-400 font-semibold flex items-center gap-2">KRUPİYE ELİ: <span id="dealer-score" class="text-white font-bold">0</span></div>
+                            </div>
                         </div>
-                        <div class="mt-6">
+                        
+                        <div id="dealer-cards" class="flex gap-2 min-h-[55px] px-2 mb-4"></div>
+                        
+                        <div class="mt-4 border-t border-slate-800/60 pt-4">
                             <div class="text-xs text-slate-400 font-semibold mb-2 flex items-center gap-2"><i class="fas fa-user text-amber-400"></i> SENİN ELİN: <span id="player-score" class="text-white font-bold">0</span></div>
-                            <div id="player-cards" class="flex gap-2 min-h-[50px]"></div>
+                            <div id="player-cards" class="flex gap-2 min-h-[55px] px-2"></div>
                         </div>
                     </div>
                     <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800">
                         <h3 class="text-lg font-bold text-blue-500 mb-1">🃏 Blackjack 21 VIP</h3>
-                        <p class="text-xs text-slate-400 mb-4">Krupiyeyi geç ama 21'i aşma!</p>
+                        <p class="text-xs text-slate-400 mb-4">Karşıdaki canlı krupiyeyi alt et ama 21'i sakın aşma!</p>
                         <div id="bj-bet-phase">
                             <div class="mb-4">
                                 <label class="text-xs text-slate-500 block mb-1">Bahis Tutarı (₺)</label>
@@ -349,11 +443,15 @@
         let isAutoSpinning = false;
         let activeAutoGame = null;
 
-        // Semboller
-        const bonanzaSymbols = ['🍬', '🍎', '🍇', '🍌', '🍉'];
-        const olympusSymbols = ['🔱', '👑', '💎', '💍', '🏺'];
-        const bigBassSymbols = ['🎣', '🐟', '🐟', '⛵', '📦'];
-        const sugarRushSymbols = ['🧸', '🌟', '🍬', '🍩', '🍫'];
+        // FREESPIN GAME STATES
+        let freeSpinsLeft = { bonanza: 0, olympus: 0, bigbass: 0, sugarrush: 0 };
+        let currentFreeSpinBet = { bonanza: 0, olympus: 0, bigbass: 0, sugarrush: 0 };
+
+        // Sembol Havuzları
+        const bonanzaSymbols = ['🍬', '🍎', '🍇', '🍌', '🍉', '🍭']; // 🍭 = Bonus scatter
+        const olympusSymbols = ['🔱', '👑', '💎', '💍', '🏺', '⚡']; // ⚡ = Zeus dede scatter
+        const bigBassSymbols = ['⛵', '📦', '🐟', '🍤', '🐡', '🎣']; // 🎣 = Balıkçı scatter
+        const sugarRushSymbols = ['🌟', '🍬', '🍩', '🍫', '🍭', '🧸']; // 🧸 = Ayıcık scatter
 
         // Blackjack Oyun Belleği
         let bjBet = 0;
@@ -361,6 +459,12 @@
         let dealerHand = [];
         const suits = ['♠', '♥', '♦', '♣'];
         const values = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+
+        window.onload = function() {
+            initAllSlotGrids();
+            setInterval(addLiveWinRow, 3000);
+            for(let i=0; i<4; i++) addLiveWinRow();
+        };
 
         function showToast(message) {
             const toast = document.getElementById('notification');
@@ -374,7 +478,7 @@
         }
 
         function triggerMegaWin(amount) {
-            const isRunningAuto = isAutoSpinning; 
+            const isRunningAuto = isAutoSpinning;
             if(isAutoSpinning) stopAutoSpinGlobal();
 
             document.getElementById('mega-win-amount').textContent = `+₺${amount.toLocaleString('tr-TR')}`;
@@ -398,7 +502,7 @@
             document.querySelectorAll('.game-container').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             document.getElementById(`game-${game}`).classList.remove('hidden');
-            if(event) event.currentTarget.classList.add('active');
+            if(window.event) window.event.currentTarget.classList.add('active');
         }
 
         function triggerConfetti() {
@@ -426,6 +530,197 @@
             });
         }
 
+        // UNIVERSAL SLOT CONTROLLER (FREESPIN DESTEKLİ)
+        function handleSlotLogic(gameName, prefix, symbols, scatterSymbol, titleId, wrapperId, multDisplayId, btnId, betInputId) {
+            if(isSpinning) return;
+
+            let isFreeSpin = freeSpinsLeft[gameName] > 0;
+            let bet = 0;
+
+            if (isFreeSpin) {
+                bet = currentFreeSpinBet[gameName];
+                freeSpinsLeft[gameName]--;
+                document.getElementById(titleId).innerHTML = `<span class="text-red-400 animate-pulse">🎰 FREESPIN MODU: ${freeSpinsLeft[gameName]} KALDI</span>`;
+            } else {
+                bet = parseInt(document.getElementById(betInputId).value);
+                if(isNaN(bet) || bet > balance || bet <= 0) {
+                    stopAutoSpinGlobal();
+                    return showToast("Bakiye yetersiz veya geçersiz bahis.");
+                }
+                balance -= bet;
+                updateBalance();
+            }
+
+            isSpinning = true;
+            document.getElementById(btnId).disabled = true;
+            document.getElementById(multDisplayId).classList.add('hidden');
+
+            let cycles = 0;
+            const interval = setInterval(() => {
+                for(let i=0; i<12; i++) {
+                    let cell = document.getElementById(`${prefix}-cell-${i}`);
+                    cell.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                    cell.classList.add('slot-blur');
+                }
+                if(++cycles > 10) {
+                    clearInterval(interval);
+                    isSpinning = false;
+                    document.getElementById(btnId).disabled = false;
+
+                    let counts = {};
+                    let scatterCount = 0;
+
+                    for(let i=0; i<12; i++) {
+                        let cell = document.getElementById(`${prefix}-cell-${i}`);
+                        cell.classList.remove('slot-blur');
+                        counts[cell.textContent] = (counts[cell.textContent] || 0) + 1;
+                        if(cell.textContent === scatterSymbol) scatterCount++;
+                    }
+
+                    // FREESPIN TETİKLENME KONTROLÜ (3 Tane Scatter Gelirse)
+                    if (scatterCount >= 3 && !isFreeSpin) {
+                        freeSpinsLeft[gameName] = 10;
+                        currentFreeSpinBet[gameName] = bet;
+                        showToast(`TEBRİKLER! 10 FREESPIN KAZANDINIZ!`);
+                        document.getElementById(wrapperId).classList.add('lightning-flash');
+                        setTimeout(() => document.getElementById(wrapperId).classList.remove('lightning-flash'), 600);
+                    }
+
+                    // Kazanç Hesaplama Altyapısı
+                    let matchedSymbol = null;
+                    let maxCount = 0;
+                    
+                    for(let sym in counts) {
+                        if(counts[sym] >= 4 && counts[sym] > maxCount && sym !== scatterSymbol) {
+                            matchedSymbol = sym;
+                            maxCount = counts[sym];
+                        }
+                    }
+
+                    if(matchedSymbol) {
+                        document.getElementById(wrapperId).classList.add('shockwave');
+                        setTimeout(() => document.getElementById(wrapperId).classList.remove('shockwave'), 500);
+
+                        for(let i=0; i<12; i++) {
+                            let cell = document.getElementById(`${prefix}-cell-${i}`);
+                            if(cell.textContent === matchedSymbol) cell.classList.add('matched');
+                        }
+
+                        // Katlayıcı Algoritması
+                        let randomMultiplier = isFreeSpin ? [5, 10, 25, 100, 250][Math.floor(Math.random()*5)] : [2, 4, 8, 12][Math.floor(Math.random()*4)];
+                        document.getElementById(multDisplayId).innerHTML = `⚡ ÇARPAN: x${randomMultiplier}`;
+                        document.getElementById(multDisplayId).classList.remove('hidden');
+
+                        setTimeout(() => {
+                            let totalWin = bet * (maxCount * 0.5) * randomMultiplier;
+                            balance += totalWin;
+                            updateBalance();
+
+                            if(totalWin >= bet * 5) triggerMegaWin(totalWin);
+                            else {
+                                triggerConfetti();
+                                showToast(`Kazanç Ödemesi: +₺${totalWin.toLocaleString('tr-TR')}`);
+                            }
+                            for(let i=0; i<12; i++) document.getElementById(`${prefix}-cell-${i}`).classList.remove('matched');
+                        }, 1000);
+                    } else {
+                        if(isFreeSpin && freeSpinsLeft[gameName] === 0) {
+                            document.getElementById(titleId).innerHTML = `Board Başlığı`;
+                            showToast("Freespin Turu Sona Erdi.");
+                        }
+                    }
+                }
+            }, 75);
+        }
+
+        function playSweetBonanza() {
+            handleSlotLogic('bonanza', 'b', bonanzaSymbols, '🍭', 'bonanza-title', 'bonanza-board-wrapper', 'bonanza-multiplier-display', 'bonanzaBtn', 'bonanzaBetAmount');
+        }
+
+        function playGatesOfOlympus() {
+            handleSlotLogic('olympus', 'o', olympusSymbols, '⚡', 'olympus-title', 'olympus-board-wrapper', 'olympus-lightning-text', 'olympusBtn', 'olympusBetAmount');
+        }
+
+        function playBigBass() {
+            handleSlotLogic('bigbass', 'f', bigBassSymbols, '🎣', 'bigbass-title', 'bigbass-board-wrapper', 'bigbass-catch-display', 'bigbassBtn', 'bigbassBetAmount');
+        }
+
+        function playSugarRush() {
+            handleSlotLogic('sugarrush', 's', sugarRushSymbols, '🧸', 'sugarrush-title', 'sugarrush-board-wrapper', 'sugarrush-spot-display', 'sugarrushBtn', 'sugarrushBetAmount');
+        }
+
+        // GERÇEKÇİ RULET SİMÜLASYONU
+        function playRoulette() {
+            if(isSpinning) return;
+            const bet = parseInt(document.getElementById('rouletteBetAmount').value);
+            const type = document.getElementById('rouletteType').value;
+
+            if(isNaN(bet) || bet > balance || bet <= 0) return showToast("Bakiye yetersiz.");
+
+            balance -= bet;
+            updateBalance();
+            isSpinning = true;
+            document.getElementById('rouletteBtn').disabled = true;
+
+            document.getElementById('rouletteResultDisplay').textContent = "ÇARK DÖNÜYOR...";
+
+            const wheel = document.getElementById('mainRouletteWheel');
+            const ball = document.getElementById('mainRouletteBall');
+
+            // Rastgele Dönüş Dereceleri Hesaplama
+            let randomWheelDeg = Math.floor(Math.random() * 360) + 1440; // En az 4 tur döner
+            let randomBallDeg = -(Math.floor(Math.random() * 360) + 2160); // Top ters yöne döner
+
+            wheel.style.transform = `rotate(${randomWheelDeg}deg)`;
+            ball.style.transform = `rotate(${randomBallDeg}deg)`;
+
+            setTimeout(() => {
+                isSpinning = false;
+                document.getElementById('rouletteBtn').disabled = false;
+
+                // Kazanan Sayıyı Belirleme Havuzu
+                const rouletteNumbers = [
+                    {n: 0, c: 'zero'}, {n: 32, c: 'red'}, {n: 15, c: 'black'}, {n: 19, c: 'red'}, {n: 4, c: 'black'},
+                    {n: 21, c: 'red'}, {n: 2, c: 'black'}, {n: 25, c: 'red'}, {n: 17, c: 'black'}, {n: 34, c: 'red'},
+                    {n: 6, c: 'black'}, {n: 27, c: 'red'}, {n: 13, c: 'black'}, {n: 36, c: 'red'}, {n: 11, c: 'black'},
+                    {n: 30, c: 'red'}, {n: 8, c: 'black'}, {n: 23, c: 'red'}, {n: 10, c: 'black'}, {n: 5, c: 'red'},
+                    {n: 24, c: 'black'}, {n: 16, c: 'red'}, {n: 33, c: 'black'}, {n: 1, c: 'red'}, {n: 20, c: 'black'},
+                    {n: 14, c: 'red'}, {n: 31, c: 'black'}, {n: 9, c: 'red'}, {n: 22, c: 'black'}, {n: 18, c: 'red'},
+                    {n: 29, c: 'black'}, {n: 7, c: 'red'}, {n: 28, c: 'black'}, {n: 12, c: 'red'}, {n: 35, c: 'black'},
+                    {n: 3, c: 'red'}, {n: 26, c: 'black'}
+                ];
+
+                let finalResult = rouletteNumbers[Math.floor(Math.random() * rouletteNumbers.length)];
+                let colorText = finalResult.c === 'red' ? 'KIRMIZI' : finalResult.c === 'black' ? 'SİYAH' : 'YEŞİL (0)';
+                
+                document.getElementById('rouletteResultDisplay').innerHTML = `KAZANAN NUMARA: <span class="font-bold text-amber-400">${finalResult.n} (${colorText})</span>`;
+
+                // Kazanç Dağıtım Kontrolü
+                if (type === finalResult.c) {
+                    let multiplier = finalResult.c === 'zero' ? 35 : 2;
+                    let winAmount = bet * multiplier;
+                    balance += winAmount;
+                    updateBalance();
+                    triggerConfetti();
+                    showToast(`Rulet Kazancı: +₺${winAmount.toLocaleString('tr-TR')}`);
+                } else {
+                    showToast("Bu el kazanç çıkmadı.");
+                }
+
+                // Çark Derecelerini Resetle (Arayüz Kaymasını Önlemek İçin)
+                wheel.style.transition = 'none';
+                ball.style.transition = 'none';
+                wheel.style.transform = `rotate(${randomWheelDeg % 360}deg)`;
+                ball.style.transform = `rotate(${randomBallDeg % 360}deg)`;
+                setTimeout(() => {
+                    wheel.style.transition = 'transform 4s cubic-bezier(0.1, 0.8, 0.1, 1)';
+                    ball.style.transition = 'transform 4s cubic-bezier(0.1, 0.8, 0.3, 1)';
+                }, 50);
+
+            }, 4000);
+        }
+
+        // AUTO SPIN AYARLARI
         function toggleAutoSpin(game) {
             if(isAutoSpinning && activeAutoGame === game) {
                 stopAutoSpinGlobal();
@@ -443,7 +738,6 @@
                 }
                 
                 runSlotGameByName(game);
-
                 autoSpinInterval = setInterval(() => {
                     if(!isSpinning && isAutoSpinning) {
                         runSlotGameByName(activeAutoGame);
@@ -473,386 +767,127 @@
             if(name === 'sugarrush') playSugarRush();
         }
 
-        // ================= DÜŞÜRÜLMÜŞ KAZANÇ ORANLARIYLA SLOT SİMÜLASYONLARI =================
-        function playSweetBonanza() {
-            if(isSpinning) return;
-            const bet = parseInt(document.getElementById('bonanzaBetAmount').value);
-            if(isNaN(bet) || bet > balance || bet <= 0) { stopAutoSpinGlobal(); return showToast("Bakiye yetersiz."); }
+        // BLACKJACK 21 FONKSİYONLARI
+        function startBlackjack() {
+            const betInput = document.getElementById('blackjackBetAmount');
+            bjBet = parseInt(betInput.value);
+            if(isNaN(bjBet) || bjBet > balance || bjBet <= 0) return showToast("Bakiye yetersiz.");
 
-            balance -= bet; updateBalance(); isSpinning = true;
-            document.getElementById('bonanzaBtn').disabled = true;
-            document.getElementById('bonanza-multiplier-display').classList.add('hidden');
+            balance -= bjBet;
+            updateBalance();
 
-            let cycles = 0;
-            const interval = setInterval(() => {
-                for(let i=0; i<12; i++) {
-                    let cell = document.getElementById(`b-cell-${i}`);
-                    cell.textContent = bonanzaSymbols[Math.floor(Math.random()*bonanzaSymbols.length)];
-                    cell.classList.add('slot-blur');
-                }
-                if(++cycles > 10) {
-                    clearInterval(interval); isSpinning = false;
-                    document.getElementById('bonanzaBtn').disabled = false;
-                    
-                    let counts = {};
-                    for(let i=0; i<12; i++) {
-                        let cell = document.getElementById(`b-cell-${i}`);
-                        cell.classList.remove('slot-blur');
-                        counts[cell.textContent] = (counts[cell.textContent] || 0) + 1;
-                    }
+            playerHand = [getRandomCard(), getRandomCard()];
+            dealerHand = [getRandomCard(), getRandomCard()];
 
-                    // ŞANS DÜŞÜRME ALGORİTMASI: Eşleşme sınırı 4'ten 5'e çıkarıldı veya rastgele %65 ihtimalle kayıp sayılıyor
-                    let matchedSymbol = null; let maxCount = 0;
-                    if (Math.random() > 0.65) { 
-                        for(let sym in counts) {
-                            if(counts[sym] >= 5 && counts[sym] > maxCount) { matchedSymbol = sym; maxCount = counts[sym]; }
-                        }
-                    }
+            document.getElementById('bj-bet-phase').classList.add('hidden');
+            document.getElementById('bj-action-phase').classList.remove('none');
+            document.getElementById('bj-action-phase').style.display = 'flex';
 
-                    if(matchedSymbol) {
-                        document.getElementById('bonanza-board-wrapper').classList.add('shockwave');
-                        setTimeout(() => document.getElementById('bonanza-board-wrapper').classList.remove('shockwave'), 500);
-
-                        for(let i=0; i<12; i++) {
-                            let cell = document.getElementById(`b-cell-${i}`);
-                            if(cell.textContent === matchedSymbol) cell.classList.add('matched');
-                        }
-
-                        let randomBomb = [2, 4, 8, 15][Math.floor(Math.random()*4)]; // Bomb değerleri düşürüldü
-                        document.getElementById('bonanza-multiplier-display').innerHTML = `🍭 BOMBA: ${randomBomb}x`;
-                        document.getElementById('bonanza-multiplier-display').classList.remove('hidden');
-
-                        setTimeout(() => {
-                            let totalWin = bet * (maxCount * 0.4) * randomBomb;
-                            balance += totalWin; updateBalance();
-                            if(totalWin >= 4000) triggerMegaWin(totalWin);
-                            else { triggerConfetti(); showToast(`Bonanza Ödemesi: +₺${totalWin.toLocaleString('tr-TR')}`); }
-                            for(let i=0; i<12; i++) document.getElementById(`b-cell-${i}`).classList.remove('matched');
-                        }, 1000);
-                    }
-                }
-            }, 75);
+            renderBlackjack();
         }
 
-        function playGatesOfOlympus() {
-            if(isSpinning) return;
-            const bet = parseInt(document.getElementById('olympusBetAmount').value);
-            if(isNaN(bet) || bet > balance || bet <= 0) { stopAutoSpinGlobal(); return showToast("Bakiye yetersiz."); }
-
-            balance -= bet; updateBalance(); isSpinning = true;
-            document.getElementById('olympusBtn').disabled = true;
-            document.getElementById('olympus-lightning-text').classList.add('hidden');
-
-            let cycles = 0;
-            const interval = setInterval(() => {
-                for(let i=0; i<12; i++) {
-                    let cell = document.getElementById(`o-cell-${i}`);
-                    cell.textContent = olympusSymbols[Math.floor(Math.random()*olympusSymbols.length)];
-                    cell.classList.add('slot-blur');
-                }
-                if(++cycles > 10) {
-                    clearInterval(interval); isSpinning = false;
-                    document.getElementById('olympusBtn').disabled = false;
-                    
-                    let counts = {};
-                    for(let i=0; i<12; i++) {
-                        let cell = document.getElementById(`o-cell-${i}`);
-                        cell.classList.remove('slot-blur');
-                        counts[cell.textContent] = (counts[cell.textContent] || 0) + 1;
-                    }
-
-                    // %70 İhtimalle Dede çarpanı vermiyor (Şans azaltıldı)
-                    let matchedSymbol = null; let maxCount = 0;
-                    if (Math.random() > 0.70) {
-                        for(let sym in counts) {
-                            if(counts[sym] >= 5 && counts[sym] > maxCount) { matchedSymbol = sym; maxCount = counts[sym]; }
-                        }
-                    }
-
-                    if(matchedSymbol) {
-                        document.getElementById('olympus-board-wrapper').classList.add('lightning-flash');
-                        setTimeout(() => document.getElementById('olympus-board-wrapper').classList.remove('lightning-flash'), 400);
-
-                        for(let i=0; i<12; i++) {
-                            let cell = document.getElementById(`o-cell-${i}`);
-                            if(cell.textContent === matchedSymbol) cell.classList.add('matched');
-                        }
-                        document.getElementById('olympus-lightning-text').classList.remove('hidden');
-
-                        setTimeout(() => {
-                            let olympusMultiplier = [2, 5, 10, 25][Math.floor(Math.random()*4)];
-                            let totalWin = bet * (maxCount * 0.4) * olympusMultiplier;
-                            balance += totalWin; updateBalance();
-                            if(totalWin >= 4000) triggerMegaWin(totalWin);
-                            else { triggerConfetti(); showToast(`Zeus Şimşeği Ödemesi: +₺${totalWin.toLocaleString('tr-TR')}`); }
-                            for(let i=0; i<12; i++) document.getElementById(`o-cell-${i}`).classList.remove('matched');
-                        }, 1000);
-                    }
-                }
-            }, 75);
+        function getRandomCard() {
+            const v = values[Math.floor(Math.random()*values.length)];
+            const s = suits[Math.floor(Math.random()*suits.length)];
+            return { value: v, suit: s };
         }
 
-        function playBigBass() {
-            if(isSpinning) return;
-            const bet = parseInt(document.getElementById('bigbassBetAmount').value);
-            if(isNaN(bet) || bet > balance || bet <= 0) { stopAutoSpinGlobal(); return showToast("Bakiye yetersiz."); }
-
-            balance -= bet; updateBalance(); isSpinning = true;
-            document.getElementById('bigbassBtn').disabled = true;
-            document.getElementById('bigbass-catch-display').classList.add('hidden');
-
-            let cycles = 0;
-            const interval = setInterval(() => {
-                for(let i=0; i<12; i++) {
-                    document.getElementById(`f-cell-${i}`).textContent = bigBassSymbols[Math.floor(Math.random()*bigBassSymbols.length)];
-                    document.getElementById(`f-cell-${i}`).classList.add('slot-blur');
-                }
-                if(++cycles > 10) {
-                    clearInterval(interval); isSpinning = false;
-                    document.getElementById('bigbassBtn').disabled = false;
-                    
-                    let hasFisherman = false; let fishCount = 0;
-                    // Kazanç olasılığı %75 ihtimalle bloke ediliyor
-                    if (Math.random() > 0.75) {
-                        for(let i=0; i<12; i++) {
-                            let cell = document.getElementById(`f-cell-${i}`);
-                            cell.classList.remove('slot-blur');
-                            if(cell.textContent === '🎣') hasFisherman = true;
-                            if(cell.textContent === '🐟') fishCount++;
-                        }
-                    } else {
-                        for(let i=0; i<12; i++) document.getElementById(`f-cell-${i}`).classList.remove('slot-blur');
-                    }
-
-                    if(hasFisherman && fishCount > 0) {
-                        for(let i=0; i<12; i++) {
-                            let cell = document.getElementById(`f-cell-${i}`);
-                            if(cell.textContent === '🎣' || cell.textContent === '🐟') cell.classList.add('matched');
-                        }
-                        document.getElementById('bigbass-catch-display').classList.remove('hidden');
-
-                        setTimeout(() => {
-                            let totalWin = bet * fishCount * 1.5;
-                            balance += totalWin; updateBalance();
-                            if(totalWin >= 4000) triggerMegaWin(totalWin);
-                            else { triggerConfetti(); showToast(`Balıkçı Yakaladı! +₺${totalWin.toLocaleString('tr-TR')}`); }
-                            for(let i=0; i<12; i++) document.getElementById(`f-cell-${i}`).classList.remove('matched');
-                        }, 1000);
-                    }
-                }
-            }, 75);
-        }
-
-        function playSugarRush() {
-            if(isSpinning) return;
-            const bet = parseInt(document.getElementById('sugarrushBetAmount').value);
-            if(isNaN(bet) || bet > balance || bet <= 0) { stopAutoSpinGlobal(); return showToast("Bakiye yetersiz."); }
-
-            balance -= bet; updateBalance(); isSpinning = true;
-            document.getElementById('sugarrushBtn').disabled = true;
-            document.getElementById('sugarrush-spot-display').classList.add('hidden');
-
-            let cycles = 0;
-            const interval = setInterval(() => {
-                for(let i=0; i<12; i++) {
-                    document.getElementById(`s-cell-${i}`).textContent = sugarRushSymbols[Math.floor(Math.random()*sugarRushSymbols.length)];
-                    document.getElementById(`s-cell-${i}`).classList.add('slot-blur');
-                }
-                if(++cycles > 10) {
-                    clearInterval(interval); isSpinning = false;
-                    document.getElementById('sugarrushBtn').disabled = false;
-                    
-                    let counts = {};
-                    for(let i=0; i<12; i++) {
-                        let cell = document.getElementById(`s-cell-${i}`);
-                        cell.classList.remove('slot-blur');
-                        counts[cell.textContent] = (counts[cell.textContent] || 0) + 1;
-                    }
-
-                    let matchedSymbol = null; let maxCount = 0;
-                    if(Math.random() > 0.70) {
-                        for(let sym in counts) {
-                            if(counts[sym] >= 5 && counts[sym] > maxCount) { matchedSymbol = sym; maxCount = counts[sym]; }
-                        }
-                    }
-
-                    if(matchedSymbol) {
-                        for(let i=0; i<12; i++) {
-                            let cell = document.getElementById(`s-cell-${i}`);
-                            if(cell.textContent === matchedSymbol) cell.classList.add('matched');
-                        }
-                        document.getElementById('sugarrush-spot-display').classList.remove('hidden');
-
-                        setTimeout(() => {
-                            let totalWin = bet * maxCount * 1.2;
-                            balance += totalWin; updateBalance();
-                            if(totalWin >= 4000) triggerMegaWin(totalWin);
-                            else { triggerConfetti(); showToast(`Sugar Rush Ödemesi: +₺${totalWin.toLocaleString('tr-TR')}`); }
-                            for(let i=0; i<12; i++) document.getElementById(`s-cell-${i}`).classList.remove('matched');
-                        }, 1000);
-                    }
-                }
-            }, 75);
-        }
-
-        // ================= COMPLETELY RECODED LIVE ROULETTE OYUNU =================
-        function playRoulette() {
-            if(isSpinning) return;
-            const bet = parseInt(document.getElementById('rouletteBetAmount').value);
-            const type = document.getElementById('rouletteType').value;
-            if(isNaN(bet) || bet > balance || bet <= 0) return showToast("Bakiye yetersiz.");
-
-            balance -= bet; updateBalance(); isSpinning = true;
-            document.getElementById('rouletteBtn').disabled = true;
-            
-            const wheel = document.getElementById('roulette-wheel-container');
-            const status = document.getElementById('roulette-status-text');
-            
-            status.innerHTML = `<div class="text-xs text-amber-400 font-black animate-spin"><i class="fas fa-spinner"></i></div><div class="text-[10px] mt-1">TOP DÖNÜYOR</div>`;
-            wheel.classList.add('roulette-wheel-spin');
-
-            setTimeout(() => {
-                wheel.classList.remove('roulette-wheel-spin');
-                isSpinning = false;
-                document.getElementById('rouletteBtn').disabled = false;
-
-                // Kasa Dostu Rulet Seçimi (%65 ihtimalle kayıp renk gelir)
-                let colors = ['red', 'black', 'zero'];
-                let finalColor = '';
-                
-                if(Math.random() > 0.35) {
-                    finalColor = type === 'red' ? 'black' : 'red'; // Oyuncunun tersini getir
-                } else {
-                    let rand = Math.random();
-                    finalColor = rand < 0.48 ? 'red' : (rand < 0.96 ? 'black' : 'zero');
-                }
-
-                let num = finalColor === 'zero' ? 0 : Math.floor(Math.random() * 36) + 1;
-                let bg = finalColor === 'red' ? 'bg-red-600' : (finalColor === 'black' ? 'bg-slate-800' : 'bg-emerald-600');
-
-                status.innerHTML = `<div class="w-10 h-10 ${bg} text-white rounded-full flex items-center justify-center font-black text-sm mx-auto shadow-md">${num}</div><div class="text-[11px] font-bold mt-1 text-slate-300 uppercase">${finalColor}</div>`;
-
-                if(type === finalColor) {
-                    let multiplier = finalColor === 'zero' ? 35 : 2;
-                    let totalWin = bet * multiplier;
-                    balance += totalWin; updateBalance();
-                    triggerConfetti();
-                    showToast(`Rulet Kazancı: +₺${totalWin.toLocaleString('tr-TR')}`);
-                } else {
-                    showToast("Rulet: Bahis Kaybetti.");
-                }
-            }, 2000);
-        }
-
-        // ================= COMPLETELY RECODED LIVE BLACKJACK OYUNU =================
-        function generateBJCard() {
-            const suit = suits[Math.floor(Math.random() * suits.length)];
-            const val = values[Math.floor(Math.random() * values.length)];
-            let points = parseInt(val);
-            if(['J','Q','K'].includes(val)) points = 10;
-            if(val === 'A') points = 11;
-            return { text: val + suit, score: points, isAce: val === 'A' };
-        }
-
-        function calculateBJScore(hand) {
-            let score = hand.reduce((acc, card) => acc + card.score, 0);
-            let aces = hand.filter(c => c.isAce).length;
+        function getScore(hand) {
+            let score = 0;
+            let aces = 0;
+            hand.forEach(c => {
+                if(['J','Q','K'].includes(c.value)) score += 10;
+                else if(c.value === 'A') { score += 11; aces++; }
+                else score += parseInt(c.value);
+            });
             while(score > 21 && aces > 0) { score -= 10; aces--; }
             return score;
         }
 
-        function startBlackjack() {
-            const bet = parseInt(document.getElementById('blackjackBetAmount').value);
-            if(isNaN(bet) || bet > balance || bet <= 0) return showToast("Bakiye yetersiz.");
-
-            bjBet = bet; balance -= bet; updateBalance();
-            playerHand = [generateBJCard(), generateBJCard()];
-            dealerHand = [generateBJCard()]; // Krupiye ilk kartı alır
-
-            document.getElementById('bj-bet-phase').classList.add('hidden');
-            document.getElementById('bj-action-phase').classList.remove('hidden');
-            renderBJHands();
-            
-            if(calculateBJScore(playerHand) === 21) standBlackjack();
-        }
-
-        function renderBJHands() {
+        function renderBlackjack() {
             const pCards = document.getElementById('player-cards');
             const dCards = document.getElementById('dealer-cards');
             pCards.innerHTML = ''; dCards.innerHTML = '';
 
             playerHand.forEach(c => {
-                pCards.innerHTML += `<div class="bg-white text-slate-900 w-10 h-14 rounded-lg flex items-center justify-center font-bold shadow-md border text-sm">${c.text}</div>`;
-            });
-            dealerHand.forEach(c => {
-                dCards.innerHTML += `<div class="bg-white text-slate-900 w-10 h-14 rounded-lg flex items-center justify-center font-bold shadow-md border text-sm">${c.text}</div>`;
+                pCards.innerHTML += `<div class="bg-white text-slate-900 p-2.5 rounded-lg font-bold text-sm shadow border w-10 text-center">${c.value}${c.suit}</div>`;
             });
 
-            document.getElementById('player-score').textContent = calculateBJScore(playerHand);
-            document.getElementById('dealer-score').textContent = calculateBJScore(dealerHand);
+            // İlk aşamada krupiyenin bir kartı kapalı durur
+            dCards.innerHTML += `<div class="bg-white text-slate-900 p-2.5 rounded-lg font-bold text-sm shadow border w-10 text-center">${dealerHand[0].value}${dealerHand[0].suit}</div>`;
+            dCards.innerHTML += `<div class="bg-blue-800 text-white p-2.5 rounded-lg font-bold text-sm shadow border w-10 text-center">?</div>`;
+
+            document.getElementById('player-score').textContent = getScore(playerHand);
+            document.getElementById('dealer-score').textContent = getScore([dealerHand[0]]);
         }
 
         function hitBlackjack() {
-            playerHand.push(generateBJCard());
-            renderBJHands();
-            if(calculateBJScore(playerHand) > 21) {
-                showToast("21'i aştınız! Kaybettiniz.");
-                endBJPhase();
+            playerHand.push(getRandomCard());
+            renderBlackjack();
+            if(getScore(playerHand) > 21) {
+                endBlackjack("Kasa Kazandı! 21 Sınırını Aştınız.");
             }
         }
 
         function standBlackjack() {
-            // Krupiye Akıllı Kart Çekme Algoritması (%70 ihtimalle oyuncuyu geçecek kartlar ayarlanır)
-            let dScore = calculateBJScore(dealerHand);
-            let pScore = calculateBJScore(playerHand);
-
-            while(dScore < 17 || (dScore < pScore && dScore <= 21)) {
-                dealerHand.push(generateBJCard());
-                dScore = calculateBJScore(dealerHand);
+            // Krupiyenin kartlarını aç ve 17'ye ulaşana kadar kart çekmesini sağla
+            let dScore = getScore(dealerHand);
+            while(dScore < 17) {
+                dealerHand.push(getRandomCard());
+                dScore = getScore(dealerHand);
             }
-            renderBJHands();
+
+            const dCards = document.getElementById('dealer-cards');
+            dCards.innerHTML = '';
+            dealerHand.forEach(c => {
+                dCards.innerHTML += `<div class="bg-white text-slate-900 p-2.5 rounded-lg font-bold text-sm shadow border w-10 text-center">${c.value}${c.suit}</div>`;
+            });
+            document.getElementById('dealer-score').textContent = dScore;
+
+            let pScore = getScore(playerHand);
 
             if(dScore > 21 || pScore > dScore) {
-                let totalWin = bjBet * 2;
-                balance += totalWin; updateBalance();
+                let win = bjBet * 2;
+                balance += win;
+                updateBalance();
                 triggerConfetti();
-                showToast(`Kazandınız! +₺${totalWin.toLocaleString('tr-TR')}`);
-            } else if(pScore === dScore) {
-                balance += bjBet; updateBalance();
-                showToast("Beraberlik (Push), bakiye iade edildi.");
+                endBlackjack(`Kazandınız! Ödeme: +₺${win.toLocaleString('tr-TR')}`);
+            } else if(pScore < dScore) {
+                endBlackjack("Krupiye Kazandı!");
             } else {
-                showToast("Krupiye kazandı.");
+                balance += bjBet;
+                updateBalance();
+                endBlackjack("Beraberlik! Bahis İade Edildi.");
             }
-            endBJPhase();
         }
 
-        function endBJPhase() {
+        function endBlackjack(msg) {
+            showToast(msg);
             document.getElementById('bj-bet-phase').classList.remove('hidden');
-            document.getElementById('bj-action-phase').classList.add('hidden');
+            document.getElementById('bj-action-phase').style.display = 'none';
         }
 
-        const sampleUsers = ['cenk_vip', 'sahin_bey', 'sedat_win', 'aylin_slots', 'emir_casino'];
-        const sampleGames = ['Sweet Bonanza VIP', 'Gates of Olympus', 'Big Bass Bonanza', 'Sugar Rush 1000', 'Roulette VIP'];
+        function redirectToWhatsApp() {
+            window.open("https://wa.me/16395697826", "_blank");
+        }
+
+        // CANLI KAZANANLAR TABLOSU SIMÜLASYONU
+        const sampleUsers = ['Ahmet', 'Mehmet', 'Can', 'Ece', 'Selin', 'Burak', 'Hakan', 'Merve', 'Kaan', 'Arda'];
+        const sampleGames = ['Sweet Bonanza', 'Gates of Olympus', 'Big Bass Bonanza', 'Sugar Rush 1000', 'Roulette VIP'];
         function addLiveWinRow() {
             const tbody = document.getElementById('live-wins-tbody');
             if(!tbody) return;
             if(tbody.children.length > 4) tbody.removeChild(tbody.lastChild);
             const user = sampleUsers[Math.floor(Math.random()*sampleUsers.length)];
-            const maskedUser = user.substring(0, 3) + '***' + user.substring(user.length - 2);
+            const maskedUser = user.substring(0, 3) + '***';
             const game = sampleGames[Math.floor(Math.random()*sampleGames.length)];
             const bet = Math.floor(Math.random() * 2000) + 1000;
-            const win = Math.floor(bet * (Math.random() * 2 + 1));
+            const win = Math.floor(bet * (Math.random() * 3 + 1.5));
             const tr = document.createElement('tr');
             tr.className = 'border-b border-slate-900/60 py-2';
             tr.innerHTML = `<td class="py-2.5 font-bold text-slate-200"><i class="fas fa-user text-[10px] text-amber-500 mr-1.5"></i>${maskedUser}</td><td class="py-2.5 text-slate-400">${game}</td><td class="py-2.5 text-slate-500">₺${bet.toLocaleString('tr-TR')}</td><td class="py-2.5 text-right font-bold text-emerald-400">+₺${win.toLocaleString('tr-TR')}</td>`;
             tbody.insertBefore(tr, tbody.firstChild);
         }
-        setInterval(addLiveWinRow, 5000);
-        function redirectToWhatsApp() { window.open(`https://wa.me/16395697826`, '_blank'); }
-
-        updateBalance();
-        initAllSlotGrids();
-        for(let i=0; i<4; i++) { setTimeout(addLiveWinRow, i * 400); }
     </script>
 </body>
 </html>
