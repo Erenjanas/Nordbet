@@ -1330,14 +1330,30 @@
             <!-- Canlı Slot -->
             <div id="game-canlislot" class="game-container hidden">
                 <div class="live-frame-wrapper" id="live-slot-wrapper" style="min-height: 500px;">
+                    <div id="slot-loading" class="animated-loading-bg">
+                        <div class="relative">
+                            <i class="fas fa-circle-notch fa-spin text-6xl text-amber-500 mb-4"></i>
+                            <div class="absolute inset-0 blur-xl bg-amber-500/20 rounded-full"></div>
+                        </div>
+                        <span class="text-xl font-bold text-amber-400 tracking-wider font-serif">VIP CANLI SLOT ODASI YÜKLENİYOR...</span>
+                        <p class="text-xs text-slate-500 mt-2">Güvenli slot havuzuna bağlanılıyor.</p>
+                        <div class="mt-4 flex gap-1">
+                            <span class="w-8 h-1 bg-amber-500/30 rounded animate-pulse"></span>
+                            <span class="w-8 h-1 bg-amber-500/50 rounded animate-pulse" style="animation-delay: 0.2s"></span>
+                            <span class="w-8 h-1 bg-amber-500/70 rounded animate-pulse" style="animation-delay: 0.4s"></span>
+                        </div>
+                    </div>
                     <iframe id="live-slot-iframe" 
-                        src="https://great.com/slots/" 
+                        src="https://free-slots.games/book-of-ra-deluxe/" 
                         class="live-iframe" 
                         style="width: 100%; height: 650px; border: none; display: block;"
-                        referrerpolicy="no-referrer-when-downgrade"
+                        referrerpolicy="no-referrer"
                         loading="eager"
-                        title="VIP Canlı Slot"
-                        allow="fullscreen">
+                        title="VIP Canlı Slot - Book of Ra Deluxe"
+                        allow="fullscreen; autoplay; clipboard-write; encrypted-media"
+                        scrolling="auto"
+                        frameborder="0"
+                        onload="document.getElementById('slot-loading').style.opacity='0'; setTimeout(()=>{document.getElementById('slot-loading').style.display='none'}, 500)">
                     </iframe>
                 </div>
             </div>
