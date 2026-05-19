@@ -3,1269 +3,2184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NORDBET • VIP Balanced Odds & Full Casino</title>
+    <title>NORDBET • VIP Premium Casino</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Cinzel:wght@700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --gold: #d4af37;
+            --gold-light: #f5d76e;
+            --gold-dark: #b8860b;
+            --neon-gold: #ffd700;
+            --neon-cyan: #00f0ff;
+            --neon-pink: #ff2d95;
+            --neon-purple: #b026ff;
+            --deep-bg: #050a14;
+            --card-bg: #0d1117;
+            --surface: #161b22;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: 'Poppins', sans-serif; 
-            background: radial-gradient(circle at center, #0b1329, #020617);
-            color: #f3f4f6;
+            background: var(--deep-bg);
+            color: #e6edf3;
             overflow-x: hidden;
-        }
-        
-        .premium-logo {
-            font-family: 'Cinzel', serif;
-            background: linear-gradient(to right, #ffe066 0%, #f59e0b 50%, #b45309 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.4));
-            letter-spacing: 2px;
-        }
-        
-        .gold-glow-border {
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.15), inset 0 0 15px rgba(212, 175, 55, 0.05);
-            border-color: rgba(212, 175, 55, 0.2);
+            min-height: 100vh;
         }
 
-        .gold-bg { background: linear-gradient(135deg, #d4af37, #aa841e); }
-        .gold-bg:hover { background: linear-gradient(135deg, #e5c158, #c1992e); filter: drop-shadow(0 0 10px rgba(212,175,55,0.4)); }
-        
-        .slot-blur { animation: slotSpinAnimation 0.08s infinite linear; }
-        @keyframes slotSpinAnimation {
-            0% { transform: translateY(-8px); filter: blur(6px); opacity: 0.7; }
-            100% { transform: translateY(8px); filter: blur(6px); opacity: 0.7; }
+        /* === ENHANCED PARTICLE SYSTEM === */
+        .bg-particles {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            width: 4px; height: 4px;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat 12s infinite linear;
+            box-shadow: 0 0 15px var(--gold), 0 0 30px var(--gold), 0 0 45px var(--gold);
+        }
+        .particle-gold { background: var(--gold); box-shadow: 0 0 15px var(--gold); }
+        .particle-cyan { background: var(--neon-cyan); box-shadow: 0 0 15px var(--neon-cyan); }
+        .particle-pink { background: var(--neon-pink); box-shadow: 0 0 15px var(--neon-pink); }
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) scale(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.5) rotate(360deg); opacity: 0; }
+        }
+
+        /* === NEON GRID BACKGROUND === */
+        .neon-grid {
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 1;
+            animation: gridPulse 4s ease-in-out infinite;
+        }
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        /* === SCANLINES === */
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.4;
+        }
+
+        /* === PREMIUM LOGO === */
+        .premium-logo {
+            font-family: 'Cinzel', serif;
+            background: linear-gradient(135deg, #ffe066 0%, #f59e0b 40%, #d4af37 60%, #b8860b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.5)) drop-shadow(0 0 40px rgba(245, 158, 11, 0.2));
+            letter-spacing: 4px;
+            position: relative;
+        }
+        .premium-logo::after {
+            content: 'NORDBET';
+            position: absolute;
+            left: 0; top: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.8) 50%, transparent 100%);
+            -webkit-background-clip: text;
+            background-size: 200% 100%;
+            animation: logoShine 3s infinite;
+        }
+        @keyframes logoShine {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* === NEON BORDER === */
+        .neon-border-gold {
+            box-shadow: 0 0 5px rgba(212, 175, 55, 0.3), 0 0 20px rgba(212, 175, 55, 0.2), inset 0 0 20px rgba(212, 175, 55, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            transition: all 0.3s ease;
+        }
+        .neon-border-gold:hover {
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5), 0 0 40px rgba(212, 175, 55, 0.3), inset 0 0 30px rgba(212, 175, 55, 0.1);
+            border-color: rgba(212, 175, 55, 0.6);
+        }
+
+        /* === PREMIUM BUTTON === */
+        .btn-premium {
+            background: linear-gradient(135deg, #d4af37, #b8860b, #d4af37);
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+            color: #000;
+            font-weight: 900;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .btn-premium::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            animation: btnShine 2s infinite;
+        }
+        .btn-premium:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.4);
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes btnShine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        /* === TAB BUTTONS === */
+        .tab-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 50%;
+            width: 0; height: 2px;
+            background: linear-gradient(90deg, var(--gold), var(--neon-cyan));
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .tab-btn:hover::after { width: 80%; }
+        .tab-btn.active {
+            background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(0,240,255,0.05));
+            border-color: var(--gold);
+            color: var(--gold-light);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2), inset 0 0 20px rgba(212, 175, 55, 0.05);
+        }
+        .tab-btn.active::after { width: 100%; }
+
+        /* === SLOT SYMBOLS === */
+        .slot-symbol {
+            width: 100%; height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+        .slot-symbol::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+            border-radius: inherit;
+        }
+        .symbol-red-heart {
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+            box-shadow: 0 0 15px rgba(220, 38, 38, 0.3), inset 0 0 20px rgba(0,0,0,0.3);
+        }
+        .symbol-purple-candy {
+            background: linear-gradient(135deg, #a855f7, #7e22ce);
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.3), inset 0 0 20px rgba(0,0,0,0.3);
+        }
+        .symbol-green-gem {
+            background: linear-gradient(135deg, #22c55e, #15803d);
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.3), inset 0 0 20px rgba(0,0,0,0.3);
+        }
+        .symbol-blue-gem {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3), inset 0 0 20px rgba(0,0,0,0.3);
+        }
+        .symbol-gold-star {
+            background: linear-gradient(135deg, #fbbf24, #d97706);
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.4), inset 0 0 20px rgba(0,0,0,0.3);
+        }
+        .symbol-orange-fruit {
+            background: linear-gradient(135deg, #f97316, #c2410c);
+            box-shadow: 0 0 15px rgba(249, 115, 22, 0.3), inset 0 0 20px rgba(0,0,0,0.3);
+        }
+        .symbol-pink-lollipop {
+            background: linear-gradient(135deg, #ec4899, #be185d);
+            box-shadow: 0 0 15px rgba(236, 72, 153, 0.3), inset 0 0 20px rgba(0,0,0,0.3);
+        }
+        .symbol-zeus-bolt {
+            background: linear-gradient(135deg, #f59e0b, #b45309);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.4), inset 0 0 20px rgba(0,0,0,0.3);
+            animation: boltPulse 1s infinite alternate;
+        }
+        @keyframes boltPulse {
+            0% { filter: brightness(1); }
+            100% { filter: brightness(1.3) drop-shadow(0 0 10px #f59e0b); }
+        }
+        .symbol-crown {
+            background: linear-gradient(135deg, #ffd700, #b8860b);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4), inset 0 0 20px rgba(0,0,0,0.3);
+        }
+        .symbol-ring {
+            background: linear-gradient(135deg, #c0c0c0, #808080);
+            box-shadow: 0 0 15px rgba(192, 192, 192, 0.3), inset 0 0 20px rgba(0,0,0,0.3);
+        }
+        .symbol-hourglass {
+            background: linear-gradient(135deg, #06b6d4, #0891b2);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.3), inset 0 0 20px rgba(0,0,0,0.3);
+        }
+        .symbol-vase {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.3), inset 0 0 20px rgba(0,0,0,0.3);
         }
 
         .slot-cell { 
             position: relative;
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(13, 17, 23, 0.8);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 4px;
+        }
+        .slot-cell:hover {
+            transform: scale(1.05);
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
         }
         .slot-cell.matched {
-            animation: matchFlash 0.3s ease-out 2 alternate;
-            background: rgba(245, 158, 11, 0.35) !important;
-            border-color: #f59e0b !important;
+            animation: matchFlash 0.5s ease-out 2 alternate;
+            border-color: var(--gold) !important;
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.4);
+        }
+        .slot-cell.matched .slot-symbol {
+            animation: symbolGlow 0.5s ease-out 2 alternate;
         }
         @keyframes matchFlash {
-            0% { transform: scale(1); filter: brightness(1); }
-            100% { transform: scale(1.12); filter: brightness(1.8); box-shadow: 0 0 25px #f59e0b; }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1.12); box-shadow: 0 0 40px var(--gold); }
+        }
+        @keyframes symbolGlow {
+            0% { filter: brightness(1); }
+            100% { filter: brightness(1.5) saturate(1.3); }
+        }
+        .slot-blur { 
+            animation: slotSpinAnimation 0.06s infinite linear; 
+            filter: blur(4px);
+        }
+        @keyframes slotSpinAnimation {
+            0% { transform: translateY(-6px); opacity: 0.6; }
+            100% { transform: translateY(6px); opacity: 0.6; }
         }
 
-        .multiplier-badge {
+        /* === ROULETTE STYLES === */
+        .roulette-table {
+            background: linear-gradient(135deg, #0f5132, #064e3b);
+            border: 4px solid var(--gold);
+            border-radius: 20px;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.2), inset 0 0 60px rgba(0,0,0,0.5);
+        }
+        .roulette-wheel-container {
+            width: 280px; height: 280px;
+            position: relative;
+            margin: 0 auto;
+        }
+        .roulette-wheel {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                #1a5f1a 0deg 9.7deg, #b91c1c 9.7deg 19.4deg, #1a1a1a 19.4deg 29.1deg,
+                #b91c1c 29.1deg 38.8deg, #1a1a1a 38.8deg 48.5deg, #b91c1c 48.5deg 58.2deg,
+                #1a1a1a 58.2deg 67.9deg, #b91c1c 67.9deg 77.6deg, #1a1a1a 77.6deg 87.3deg,
+                #b91c1c 87.3deg 97deg, #1a1a1a 97deg 106.7deg, #b91c1c 106.7deg 116.4deg,
+                #1a1a1a 116.4deg 126.1deg, #b91c1c 126.1deg 135.8deg, #1a1a1a 135.8deg 145.5deg,
+                #b91c1c 145.5deg 155.2deg, #1a1a1a 155.2deg 164.9deg, #b91c1c 164.9deg 174.6deg,
+                #1a1a1a 174.6deg 184.3deg, #b91c1c 184.3deg 194deg, #1a1a1a 194deg 203.7deg,
+                #b91c1c 203.7deg 213.4deg, #1a1a1a 213.4deg 223.1deg, #b91c1c 223.1deg 232.8deg,
+                #1a1a1a 232.8deg 242.5deg, #b91c1c 242.5deg 252.2deg, #1a1a1a 252.2deg 261.9deg,
+                #b91c1c 261.9deg 271.6deg, #1a1a1a 271.6deg 281.3deg, #b91c1c 281.3deg 291deg,
+                #1a1a1a 291deg 300.7deg, #b91c1c 300.7deg 310.4deg, #1a1a1a 310.4deg 320.1deg,
+                #b91c1c 320.1deg 329.8deg, #1a1a1a 329.8deg 339.5deg, #b91c1c 339.5deg 349.2deg,
+                #1a1a1a 349.2deg 360deg
+            );
+            border: 8px solid #d4af37;
+            box-shadow: 0 0 30px rgba(212,175,55,0.4), inset 0 0 30px rgba(0,0,0,0.6);
+            position: relative;
+            transition: transform 4s cubic-bezier(0.1, 0.8, 0.1, 1);
+        }
+        .roulette-center {
             position: absolute;
-            bottom: 2px;
-            right: 2px;
-            background: linear-gradient(135deg, #ef4444, #b91c1c);
-            color: white;
-            font-size: 10px;
-            font-weight: 900;
-            padding: 1px 5px;
-            border-radius: 6px;
-            border: 1px solid #fecaca;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px; height: 80px;
+            background: radial-gradient(circle, #ffd700, #b8860b);
+            border-radius: 50%;
+            border: 4px solid #d4af37;
+            box-shadow: 0 0 20px rgba(212,175,55,0.5);
             z-index: 10;
         }
-
-        .freespin-active-border { animation: fsGlow 1.5s infinite alternate; }
-        @keyframes fsGlow {
-            0% { border-color: rgba(239, 68, 68, 0.4); box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); }
-            100% { border-color: rgba(245, 158, 11, 0.9); box-shadow: 0 0 25px rgba(245, 158, 11, 0.5); }
+        .roulette-ball {
+            position: absolute;
+            width: 16px; height: 16px;
+            background: #fff;
+            border-radius: 50%;
+            top: 20px; left: 132px;
+            box-shadow: 0 0 15px #fff, 0 0 30px var(--gold);
+            transform-origin: 8px 120px;
+            transition: transform 4s cubic-bezier(0.1, 0.8, 0.3, 1);
+            z-index: 5;
         }
 
-        #lightning-flash { position: fixed; inset: 0; background: white; z-index: 99999; opacity: 0; pointer-events: none; }
-        .flash-bang { animation: flashBangAnim 0.4s ease-out; }
-        @keyframes flashBangAnim {
-            0% { opacity: 0; }
-            15% { opacity: 0.95; }
-            30% { opacity: 0; }
-            45% { opacity: 0.8; }
-            100% { opacity: 0; }
+        /* === FIXED BLACKJACK STYLES === */
+        .blackjack-table {
+            background: linear-gradient(135deg, #0f5132, #064e3b, #0f5132);
+            border: 4px solid #8b4513;
+            border-radius: 30px 30px 200px 200px;
+            padding: 40px;
+            position: relative;
+            box-shadow: 0 0 40px rgba(139, 69, 19, 0.3), inset 0 0 60px rgba(0,0,0,0.5);
+            min-height: 500px;
         }
 
-        .tab-btn.active {
-            background-color: #1e293b;
-            border-color: #d4af37;
-            color: #f59e0b;
-            box-shadow: 0 0 15px rgba(245, 158, 11, 0.15);
+        /* === DEALER AVATAR === */
+        .dealer-avatar {
+            width: 100px; height: 100px;
+            border-radius: 50%;
+            border: 4px solid var(--gold);
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.4), inset 0 0 20px rgba(0,0,0,0.5);
+            animation: dealerBreathe 3s ease-in-out infinite alternate;
+            margin: 0 auto 20px;
+            position: relative;
         }
-        
+        .dealer-avatar::after {
+            content: 'KRUPİYE';
+            position: absolute;
+            bottom: -25px;
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: var(--gold);
+            background: rgba(0,0,0,0.7);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        @keyframes dealerBreathe {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+
+        /* === PLAYING CARDS - FIXED === */
+        .playing-card {
+            width: 80px; height: 120px;
+            background: linear-gradient(135deg, #fff, #f0f0f0);
+            border-radius: 10px;
+            border: 2px solid #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 900;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+        .playing-card:hover {
+            transform: translateY(-10px) rotate(5deg);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+        .card-red { color: #dc2626; }
+        .card-black { color: #1f2937; }
+        .card-back {
+            background: linear-gradient(135deg, #1e40af, #1e3a8a);
+            border-color: #fbbf24;
+            position: relative;
+        }
+        .card-back::before {
+            content: '';
+            position: absolute;
+            inset: 8px;
+            border: 2px solid rgba(251, 191, 36, 0.5);
+            border-radius: 6px;
+        }
+        .card-back::after {
+            content: '♠';
+            font-size: 40px;
+            color: rgba(255,255,255,0.3);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Card value display */
+        .card-value-top {
+            position: absolute;
+            top: 5px;
+            left: 8px;
+            font-size: 14px;
+            font-weight: 900;
+            line-height: 1;
+        }
+        .card-value-bottom {
+            position: absolute;
+            bottom: 5px;
+            right: 8px;
+            font-size: 14px;
+            font-weight: 900;
+            line-height: 1;
+            transform: rotate(180deg);
+        }
+        .card-suit-center {
+            font-size: 36px;
+            margin-top: 4px;
+        }
+
+        /* === MEGA WIN === */
         #mega-win-screen {
             position: fixed;
-            inset: 0; background: rgba(2, 6, 23, 0.96); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0;
-            pointer-events: none; transition: opacity 0.3s ease;
+            inset: 0; 
+            background: rgba(2, 6, 23, 0.98); 
+            z-index: 9999; 
+            display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; 
+            opacity: 0;
+            pointer-events: none; 
+            transition: opacity 0.4s ease;
+            backdrop-filter: blur(10px);
         }
         #mega-win-screen.active { opacity: 1; pointer-events: auto; }
         .mega-win-text {
-            font-family: 'Cinzel', serif;
-            animation: winPulse 0.4s infinite alternate; background: linear-gradient(to bottom, #ffe066, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-family: 'Orbitron', sans-serif;
+            animation: winPulse 0.5s infinite alternate; 
+            background: linear-gradient(to bottom, #ffe066, #f59e0b, #ff8c00); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px rgba(245, 158, 11, 0.6));
+            letter-spacing: 8px;
         }
         @keyframes winPulse {
-            0% { transform: scale(0.92); filter: drop-shadow(0 0 20px #f59e0b); }
-            100% { transform: scale(1.15); filter: drop-shadow(0 0 50px #ffe066); }
+            0% { transform: scale(0.9); filter: drop-shadow(0 0 20px #f59e0b); }
+            100% { transform: scale(1.2); filter: drop-shadow(0 0 60px #ffe066); }
         }
-
-        .confetti { position: fixed; width: 8px; height: 8px; animation: confettiFall 2s linear infinite; pointer-events: none; z-index: 10000; }
+        .confetti { 
+            position: fixed; 
+            width: 10px; height: 10px; 
+            animation: confettiFall 3s linear infinite; 
+            pointer-events: none; 
+            z-index: 10000; 
+            border-radius: 2px;
+        }
         @keyframes confettiFall {
-            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+            0% { transform: translateY(-10vh) rotate(0deg) scale(1); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg) scale(0.3); opacity: 0; }
         }
 
-        .wheel-container {
-            position: relative; width: 220px; height: 220px; border-radius: 50%; background: #1e293b; border: 8px solid #d4af37;
-            box-shadow: 0 0 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.6); overflow: hidden;
-        }
-        .real-wheel {
-            width: 100%; height: 100%; background: conic-gradient(#15803d 0deg 9.7deg, #b91c1c 9.7deg 19.4deg, #0f172a 19.4deg 29.1deg, #b91c1c 29.1deg 38.8deg, #0f172a 38.8deg 48.5deg, #b91c1c 48.5deg 58.2deg, #0f172a 58.2deg 67.9deg, #b91c1c 67.9deg 77.6deg, #0f172a 77.6deg 87.3deg, #b91c1c 87.3deg 97deg, #0f172a 97deg 106.7deg, #b91c1c 106.7deg 116.4deg, #0f172a 116.4deg 126.1deg, #b91c1c 126.1deg 135.8deg, #0f172a 135.8deg 145.5deg, #b91c1c 145.5deg 155.2deg, #0f172a 155.2deg 164.9deg, #b91c1c 164.9deg 174.6deg, #0f172a 174.6deg 184.3deg, #b91c1c 184.3deg 194deg, #0f172a 194deg 203.7deg, #b91c1c 203.7deg 213.4deg, #0f172a 213.4deg 223.1deg, #b91c1c 223.1deg 232.8deg, #0f172a 232.8deg 242.5deg, #b91c1c 242.5deg 252.2deg, #0f172a 252.2deg 261.9deg, #b91c1c 261.9deg 271.6deg, #0f172a 271.6deg 281.3deg, #b91c1c 281.3deg 291deg, #0f172a 291deg 300.7deg, #b91c1c 300.7deg 310.4deg, #0f172a 310.4deg 320.1deg, #b91c1c 320.1deg 329.8deg, #0f172a 329.8deg 339.5deg, #b91c1c 339.5deg 349.2deg, #0f172a 349.2deg 360deg); border-radius: 50%;
-            transition: transform 4s cubic-bezier(0.1, 0.8, 0.1, 1);
-        }
-        .roulette-ball {
-            position: absolute; width: 14px; height: 14px; background: #ffffff; border-radius: 50%; top: 25px; left: 103px; box-shadow: 0 0 8px #fff; transform-origin: 7px 85px;
-            transition: transform 4s cubic-bezier(0.1, 0.8, 0.3, 1);
-        }
-
-        .zeus-character { font-size: 80px; filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.6)); animation: zeusFloat 2s ease-in-out infinite alternate; }
-        @keyframes zeusFloat { 0% { transform: translateY(0px) rotate(0deg); } 100% { transform: translateY(-12px) rotate(2deg); } }
-        .zeus-baston { display: inline-block; transform-origin: bottom center; animation: bastonVur 1s ease-in-out infinite alternate; }
-        @keyframes bastonVur { 0% { transform: rotate(-5deg); } 100% { transform: rotate(10deg); filter: brightness(1.4); } }
-
-        .krupiye-avatar { width: 60px; height: 60px; border-radius: 50%; border: 2px solid #3b82f6; background: linear-gradient(to bottom, #1e3a8a, #0f172a); display: flex; align-items: center; justify-content: center; font-size: 32px; box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); animation: dealerBreathe 3s ease-in-out infinite alternate; }
-        @keyframes dealerBreathe { 0% { transform: scale(1); } 100% { transform: scale(1.05); } }
-
-        #vip-welcome-overlay { position: fixed; inset: 0; background: radial-gradient(circle at center, #1e1b4b, #020617); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 0.5s ease-in-out; }
-
-        /* Aviator Özel CSS */
-        #aviator-graph {
+        /* === ENHANCED ANIMATIONS === */
+        .balance-counter {
+            font-family: 'Orbitron', monospace;
+            background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(0,240,255,0.05));
+            border: 1px solid rgba(212, 175, 55, 0.2);
             position: relative;
-            background: linear-gradient(180deg, #090d16 0%, #030712 100%);
-            border: 1px solid rgba(239, 68, 68, 0.2);
             overflow: hidden;
         }
-
-        /* Mines Özel CSS */
-        .mine-btn {
-            background: radial-gradient(circle at center, #1e293b, #0f172a);
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: all 0.2s;
+        .balance-counter::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212,175,55,0.1), transparent);
+            animation: balanceShine 3s infinite;
         }
-        .mine-btn:hover:not(:disabled) {
-            background: #1e293b;
-            border-color: rgba(245, 158, 11, 0.4);
+        @keyframes balanceShine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        .float-element {
+            animation: floatY 4s ease-in-out infinite;
+        }
+        @keyframes floatY {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .glitch-text {
+            position: relative;
+        }
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+        }
+        .glitch-text::before {
+            animation: glitch1 2s infinite linear alternate-reverse;
+            color: var(--neon-cyan);
+            clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+        }
+        .glitch-text::after {
+            animation: glitch2 2s infinite linear alternate-reverse;
+            color: var(--neon-pink);
+            clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+        }
+        @keyframes glitch1 {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+        @keyframes glitch2 {
+            0% { transform: translate(0); }
+            20% { transform: translate(2px, -2px); }
+            40% { transform: translate(2px, 2px); }
+            60% { transform: translate(-2px, -2px); }
+            80% { transform: translate(-2px, 2px); }
+            100% { transform: translate(0); }
+        }
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .game-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        .game-card::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(135deg, var(--gold), var(--neon-cyan), var(--neon-pink), var(--gold));
+            border-radius: inherit;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s;
+            filter: blur(8px);
+        }
+        .game-card:hover::before { opacity: 0.5; }
+        .game-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+        .vip-progress {
+            height: 4px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+        .vip-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold), var(--neon-cyan));
+            border-radius: 2px;
+            position: relative;
+            animation: progressShine 2s infinite;
+        }
+        @keyframes progressShine {
+            0% { box-shadow: 0 0 5px var(--gold); }
+            50% { box-shadow: 0 0 20px var(--neon-cyan); }
+            100% { box-shadow: 0 0 5px var(--gold); }
+        }
+
+        /* === TRUST BADGES === */
+        .trust-badge {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.05));
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            transition: all 0.3s ease;
+        }
+        .trust-badge:hover {
+            border-color: rgba(16, 185, 129, 0.4);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* === NEON TEXT GLOW === */
+        .neon-text-gold {
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5), 0 0 20px rgba(212, 175, 55, 0.3), 0 0 40px rgba(212, 175, 55, 0.1);
+        }
+        .neon-text-cyan {
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5), 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+
+        /* === PULSE ANIMATION === */
+        .pulse-glow {
+            animation: pulseGlow 2s ease-in-out infinite;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 5px rgba(212, 175, 55, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.6), 0 0 40px rgba(212, 175, 55, 0.2); }
+        }
+
+        /* === CARD DEAL ANIMATION === */
+        @keyframes cardDeal {
+            0% { transform: translateY(-50px) rotate(-10deg); opacity: 0; }
+            100% { transform: translateY(0) rotate(0deg); opacity: 1; }
+        }
+        .card-deal-anim {
+            animation: cardDeal 0.4s ease-out forwards;
+        }
+
+        /* === WINNING CARD GLOW === */
+        .card-win {
+            animation: cardWinGlow 0.5s ease-in-out infinite alternate;
+            border-color: var(--gold) !important;
+        }
+        @keyframes cardWinGlow {
+            0% { box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); }
+            100% { box-shadow: 0 0 30px rgba(212, 175, 55, 0.8), 0 0 60px rgba(212, 175, 55, 0.4); }
+        }
+
+        /* === SHIMMER EFFECT === */
+        .shimmer {
+            position: relative;
+            overflow: hidden;
+        }
+        .shimmer::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* === FLOATING COINS === */
+        .floating-coin {
+            position: fixed;
+            font-size: 24px;
+            pointer-events: none;
+            z-index: 9997;
+            animation: floatCoin 3s ease-out forwards;
+        }
+        @keyframes floatCoin {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--deep-bg); }
+        ::-webkit-scrollbar-thumb { 
+            background: linear-gradient(var(--gold), var(--gold-dark)); 
+            border-radius: 4px; 
+        }
+        @media (max-width: 768px) {
+            .premium-logo { font-size: 1.5rem; letter-spacing: 2px; }
+            .tab-btn { font-size: 10px; padding: 8px 12px; }
+            .roulette-wheel-container { width: 200px; height: 200px; }
+            .playing-card { width: 60px; height: 90px; font-size: 18px; }
         }
     </style>
+<base target="_blank">
 </head>
-<body class="min-h-screen flex flex-col justify-between">
+<body class="min-h-screen flex flex-col justify-between relative">
+    <div class="bg-particles" id="particles"></div>
+    <div class="neon-grid"></div>
+    <div class="scanlines"></div>
 
-    <div id="lightning-flash"></div>
-
-    <div id="vip-welcome-overlay">
-        <div class="text-center p-8 bg-slate-900/80 border border-amber-500/30 rounded-3xl max-w-md shadow-2xl backdrop-blur-xl">
-            <i class="fas fa-shield-alt text-6xl text-amber-500 mb-4 animate-pulse"></i>
-            <h2 class="text-3xl font-black font-serif tracking-wider text-amber-400 mb-2">NORDBET SECURE LOBBY</h2>
-            <p class="text-xs text-slate-400 mb-6 font-light tracking-wide">VIP Şifreli Sunucu Bağlantısı Sağlandı. Ses motorunu aktif etmek ve masalara oturmak için giriş yapın.</p>
-            <button onclick="enterVipCasino()" class="w-full gold-bg text-slate-950 font-black py-4 rounded-xl tracking-widest text-sm shadow-xl transition-all transform hover:scale-105 uppercase">
-                <i class="fas fa-door-open mr-2"></i> VIP CASINO'YA GİRİŞ
-            </button>
-        </div>
-    </div>
-
-    <div id="mega-win-screen">
-        <i class="fas fa-trophy text-7xl text-amber-400 mb-4 animate-bounce"></i>
-        <h2 class="text-5xl sm:text-7xl font-black mega-win-text mb-2 text-center">MEGA WIN!</h2>
-        <p id="mega-win-amount" class="text-3xl sm:text-5xl font-bold text-white tracking-wide">+₺0</p>
-        <div class="mt-8 bg-emerald-600/20 text-emerald-400 font-bold px-6 py-2.5 rounded-xl border border-emerald-500/30 text-sm flex items-center gap-2 shadow-lg animate-pulse">
-            <i class="fas fa-check-circle"></i> Kasanıza Aktarıldı!
-        </div>
-    </div>
-
-    <header class="bg-slate-950/95 backdrop-blur-md border-b border-slate-800/60 p-4 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-3 group cursor-pointer">
-                <div class="relative flex items-center justify-center w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl shadow-lg group-hover:rotate-12 transition-transform">
-                    <i class="fas fa-crown text-xl text-slate-950"></i>
+    <!-- VIP Welcome Overlay -->
+    <div id="vip-welcome-overlay" style="position: fixed; inset: 0; background: radial-gradient(circle at center, #0f172a, #020617); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);">
+        <div style="background: rgba(13, 17, 23, 0.9); border: 1px solid rgba(212, 175, 55, 0.3); backdrop-filter: blur(20px); position: relative; overflow: hidden; text-align: center; padding: 40px; border-radius: 24px; max-width: 28rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
+            <div style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent, rgba(212,175,55,0.1), transparent 30%); animation: cardRotate 4s linear infinite;"></div>
+            <div class="relative z-10">
+                <div class="mb-6 relative inline-block">
+                    <i class="fas fa-shield-alt text-7xl text-amber-500 animate-pulse"></i>
+                    <div class="absolute inset-0 blur-xl bg-amber-500/30 rounded-full"></div>
                 </div>
-                <h1 class="text-3xl font-black premium-logo">NORD<span class="text-white font-light">BET</span></h1>
+                <h2 class="text-3xl font-black font-serif tracking-wider text-amber-400 mb-2 glitch-text" data-text="NORDBET SECURE LOBBY">NORDBET SECURE LOBBY</h2>
+                <div class="vip-progress w-48 mx-auto mb-6">
+                    <div class="vip-progress-bar" style="width: 85%"></div>
+                </div>
+                <p class="text-xs text-slate-400 mb-8 font-light tracking-wide leading-relaxed">
+                    VIP Şifreli Sunucu Bağlantısı Sağlandı.<br>
+                    Ses motorunu aktif etmek ve masalara oturmak için giriş yapın.
+                </p>
+                <button onclick="enterVipCasinoWithMusic()" class="btn-premium w-full py-4 rounded-xl tracking-widest text-sm shadow-xl uppercase relative z-10">
+                    <i class="fas fa-door-open mr-2"></i> VIP CASINO'YA GİRİŞ
+                </button>
+                <div class="mt-4 flex justify-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    <span class="text-[10px] text-green-400 uppercase tracking-widest">Server Online • 12ms Ping</span>
+                </div>
             </div>
-            <div class="flex items-center gap-4 w-full sm:w-auto justify-end">
-                <div id="balance" class="bg-slate-900 px-5 py-2 rounded-xl border border-amber-500/20 text-amber-400 font-bold tracking-wide text-lg">₺ 124.850</div>
-                <button onclick="redirectToWhatsApp()" class="gold-bg text-slate-950 font-bold px-5 py-2 rounded-xl shadow-lg transition-all transform hover:scale-105 flex items-center gap-2"><i class="fas fa-wallet"></i> YATIR</button>
-                <button onclick="redirectToWhatsApp()" class="bg-slate-800 hover:bg-slate-700 text-white font-medium px-5 py-2 rounded-xl border border-slate-700 transition-all transform hover:scale-105 flex items-center gap-2"><i class="fas fa-hand-holding-usd"></i> ÇEK</button>
+        </div>
+    </div>
+
+    <!-- Mega Win Screen -->
+    <div id="mega-win-screen">
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div id="confetti-container"></div>
+        </div>
+        <div class="relative z-10 text-center">
+            <div class="mb-6 relative inline-block">
+                <i class="fas fa-trophy text-8xl text-amber-400 animate-bounce"></i>
+                <div class="absolute inset-0 blur-2xl bg-amber-500/40 rounded-full scale-150"></div>
+            </div>
+            <h2 class="text-6xl sm:text-8xl font-black mega-win-text mb-4 text-center">MEGA WIN!</h2>
+            <p id="mega-win-amount" class="text-4xl sm:text-6xl font-bold text-white tracking-wide font-mono">+₺0</p>
+            <div class="mt-8 bg-emerald-600/20 text-emerald-400 font-bold px-8 py-3 rounded-xl border border-emerald-500/30 text-sm flex items-center gap-3 shadow-lg animate-pulse backdrop-blur-sm">
+                <i class="fas fa-check-circle text-lg"></i> 
+                <span>Kasanıza Aktarıldı!</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-slate-950/90 backdrop-blur-xl border-b border-slate-800/60 p-4 sticky top-0 z-50 relative">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4 group cursor-pointer float-element">
+                <div class="relative flex items-center justify-center w-12 h-12">
+                    <div class="absolute inset-0 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl blur-md opacity-50 group-hover:opacity-80 transition-opacity"></div>
+                    <div class="relative flex items-center justify-center w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl shadow-lg group-hover:rotate-12 transition-transform duration-500">
+                        <i class="fas fa-crown text-xl text-slate-950"></i>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-3xl sm:text-4xl font-black premium-logo">NORD<span class="text-white font-light">BET</span></h1>
+                    <div class="flex items-center gap-2 mt-0.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                        <span class="text-[9px] text-slate-500 uppercase tracking-widest">Premium Gaming</span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+                <div id="balance" class="balance-counter px-6 py-2.5 rounded-xl text-amber-400 font-bold tracking-wide text-lg neon-text-gold">
+                    ₺ 124.850
+                </div>
+                <button onclick="redirectToWhatsApp()" class="btn-premium px-6 py-2.5 rounded-xl shadow-lg transition-all transform hover:scale-105 flex items-center gap-2 text-sm">
+                    <i class="fas fa-wallet"></i> YATIR
+                </button>
+                <button onclick="redirectToWhatsApp()" class="bg-slate-800 hover:bg-slate-700 text-white font-medium px-6 py-2.5 rounded-xl border border-slate-700 transition-all transform hover:scale-105 flex items-center gap-2 text-sm hover:border-slate-500">
+                    <i class="fas fa-hand-holding-usd"></i> ÇEK
+                </button>
             </div>
         </div>
     </header>
 
-    <div class="max-w-7xl mx-auto p-4 sm:p-6 w-full flex-grow">
-        
-        <div class="flex flex-wrap gap-2 mb-6 border-b border-slate-800 pb-4 justify-center lg:justify-start">
-            <button onclick="switchTab('sweetbonanza')" class="tab-btn active border border-slate-800 px-4 py-2.5 rounded-xl font-medium text-xs transition-all flex items-center gap-2 hover:bg-slate-900"><i class="fas fa-candy-cane text-pink-500"></i> Sweet Bonanza</button>
-            <button onclick="switchTab('gatesolympus')" class="tab-btn border border-slate-800 px-4 py-2.5 rounded-xl font-medium text-xs transition-all flex items-center gap-2 hover:bg-slate-900"><i class="fas fa-bolt text-amber-400"></i> Gates of Olympus</button>
-            <button onclick="switchTab('bigbass')" class="tab-btn border border-slate-800 px-4 py-2.5 rounded-xl font-medium text-xs transition-all flex items-center gap-2 hover:bg-slate-900"><i class="fas fa-fish text-emerald-400"></i> Big Bass Bonanza</button>
-            <button onclick="switchTab('sugarrush')" class="tab-btn border border-slate-800 px-4 py-2.5 rounded-xl font-medium text-xs transition-all flex items-center gap-2 hover:bg-slate-900"><i class="fas fa-ice-cream text-purple-400"></i> Sugar Rush 1000</button>
-            <button onclick="switchTab('roulette')" class="tab-btn border border-slate-800 px-4 py-2.5 rounded-xl font-medium text-xs transition-all flex items-center gap-2 hover:bg-slate-900"><i class="fas fa-circle-dot text-red-500"></i> Rulet</button>
-            <button onclick="switchTab('blackjack')" class="tab-btn border border-slate-800 px-4 py-2.5 rounded-xl font-medium text-xs transition-all flex items-center gap-2 hover:bg-slate-900"><i class="fas fa-id-card text-blue-500"></i> Blackjack</button>
-            
-            <button onclick="switchTab('aviator')" class="tab-btn border border-slate-800 px-4 py-2.5 rounded-xl font-medium text-xs transition-all flex items-center gap-2 hover:bg-slate-900"><i class="fas fa-plane text-red-500 animate-pulse"></i> Aviator VIP</button>
-            <button onclick="switchTab('mines')" class="tab-btn border border-slate-800 px-4 py-2.5 rounded-xl font-medium text-xs transition-all flex items-center gap-2 hover:bg-slate-900"><i class="fas fa-bomb text-amber-500"></i> Mines (Mayın)</button>
-            <button onclick="switchTab('pixelsoccer')" class="tab-btn border border-slate-800 px-4 py-2.5 rounded-xl font-medium text-xs transition-all flex items-center gap-2 hover:bg-slate-900"><i class="fas fa-futbol text-cyan-400"></i> Pixel Match</button>
+    <!-- Marquee -->
+    <div class="bg-slate-950/50 border-b border-slate-800/40 py-2 relative overflow-hidden">
+        <div class="marquee-container">
+            <div class="marquee-content text-xs text-slate-400 font-medium tracking-wide">
+                <span class="mx-8 text-amber-400"><i class="fas fa-fire mr-1"></i> SON KAZANAN: Ahmet K. - ₺45.200</span>
+                <span class="mx-8 text-cyan-400"><i class="fas fa-bolt mr-1"></i> JACKPOT: Sweet Bonanza - ₺128.000</span>
+                <span class="mx-8 text-pink-400"><i class="fas fa-gem mr-1"></i> VIP ÖDÜL: Elif Y. - ₺89.500</span>
+                <span class="mx-8 text-emerald-400"><i class="fas fa-trophy mr-1"></i> MEGA WIN: Mehmet A. - ₺234.000</span>
+                <span class="mx-8 text-purple-400"><i class="fas fa-star mr-1"></i> GÜNLÜK BONUS: %25 Yatırım Bonusu</span>
+                <span class="mx-8 text-amber-400"><i class="fas fa-fire mr-1"></i> SON KAZANAN: Ahmet K. - ₺45.200</span>
+                <span class="mx-8 text-cyan-400"><i class="fas fa-bolt mr-1"></i> JACKPOT: Sweet Bonanza - ₺128.000</span>
+                <span class="mx-8 text-pink-400"><i class="fas fa-gem mr-1"></i> VIP ÖDÜL: Elif Y. - ₺89.500</span>
+                <span class="mx-8 text-emerald-400"><i class="fas fa-trophy mr-1"></i> MEGA WIN: Mehmet A. - ₺234.000</span>
+                <span class="mx-8 text-purple-400"><i class="fas fa-star mr-1"></i> GÜNLÜK BONUS: %25 Yatırım Bonusu</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- TRUST SECTION - Güven Veren Sözler -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 relative z-10">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div class="trust-badge rounded-xl p-3 flex items-center gap-3 cursor-pointer">
+                <div class="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-shield-alt text-emerald-400 text-lg"></i>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-emerald-400">256-BIT SSL</p>
+                    <p class="text-[10px] text-slate-400">Banka Düzeyinde Güvenlik</p>
+                </div>
+            </div>
+            <div class="trust-badge rounded-xl p-3 flex items-center gap-3 cursor-pointer">
+                <div class="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-bolt text-amber-400 text-lg"></i>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-amber-400">ANINDA ÇEKİM</p>
+                    <p class="text-[10px] text-slate-400">5 Dakikada Hesabınızda</p>
+                </div>
+            </div>
+            <div class="trust-badge rounded-xl p-3 flex items-center gap-3 cursor-pointer">
+                <div class="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-headset text-cyan-400 text-lg"></i>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-cyan-400">7/24 DESTEK</p>
+                    <p class="text-[10px] text-slate-400">Uzman Ekip Yanınızda</p>
+                </div>
+            </div>
+            <div class="trust-badge rounded-xl p-3 flex items-center gap-3 cursor-pointer">
+                <div class="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-certificate text-purple-400 text-lg"></i>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-purple-400">LİSANSLI</p>
+                    <p class="text-[10px] text-slate-400">Curacao Gaming Lisansı</p>
+                </div>
+            </div>
         </div>
 
-        <div id="main-casino-frame" class="bg-slate-900/30 backdrop-blur-md border border-slate-800 rounded-3xl p-6 min-h-[460px] relative shadow-2xl gold-glow-border">
-            
+        <!-- Güven Mesajları -->
+        <div class="mt-3 bg-gradient-to-r from-amber-500/5 via-transparent to-amber-500/5 border border-amber-500/10 rounded-xl p-3 flex items-center justify-center gap-2 shimmer">
+            <i class="fas fa-quote-left text-amber-500/30 text-sm"></i>
+            <p class="text-xs text-amber-400/80 font-medium tracking-wide" id="trust-message">"Kazancınızı garanti altına alıyoruz — 50.000+ aktif üye bizi tercih ediyor"</p>
+            <i class="fas fa-quote-right text-amber-500/30 text-sm"></i>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto p-4 sm:p-6 w-full flex-grow relative z-10">
+
+        <!-- Tabs -->
+        <div class="flex flex-wrap gap-2 mb-6 border-b border-slate-800/60 pb-4 justify-center lg:justify-start">
+            <button onclick="switchTab('sweetbonanza')" class="tab-btn active border border-slate-800 px-4 py-2.5 rounded-xl font-medium text-xs transition-all flex items-center gap-2 hover:bg-slate-900/80">
+                <i class="fas fa-candy-cane text-pink-500"></i> Sweet Bonanza
+            </button>
+            <button onclick="switchTab('gatesolympus')" class="tab-btn border border-slate-800 px-4 py-2.5 rounded-xl font-medium text-xs transition-all flex items-center gap-2 hover:bg-slate-900/80">
+                <i class="fas fa-bolt text-amber-400"></i> Gates of Olympus
+            </button>
+            <button onclick="switchTab('bigbass')" class="tab-btn border border-slate-800 px-4 py-2.5 rounded-xl font-medium text-xs transition-all flex items-center gap-2 hover:bg-slate-900/80">
+                <i class="fas fa-fish text-emerald-400"></i> Big Bass Bonanza
+            </button>
+            <button onclick="switchTab('sugarrush')" class="tab-btn border border-slate-800 px-4 py-2.5 rounded-xl font-medium text-xs transition-all flex items-center gap-2 hover:bg-slate-900/80">
+                <i class="fas fa-ice-cream text-purple-400"></i> Sugar Rush 1000
+            </button>
+            <button onclick="switchTab('roulette')" class="tab-btn border border-slate-800 px-4 py-2.5 rounded-xl font-medium text-xs transition-all flex items-center gap-2 hover:bg-slate-900/80">
+                <i class="fas fa-circle-dot text-red-500"></i> Rulet
+            </button>
+            <button onclick="switchTab('blackjack')" class="tab-btn border border-slate-800 px-4 py-2.5 rounded-xl font-medium text-xs transition-all flex items-center gap-2 hover:bg-slate-900/80">
+                <i class="fas fa-id-card text-blue-500"></i> Blackjack
+            </button>
+            <button onclick="switchTab('aviator')" class="tab-btn border border-slate-800 px-4 py-2.5 rounded-xl font-medium text-xs transition-all flex items-center gap-2 hover:bg-slate-900/80">
+                <i class="fas fa-plane text-red-500 animate-pulse"></i> Aviator VIP
+            </button>
+            <button onclick="switchTab('mines')" class="tab-btn border border-slate-800 px-4 py-2.5 rounded-xl font-medium text-xs transition-all flex items-center gap-2 hover:bg-slate-900/80">
+                <i class="fas fa-bomb text-amber-500"></i> Mines (Mayın)
+            </button>
+            <button onclick="switchTab('canlislot')" class="tab-btn border border-amber-500/40 bg-amber-500/10 px-5 py-2.5 rounded-xl font-bold text-xs text-amber-400 transition-all flex items-center gap-2 hover:bg-amber-500/20 shadow-[0_0_15px_rgba(245,158,11,0.1)]">
+                <i class="fas fa-stream animate-spin text-amber-400" style="animation-duration: 3s"></i> CANLI SLOT
+            </button>
+        </div>
+
+        <!-- Game Container -->
+        <div id="main-casino-frame" class="bg-slate-900/40 backdrop-blur-md border border-slate-800/60 rounded-3xl p-6 min-h-[460px] relative shadow-2xl neon-border-gold">
+
+            <!-- Sweet Bonanza -->
             <div id="game-sweetbonanza" class="game-container block">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
-                    <div id="bonanza-board-wrapper" class="lg:col-span-2 bg-gradient-to-br from-pink-900/30 via-purple-950/30 to-slate-950 p-6 rounded-2xl border border-pink-500/20 text-center relative overflow-hidden">
-                        <div class="flex justify-between items-center mb-4 px-2">
-                            <span id="bonanza-title" class="text-xs uppercase tracking-wider text-pink-400 font-bold"><i class="fas fa-cookie-bite mr-1"></i> Sweet Bonanza Board</span>
-                            <div id="bonanza-multiplier-display" class="hidden bg-red-600 text-white text-xs font-black px-3 py-1 rounded-full animate-bounce"></div>
+                    <div id="bonanza-board-wrapper" class="lg:col-span-2 bg-gradient-to-br from-pink-900/20 via-purple-950/20 to-slate-950 p-6 rounded-2xl border border-pink-500/20 text-center relative overflow-hidden game-card">
+                        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIvPjwvc3ZnPg==')] opacity-30"></div>
+                        <div class="flex justify-between items-center mb-4 px-2 relative z-10">
+                            <span id="bonanza-title" class="text-xs uppercase tracking-wider text-pink-400 font-bold flex items-center gap-2">
+                                <i class="fas fa-cookie-bite"></i> Sweet Bonanza Board
+                            </span>
+                            <div id="bonanza-multiplier-display" class="hidden bg-gradient-to-r from-red-600 to-red-700 text-white text-xs font-black px-4 py-1.5 rounded-full animate-bounce shadow-lg shadow-red-500/30">
+                            </div>
                         </div>
-                        <div class="grid grid-cols-4 gap-3 max-w-md mx-auto bg-black/40 p-4 rounded-xl border border-pink-500/10" id="bonanza-grid"></div>
+                        <div class="grid grid-cols-4 gap-3 max-w-md mx-auto bg-black/50 p-4 rounded-xl border border-pink-500/10 relative z-10" id="bonanza-grid"></div>
                     </div>
-                    <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800">
-                        <h3 class="text-lg font-bold text-pink-400 mb-1"><i class="fas fa-candy-cane"></i> Sweet Bonanza VIP</h3>
-                        <p class="text-xs text-slate-400 mb-4">3 Adet Bonus (`🍭`) Yakala, **Şimşekler Eşliğinde 10 Freespin** Kazan ve Çarpan Bombalarını (`💣`) Topla!</p>
-                        <div class="mb-4">
-                            <label class="text-xs text-slate-500 block mb-1">Bahis Tutarı (₺)</label>
-                            <input id="bonanzaBetAmount" type="number" value="1000" class="w-full bg-slate-900 p-3 rounded-xl border border-slate-800 text-pink-400 font-bold focus:outline-none">
+                    <div class="bg-slate-950/90 p-6 rounded-2xl border border-slate-800/60 backdrop-blur-sm game-card">
+                        <div class="flex items-center gap-3 mb-1">
+                            <i class="fas fa-candy-cane text-pink-400 text-xl"></i>
+                            <h3 class="text-lg font-bold text-pink-400">Sweet Bonanza VIP</h3>
                         </div>
-                        <div class="flex gap-2">
-                            <button onclick="playSweetBonanza()" id="bonanzaBtn" class="flex-grow bg-gradient-to-r from-pink-500 to-purple-600 text-white font-extrabold py-3.5 rounded-xl shadow-lg text-sm">SPIN ET</button>
-                            <button onclick="toggleAutoSpin('bonanza')" id="bonanzaAutoBtn" class="bg-slate-800 border border-slate-700 text-slate-300 font-bold px-4 rounded-xl text-xs whitespace-nowrap">AUTO: OFF</button>
+                        <p class="text-xs text-slate-400 mb-6 leading-relaxed">
+                            3 Adet Scatter (<span class="text-pink-400 font-bold">LOLLIPOP</span>) Yakala, 
+                            <strong class="text-amber-400">Şimşekler Eşliğinde 10 Freespin</strong> Kazan ve 
+                            Çarpan Bombalarını (<span class="text-red-400 font-bold">BOMB</span>) Topla!
+                        </p>
+                        <div class="mb-5">
+                            <label class="text-xs text-slate-500 block mb-2 font-medium">Bahis Tutarı (₺)</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold">₺</span>
+                                <input id="bonanzaBetAmount" type="number" value="1000" class="w-full bg-slate-900 pl-8 pr-4 py-3 rounded-xl border border-slate-800 text-pink-400 font-bold focus:outline-none focus:border-pink-500/50 focus:shadow-[0_0_15px_rgba(236,72,153,0.1)] transition-all">
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <button onclick="playSweetBonanza()" id="bonanzaBtn" class="flex-grow bg-gradient-to-r from-pink-500 via-purple-500 to-pink-600 text-white font-extrabold py-3.5 rounded-xl shadow-lg text-sm hover:shadow-pink-500/30 transition-all hover:scale-[1.02] active:scale-95 relative overflow-hidden group">
+                                <span class="relative z-10">SPIN ET</span>
+                                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                            </button>
+                            <button onclick="toggleAutoSpin('bonanza')" id="bonanzaAutoBtn" class="bg-slate-800 border border-slate-700 text-slate-300 font-bold px-4 rounded-xl text-xs whitespace-nowrap hover:bg-slate-700 hover:border-slate-600 transition-all">
+                                AUTO: OFF
+                            </button>
+                        </div>
+                        <div class="mt-4 flex items-center justify-between text-[10px] text-slate-500">
+                            <span>RTP: %96.5</span>
+                            <span class="flex items-center gap-1"><i class="fas fa-bolt text-amber-400"></i> Volatilite: Yüksek</span>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Gates of Olympus -->
             <div id="game-gatesolympus" class="game-container hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
-                    <div id="olympus-board-wrapper" class="lg:col-span-2 bg-gradient-to-br from-amber-950/20 via-slate-900 to-purple-950/20 p-6 rounded-2xl border border-amber-500/20 text-center relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-4">
-                        <div class="w-full">
+                    <div id="olympus-board-wrapper" class="lg:col-span-2 bg-gradient-to-br from-amber-950/20 via-slate-900 to-purple-950/20 p-6 rounded-2xl border border-amber-500/20 text-center relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-4 game-card">
+                        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTMwIDVMMzUgMzBMMzAgNTVMMjUgMzB6IiBmaWxsPSJub25lIiBzdHJva2U9InJnYmEoMjEyLDE3NSw1NSwwLjA1KSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9zdmc+')] opacity-20"></div>
+                        <div class="w-full relative z-10">
                             <div class="flex justify-between items-center mb-4 px-2">
-                                <span id="olympus-title" class="text-xs uppercase tracking-wider text-amber-400 font-bold"><i class="fas fa-bolt mr-1"></i> Gates of Olympus</span>
-                                <div id="olympus-lightning-text" class="hidden bg-amber-500 text-slate-950 text-xs font-black px-3 py-1 rounded-full animate-pulse">⚡ ZEUS ÇARPANI TETİKLENDİ!</div>
+                                <span id="olympus-title" class="text-xs uppercase tracking-wider text-amber-400 font-bold flex items-center gap-2">
+                                    <i class="fas fa-bolt"></i> Gates of Olympus
+                                </span>
+                                <div id="olympus-lightning-text" class="hidden bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 text-xs font-black px-4 py-1.5 rounded-full animate-pulse shadow-lg shadow-amber-500/30">
+                                    ⚡ ZEUS ÇARPANI TETİKLENDİ!
+                                </div>
                             </div>
                             <div class="grid grid-cols-4 gap-3 max-w-sm mx-auto bg-black/50 p-4 rounded-xl border border-amber-500/10" id="olympus-grid"></div>
                         </div>
-                        <div class="flex flex-col items-center justify-center p-2 min-w-[120px]">
-                            <div class="zeus-character">🧙‍♂️<span class="zeus-baston">🪄</span></div>
-                            <div class="text-[10px] text-amber-400 font-bold tracking-widest uppercase mt-2 bg-slate-950 px-2 py-1 rounded border border-amber-500/30 shadow-md">OLYMPUS ZEUS</div>
+                        <div class="flex flex-col items-center justify-center p-2 min-w-[120px] relative z-10">
+                            <div class="text-8xl filter drop-shadow-[0_0_25px_rgba(56,189,248,0.8)] animate-[zeusFloat_3s_ease-in-out_infinite_alternate]">🧙‍♂️</div>
+                            <div class="text-[10px] text-amber-400 font-bold tracking-widest uppercase mt-2 bg-slate-950 px-3 py-1.5 rounded-lg border border-amber-500/30 shadow-md">
+                                OLYMPUS ZEUS
+                            </div>
                         </div>
                     </div>
-                    <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800">
-                        <h3 class="text-lg font-bold text-amber-400 mb-1">⚡ Gates of Olympus VIP</h3>
-                        <p class="text-xs text-slate-400 mb-4">3 Adet Dede Emojisi (`⚡`) yan yana gelince gök gürler ve **10 FREESPIN** başlar! Şimşek çarpanları (`💥`) kasayı uçurur.</p>
-                        <div class="mb-4">
-                            <label class="text-xs text-slate-500 block mb-1">Bahis Tutarı (₺)</label>
-                            <input id="olympusBetAmount" type="number" value="1000" class="w-full bg-slate-900 p-3 rounded-xl border border-slate-800 text-amber-400 font-bold focus:outline-none">
+                    <div class="bg-slate-950/90 p-6 rounded-2xl border border-slate-800/60 backdrop-blur-sm game-card">
+                        <div class="flex items-center gap-3 mb-1">
+                            <i class="fas fa-bolt text-amber-400 text-xl animate-pulse"></i>
+                            <h3 class="text-lg font-bold text-amber-400">Gates of Olympus VIP</h3>
                         </div>
-                        <div class="flex gap-2">
-                            <button onclick="playGatesOfOlympus()" id="olympusBtn" class="flex-grow bg-gradient-to-r from-amber-500 to-yellow-600 text-slate-950 font-black py-3.5 rounded-xl shadow-lg text-sm">SPIN ET</button>
-                            <button onclick="toggleAutoSpin('olympus')" id="olympusAutoBtn" class="bg-slate-800 border border-slate-700 text-slate-300 font-bold px-4 rounded-xl text-xs whitespace-nowrap">AUTO: OFF</button>
+                        <p class="text-xs text-slate-400 mb-6 leading-relaxed">
+                            3 Adet Zeus Scatter (<span class="text-amber-400 font-bold">BOLT</span>) yan yana gelince gök gürler ve 
+                            <strong class="text-amber-400">10 FREESPIN</strong> başlar! Çarpanlar (<span class="text-red-400 font-bold">MULTIPLIER</span>) kasayı uçurur.
+                        </p>
+                        <div class="mb-5">
+                            <label class="text-xs text-slate-500 block mb-2 font-medium">Bahis Tutarı (₺)</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold">₺</span>
+                                <input id="olympusBetAmount" type="number" value="1000" class="w-full bg-slate-900 pl-8 pr-4 py-3 rounded-xl border border-slate-800 text-amber-400 font-bold focus:outline-none focus:border-amber-500/50 focus:shadow-[0_0_15px_rgba(245,158,11,0.1)] transition-all">
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <button onclick="playGatesOfOlympus()" id="olympusBtn" class="flex-grow bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 text-slate-950 font-black py-3.5 rounded-xl shadow-lg text-sm hover:shadow-amber-500/30 transition-all hover:scale-[1.02] active:scale-95 relative overflow-hidden group">
+                                <span class="relative z-10">SPIN ET</span>
+                                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                            </button>
+                            <button onclick="toggleAutoSpin('olympus')" id="olympusAutoBtn" class="bg-slate-800 border border-slate-700 text-slate-300 font-bold px-4 rounded-xl text-xs whitespace-nowrap hover:bg-slate-700 hover:border-slate-600 transition-all">
+                                AUTO: OFF
+                            </button>
+                        </div>
+                        <div class="mt-4 flex items-center justify-between text-[10px] text-slate-500">
+                            <span>RTP: %96.5</span>
+                            <span class="flex items-center gap-1"><i class="fas fa-bolt text-amber-400"></i> Volatilite: Çok Yüksek</span>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Big Bass Bonanza -->
             <div id="game-bigbass" class="game-container hidden">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
-                    <div id="bigbass-board-wrapper" class="lg:col-span-2 bg-gradient-to-br from-emerald-950/40 via-slate-900 to-cyan-950/30 p-6 rounded-2xl border border-emerald-500/20 text-center">
-                        <div class="flex justify-between items-center mb-4 px-2">
-                            <span id="bigbass-title" class="text-xs uppercase tracking-wider text-emerald-400 font-bold"><i class="fas fa-water mr-1"></i> Big Bass Netting</span>
-                            <div id="bigbass-catch-display" class="hidden bg-emerald-600 text-white text-xs font-black px-3 py-1 rounded-full animate-bounce">🎣 BALIKÇI ÖDÜLLERİ KATLADI!</div>
+                <div class="flex flex-col items-center justify-center h-96">
+                    <div class="text-8xl mb-6 float-element">🎣</div>
+                    <h3 class="text-2xl font-bold text-emerald-400 mb-2">Big Bass Bonanza</h3>
+                    <p class="text-slate-400 text-sm mb-6">Olta at ve büyük balıkları yakala!</p>
+                    <div class="flex gap-4">
+                        <div class="bg-slate-800 px-4 py-2 rounded-lg border border-slate-700">
+                            <span class="text-xs text-slate-500">RTP</span>
+                            <p class="text-emerald-400 font-bold">%96.7</p>
                         </div>
-                        <div class="grid grid-cols-4 gap-3 max-w-md mx-auto bg-black/40 p-4 rounded-xl border border-emerald-500/10" id="bigbass-grid"></div>
-                    </div>
-                    <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800">
-                        <h3 class="text-lg font-bold text-emerald-400 mb-1"><i class="fas fa-fish"></i> Big Bass Bonanza VIP</h3>
-                        <p class="text-xs text-slate-400 mb-4">3 Adet Yeşil Balık (`🎣`) bulunca fırtına kopar ve **10 Freespin** başlar. Altın Balıklar Çarpan (`💵`) taşır!</p>
-                        <div class="mb-4">
-                            <label class="text-xs text-slate-500 block mb-1">Bahis Tutarı (₺)</label>
-                            <input id="bigbassBetAmount" type="number" value="1000" class="w-full bg-slate-900 p-3 rounded-xl border border-slate-800 text-emerald-400 font-bold focus:outline-none">
-                        </div>
-                        <div class="flex gap-2">
-                            <button onclick="playBigBass()" id="bigbassBtn" class="flex-grow bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 font-black py-3.5 rounded-xl text-sm shadow-md">OLTA AT (SPIN)</button>
-                            <button onclick="toggleAutoSpin('bigbass')" id="bigbassAutoBtn" class="bg-slate-800 border border-slate-700 text-slate-300 font-bold px-4 rounded-xl text-xs whitespace-nowrap">AUTO: OFF</button>
+                        <div class="bg-slate-800 px-4 py-2 rounded-lg border border-slate-700">
+                            <span class="text-xs text-slate-500">Max Win</span>
+                            <p class="text-emerald-400 font-bold">x2100</p>
                         </div>
                     </div>
+                    <button class="mt-6 btn-premium px-8 py-3 rounded-xl font-bold text-sm">YAKINDA</button>
                 </div>
             </div>
 
+            <!-- Sugar Rush 1000 -->
             <div id="game-sugarrush" class="game-container hidden">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
-                    <div id="sugarrush-board-wrapper" class="lg:col-span-2 bg-gradient-to-br from-purple-900/30 via-fuchsia-950/30 to-slate-950 p-6 rounded-2xl border border-purple-500/20 text-center">
-                        <div class="flex justify-between items-center mb-4 px-2">
-                            <span id="sugarrush-title" class="text-xs uppercase tracking-wider text-purple-400 font-bold"><i class="fas fa-ice-cream mr-1"></i> Sugar Rush Spots</span>
-                            <div id="sugarrush-spot-display" class="hidden bg-purple-600 text-white text-xs font-black px-3 py-1 rounded-full animate-pulse">🍇 X1000 MULTIPLIER SPOT!</div>
+                <div class="flex flex-col items-center justify-center h-96">
+                    <div class="text-8xl mb-6 float-element">🍬</div>
+                    <h3 class="text-2xl font-bold text-purple-400 mb-2">Sugar Rush 1000</h3>
+                    <p class="text-slate-400 text-sm mb-6">Şeker patlamaları ile kazan!</p>
+                    <div class="flex gap-4">
+                        <div class="bg-slate-800 px-4 py-2 rounded-lg border border-slate-700">
+                            <span class="text-xs text-slate-500">RTP</span>
+                            <p class="text-purple-400 font-bold">%97.0</p>
                         </div>
-                        <div class="grid grid-cols-4 gap-3 max-w-md mx-auto bg-black/40 p-4 rounded-xl border border-purple-500/10" id="sugarrush-grid"></div>
-                    </div>
-                    <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800">
-                        <h3 class="text-lg font-bold text-purple-400 mb-1">🧸 Sugar Rush 1000</h3>
-                        <p class="text-xs text-slate-400 mb-4">3 Adet Ayıcık (`🧸`) ile fırtınalı **10 Freespin** tetiklenir. Jelibonlar patladıkça çarpan sakızları (`🍬`) kalır!</p>
-                        <div class="mb-4">
-                            <label class="text-xs text-slate-500 block mb-1">Bahis Tutarı (₺)</label>
-                            <input id="sugarrushBetAmount" type="number" value="1000" class="w-full bg-slate-900 p-3 rounded-xl border border-slate-800 text-purple-400 font-bold focus:outline-none">
-                        </div>
-                        <div class="flex gap-2">
-                            <button onclick="playSugarRush()" id="sugarrushBtn" class="flex-grow bg-gradient-to-r from-purple-500 to-fuchsia-600 text-white font-extrabold py-3.5 rounded-xl text-sm shadow-md">JELİBONLARI DÖNDÜR</button>
-                            <button onclick="toggleAutoSpin('sugarrush')" id="sugarrushAutoBtn" class="bg-slate-800 border border-slate-700 text-slate-300 font-bold px-4 rounded-xl text-xs whitespace-nowrap">AUTO: OFF</button>
+                        <div class="bg-slate-800 px-4 py-2 rounded-lg border border-slate-700">
+                            <span class="text-xs text-slate-500">Max Win</span>
+                            <p class="text-purple-400 font-bold">x5000</p>
                         </div>
                     </div>
+                    <button class="mt-6 btn-premium px-8 py-3 rounded-xl font-bold text-sm">YAKINDA</button>
                 </div>
             </div>
 
+            <!-- ROULETTE -->
             <div id="game-roulette" class="game-container hidden">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
-                    <div class="lg:col-span-2 bg-slate-950 p-6 rounded-2xl border border-red-500/20 text-center relative overflow-hidden flex flex-col items-center">
-                        <div class="wheel-container mb-4">
-                            <div class="real-wheel" id="mainRouletteWheel"></div>
-                            <div class="roulette-ball" id="mainRouletteBall"></div>
-                        </div>
-                        <div id="roulette-status-text" class="text-center bg-slate-900/90 px-4 py-2 rounded-xl border border-slate-800">
-                            <i class="fas fa-circle-dot text-xl text-red-500 animate-pulse"></i>
-                            <div class="text-xs font-bold mt-1 text-slate-300" id="rouletteResultDisplay">BAHİS BEKLENİYOR</div>
-                        </div>
-                        <div class="flex justify-center gap-3 mt-4 w-full max-w-xs">
-                            <div class="bg-red-600 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow flex-1">Kırmızı (2x)</div>
-                            <div class="bg-slate-800 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow flex-1">Siyah (2x)</div>
-                            <div class="bg-emerald-600 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow flex-1">Sıfır (35x)</div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2">
+                        <div class="roulette-table game-card">
+                            <div class="text-center mb-4">
+                                <h3 class="text-amber-400 font-bold text-lg tracking-wider"><i class="fas fa-circle-dot mr-2"></i> PREMIUM RULET</h3>
+                            </div>
+                            <div class="flex flex-col md:flex-row items-center justify-center gap-8">
+                                <div class="roulette-wheel-container">
+                                    <div class="roulette-wheel" id="rouletteWheel">
+                                        <div class="roulette-center"></div>
+                                    </div>
+                                    <div class="roulette-ball" id="rouletteBall"></div>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <div class="text-center mb-2">
+                                        <span class="text-xs text-slate-400 uppercase tracking-wider">Son Sonuç</span>
+                                        <div id="rouletteResult" class="text-4xl font-black text-white mt-1">--</div>
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-1 text-xs">
+                                        <button onclick="betRoulette('red')" class="bg-red-600 hover:bg-red-500 text-white py-2 rounded font-bold transition-all hover:scale-105">KIRMIZI</button>
+                                        <button onclick="betRoulette('green')" class="bg-green-600 hover:bg-green-500 text-white py-2 rounded font-bold transition-all hover:scale-105">YEŞİL</button>
+                                        <button onclick="betRoulette('black')" class="bg-slate-800 hover:bg-slate-700 text-white py-2 rounded font-bold transition-all hover:scale-105">SİYAH</button>
+                                    </div>
+                                    <button onclick="spinRoulette()" id="rouletteSpinBtn" class="btn-premium py-3 rounded-xl font-black text-sm mt-2">
+                                        <i class="fas fa-sync-alt mr-2"></i> ÇEVİR
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800">
-                        <h3 class="text-lg font-bold text-red-500 mb-1">🎰 Canlı Avrupa Ruleti VIP</h3>
-                        <p class="text-xs text-slate-400 mb-4">Gerçek fiziksel kurallı çarkı döndür, kazanan sayıya top tam olarak otursun.</p>
-                        <div class="mb-3">
-                            <label class="text-xs text-slate-500 block mb-1">Bahis Türü Seç</label>
-                            <select id="rouletteType" class="w-full bg-slate-900 p-3 rounded-xl border border-slate-800 text-white text-xs font-medium focus:outline-none">
-                                <option value="red">Kırmızı (Red)</option>
-                                <option value="black">Siyah (Black)</option>
-                                <option value="zero">Yeşil (0 - Zero)</option>
-                            </select>
-                        </div>
+                    <div class="bg-slate-950/90 p-6 rounded-2xl border border-slate-800/60 backdrop-blur-sm game-card">
+                        <h3 class="text-lg font-bold text-red-400 mb-4"><i class="fas fa-circle-dot mr-2"></i> Rulet VIP</h3>
                         <div class="mb-4">
-                            <label class="text-xs text-slate-500 block mb-1">Bahis Tutarı (₺)</label>
-                            <input id="rouletteBetAmount" type="number" value="1000" class="w-full bg-slate-900 p-3 rounded-xl border border-slate-800 text-red-500 font-bold focus:outline-none">
+                            <label class="text-xs text-slate-500 block mb-2">Bahis Tutarı (₺)</label>
+                            <input id="rouletteBetAmount" type="number" value="1000" class="w-full bg-slate-900 px-4 py-3 rounded-xl border border-slate-800 text-red-400 font-bold focus:outline-none focus:border-red-500/50 transition-all">
                         </div>
-                        <button onclick="playRoulette()" id="rouletteBtn" class="w-full bg-gradient-to-r from-red-600 to-amber-600 text-white font-extrabold py-3.5 rounded-xl text-sm shadow-md">ÇARKI DÖNDÜR</button>
+                        <div class="space-y-2 text-xs text-slate-400">
+                            <div class="flex justify-between"><span>Kırmızı / Siyah</span><span class="text-amber-400">2x</span></div>
+                            <div class="flex justify-between"><span>Yeşil (0)</span><span class="text-amber-400">14x</span></div>
+                            <div class="flex justify-between"><span>Tek / Çift</span><span class="text-amber-400">2x</span></div>
+                        </div>
+                        <div class="mt-4 p-3 bg-slate-900 rounded-lg border border-slate-800">
+                            <span class="text-xs text-slate-500">Geçmiş</span>
+                            <div id="rouletteHistory" class="flex gap-1 mt-1 flex-wrap">
+                                <span class="w-6 h-6 rounded-full bg-red-600 flex items-center justify-center text-[10px] font-bold">7</span>
+                                <span class="w-6 h-6 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-bold">11</span>
+                                <span class="w-6 h-6 rounded-full bg-green-600 flex items-center justify-center text-[10px] font-bold">0</span>
+                                <span class="w-6 h-6 rounded-full bg-red-600 flex items-center justify-center text-[10px] font-bold">23</span>
+                                <span class="w-6 h-6 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-bold">4</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
+            <!-- FIXED BLACKJACK -->
             <div id="game-blackjack" class="game-container hidden">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
-                    <div class="lg:col-span-2 bg-gradient-to-br from-blue-950/20 to-slate-950 p-6 rounded-2xl border border-blue-500/20 min-h-[300px] flex flex-col justify-between relative overflow-hidden">
-                        <div class="flex items-center gap-4 border-b border-blue-900/40 pb-3 mb-2">
-                            <div class="krupiye-avatar">👩‍💼</div>
-                            <div>
-                                <div class="text-[10px] text-blue-400 font-bold uppercase tracking-wider">VIP LIVE DEALER</div>
-                                <div class="text-xs text-slate-400 font-semibold flex items-center gap-2">KRUPİYE ELİ: <span id="dealer-score" class="text-white font-bold">0</span></div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2">
+                        <div class="blackjack-table game-card">
+                            <div class="text-center mb-2">
+                                <h3 class="text-amber-400 font-bold text-lg tracking-wider"><i class="fas fa-id-card mr-2"></i> PREMIUM BLACKJACK</h3>
                             </div>
-                        </div>
-                        <div id="dealer-cards" class="flex gap-2 min-h-[55px] px-2 mb-4"></div>
-                        <div class="mt-4 border-t border-slate-800/60 pt-4">
-                            <div class="text-xs text-slate-400 font-semibold mb-2 flex items-center gap-2"><i class="fas fa-user text-amber-400"></i> SENİN ELİN: <span id="player-score" class="text-white font-bold">0</span></div>
-                            <div id="player-cards" class="flex gap-2 min-h-[55px] px-2"></div>
+
+                            <!-- Dealer -->
+                            <div class="text-center mb-6">
+                                <div class="dealer-avatar">
+                                    <i class="fas fa-user-tie text-4xl text-slate-300"></i>
+                                </div>
+                                <div class="mt-6 flex justify-center gap-2 min-h-[130px]" id="dealerCards">
+                                    <!-- Kartlar buraya dinamik eklenecek -->
+                                </div>
+                                <p class="text-xs text-slate-400 mt-2">Krupiye: <span id="dealerScore" class="text-amber-400 font-bold">0</span></p>
+                            </div>
+
+                            <!-- Player -->
+                            <div class="text-center mt-8">
+                                <p class="text-xs text-slate-400 mb-2">Senin Elin: <span id="playerScore" class="text-emerald-400 font-bold">0</span></p>
+                                <div class="flex justify-center gap-2 mb-4 min-h-[130px]" id="playerCards">
+                                    <!-- Kartlar buraya dinamik eklenecek -->
+                                </div>
+                                <div class="flex justify-center gap-3">
+                                    <button onclick="bjHit()" id="bjHitBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2 rounded-xl font-bold text-sm transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                        <i class="fas fa-plus mr-1"></i> KART
+                                    </button>
+                                    <button onclick="bjStand()" id="bjStandBtn" class="bg-red-600 hover:bg-red-500 text-white px-6 py-2 rounded-xl font-bold text-sm transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                        <i class="fas fa-hand-paper mr-1"></i> BEKLE
+                                    </button>
+                                    <button onclick="bjDouble()" id="bjDoubleBtn" class="bg-amber-600 hover:bg-amber-500 text-white px-6 py-2 rounded-xl font-bold text-sm transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                        <i class="fas fa-times mr-1"></i> 2x
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800">
-                        <h3 class="text-lg font-bold text-blue-500 mb-1">🃏 Blackjack 21 VIP</h3>
-                        <p class="text-xs text-slate-400 mb-4">Karşıdaki canlı krupiyeyi alt et ama 21'i sakın aşma!</p>
-                        <div id="bj-bet-phase">
-                            <div class="mb-4">
-                                <label class="text-xs text-slate-500 block mb-1">Bahis Tutarı (₺)</label>
-                                <input id="blackjackBetAmount" type="number" value="1000" class="w-full bg-slate-900 p-3 rounded-xl border border-slate-800 text-blue-400 font-bold focus:outline-none">
-                            </div>
-                            <button onclick="startBlackjack()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl text-sm shadow-md">OYUNU BAŞLAT</button>
+                    <div class="bg-slate-950/90 p-6 rounded-2xl border border-slate-800/60 backdrop-blur-sm game-card">
+                        <h3 class="text-lg font-bold text-blue-400 mb-4"><i class="fas fa-id-card mr-2"></i> Blackjack VIP</h3>
+                        <div class="mb-4">
+                            <label class="text-xs text-slate-500 block mb-2">Bahis Tutarı (₺)</label>
+                            <input id="blackjackBetAmount" type="number" value="1000" class="w-full bg-slate-900 px-4 py-3 rounded-xl border border-slate-800 text-blue-400 font-bold focus:outline-none focus:border-blue-500/50 transition-all">
                         </div>
-                        <div id="bj-action-phase" class="hidden flex gap-2">
-                            <button onclick="hitBlackjack()" class="flex-grow bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-xs">KART AL</button>
-                            <button onclick="standBlackjack()" class="flex-grow bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl text-xs">DUR</button>
+                        <div class="space-y-2 text-xs text-slate-400 mb-4">
+                            <div class="flex justify-between"><span>Blackjack</span><span class="text-amber-400">2.5x</span></div>
+                            <div class="flex justify-between"><span>Normal Win</span><span class="text-amber-400">2x</span></div>
+                            <div class="flex justify-between"><span>Berabere</span><span class="text-amber-400">İade</span></div>
+                        </div>
+                        <button onclick="bjDeal()" id="bjDealBtn" class="w-full btn-premium py-3 rounded-xl font-black text-sm mb-3 pulse-glow">
+                            <i class="fas fa-play mr-2"></i> DAĞIT
+                        </button>
+                        <div class="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                            <span class="text-xs text-slate-500">Oyun Durumu</span>
+                            <p id="bjStatus" class="text-sm text-slate-300 mt-1">Kart dağıtmak için DAĞIT butonuna basın</p>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Aviator VIP -->
             <div id="game-aviator" class="game-container hidden">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
-                    <div id="aviator-graph" class="lg:col-span-2 h-[320px] rounded-2xl relative flex items-center justify-center">
-                        <div class="absolute inset-0 bg-grid opacity-10"></div>
-                        <svg class="absolute inset-0 w-full h-full" id="aviator-svg" style="pointer-events: none;">
-                            <path id="aviator-path" d="M 0 320" fill="none" stroke="#ef4444" stroke-width="4" stroke-linecap="round"/>
-                        </svg>
-                        <div id="aviator-plane" class="absolute left-0 bottom-0 text-3xl transform transition-all duration-100 ease-linear select-none pointer-events-none" style="display:none; transform: translate(0px, 0px) rotate(-15deg); z-index: 20;">🚀</div>
-                        <div id="aviator-multiplier" class="text-5xl sm:text-7xl font-black text-white tracking-widest drop-shadow-[0_4px_12px_rgba(239,68,68,0.5)] z-10">1.00x</div>
-                        <div id="aviator-status" class="absolute bottom-4 left-4 text-xs font-bold text-red-500 uppercase tracking-widest bg-black/60 px-3 py-1 rounded border border-red-500/20 z-10">UÇAK BEKLENİYOR</div>
+                <div class="flex flex-col items-center justify-center h-96">
+                    <div class="text-8xl mb-6 animate-pulse">✈️</div>
+                    <h3 class="text-2xl font-bold text-red-400 mb-2">Aviator VIP</h3>
+                    <p class="text-slate-400 text-sm mb-6">Uçak uçmadan önce nakit çıkışını yap!</p>
+                    <div class="w-64 h-32 bg-slate-900 rounded-xl border border-slate-700 flex items-center justify-center mb-4 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
+                        <span class="text-4xl font-black text-red-400">1.00x</span>
                     </div>
-                    <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800">
-                        <h3 class="text-lg font-bold text-red-500 mb-1"><i class="fas fa-plane"></i> Aviator VIP Crasher</h3>
-                        <p class="text-xs text-slate-400 mb-4">Uçak yükseldikçe çarpan artar. Uçak uçup gitmeden önce nakit çek butonuna basmalısın!</p>
-                        <div class="mb-4">
-                            <label class="text-xs text-slate-500 block mb-1">Bahis Tutarı (₺)</label>
-                            <input id="aviatorBetAmount" type="number" value="1000" class="w-full bg-slate-900 p-3 rounded-xl border border-slate-800 text-red-500 font-bold focus:outline-none">
-                        </div>
-                        <div id="aviator-controls">
-                            <button onclick="startAviator()" id="aviatorBtn" class="w-full bg-gradient-to-r from-red-600 to-rose-600 text-white font-extrabold py-4 rounded-xl text-sm shadow-lg tracking-wider uppercase">BAHİS YAP</button>
-                        </div>
+                    <div class="flex gap-3">
+                        <button class="btn-premium px-6 py-2 rounded-lg font-bold text-sm">BAHİS</button>
+                        <button class="bg-red-600 hover:bg-red-500 text-white px-6 py-2 rounded-lg font-bold text-sm transition-all">NAKİT ÇIKIŞ</button>
                     </div>
                 </div>
             </div>
 
+            <!-- Mines -->
             <div id="game-mines" class="game-container hidden">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
-                    <div class="lg:col-span-2 flex justify-center p-2 bg-slate-950 rounded-2xl border border-slate-800/60">
-                        <div id="mines-grid" class="grid grid-cols-5 gap-2 w-full max-w-[340px] aspect-square p-2"></div>
+                <div class="flex flex-col items-center justify-center h-96">
+                    <div class="text-8xl mb-6 float-element">💣</div>
+                    <h3 class="text-2xl font-bold text-amber-400 mb-2">Mines (Mayın)</h3>
+                    <p class="text-slate-400 text-sm mb-6">Elmasları bul, mayınlardan kaç!</p>
+                    <div class="grid grid-cols-5 gap-2 mb-4">
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
+                        <button class="w-12 h-12 bg-slate-800 rounded-lg border border-slate-700 hover:bg-slate-700 transition-all text-xl">❓</button>
                     </div>
-                    <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800">
-                        <h3 class="text-lg font-bold text-amber-500 mb-1"><i class="fas fa-bomb"></i> Mines Gold VIP</h3>
-                        <p class="text-xs text-slate-400 mb-4">Mayınlara basmadan mücevherleri (`💎`) bul. Her bulduğun mücevher ödülü katlar!</p>
-                        <div class="grid grid-cols-2 gap-2 mb-3">
-                            <div>
-                                <label class="text-xs text-slate-500 block mb-1">Bahis Tutarı (₺)</label>
-                                <input id="minesBetAmount" type="number" value="1000" class="w-full bg-slate-900 p-2.5 rounded-xl border border-slate-800 text-amber-500 font-bold text-sm focus:outline-none">
-                            </div>
-                            <div>
-                                <label class="text-xs text-slate-500 block mb-1">Mayın Sayısı</label>
-                                <select id="minesCount" class="w-full bg-slate-900 p-2.5 rounded-xl border border-slate-800 text-white font-bold text-sm focus:outline-none">
-                                    <option value="1">1 Mayın</option>
-                                    <option value="3" selected>3 Mayın</option>
-                                    <option value="5">5 Mayın</option>
-                                    <option value="10">10 Mayın</option>
-                                    <option value="24">24 Mayın</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="mb-4 bg-slate-900/60 p-2 rounded-xl border border-slate-800 text-center">
-                            <span class="text-xs text-slate-400">Güncel Çarpan:</span>
-                            <span id="mines-current-multiplier" class="text-sm font-black text-amber-400 ml-1">1.00x</span>
-                        </div>
-                        <div id="mines-controls" class="flex flex-col gap-2">
-                            <button onclick="startMines()" id="minesStartBtn" class="w-full bg-gradient-to-r from-amber-500 to-yellow-600 text-slate-950 font-black py-3.5 rounded-xl text-sm shadow-md uppercase">OYUNU BAŞLAT</button>
-                            <button onclick="cashoutMines()" id="minesCashoutBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold py-3.5 rounded-xl text-sm shadow-md hidden uppercase">NAKİT ÇEK (₺0)</button>
-                        </div>
-                    </div>
+                    <button class="btn-premium px-8 py-2 rounded-xl font-bold text-sm">YAKINDA</button>
                 </div>
             </div>
 
-            <div id="game-pixelsoccer" class="game-container hidden">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
-                    <div class="lg:col-span-2 bg-gradient-to-b from-emerald-900 via-emerald-950 to-slate-950 p-5 rounded-2xl border border-emerald-500/20 text-center relative overflow-hidden">
-                        <div class="flex justify-between items-center border-b border-emerald-800/40 pb-3 mb-4">
-                            <span class="text-xs uppercase tracking-wider text-emerald-400 font-bold"><i class="fas fa-gamepad mr-1"></i> Süper Lig Retro Arena</span>
-                            <div class="bg-black/40 px-3 py-1 rounded-full text-xs font-mono text-cyan-400" id="soccer-time">Süre: 00'</div>
+            <!-- Canlı Slot -->
+            <div id="game-canlislot" class="game-container hidden">
+                <div style="position: relative; width: 100%; border-radius: 1.5rem; overflow: hidden; background: #020617; border: 2px solid transparent; background-image: linear-gradient(#0f172a, #020617), linear-gradient(135deg, #d4af37, #00f0ff, #ff2d95); background-origin: border-box; background-clip: padding-box, border-box; box-shadow: 0 0 40px rgba(0, 240, 255, 0.15); animation: borderGlow 4s infinite alternate;">
+                    <div id="slot-loading" style="position: absolute; inset: 0; background: linear-gradient(90deg, #0f172a 25%, #1e293b 50%, #0f172a 75%); background-size: 200% 100%; animation: loadingSkeleton 1.5s infinite; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; transition: opacity 0.5s ease-out; z-index: 10;">
+                        <div class="relative">
+                            <i class="fas fa-circle-notch fa-spin text-6xl text-amber-500 mb-4"></i>
+                            <div class="absolute inset-0 blur-xl bg-amber-500/20 rounded-full"></div>
                         </div>
-                        
-                        <div class="flex justify-center items-center gap-6 bg-black/60 p-4 rounded-xl border border-emerald-500/10 max-w-sm mx-auto mb-4 font-mono">
-                            <div class="text-right flex-1">
-                                <div class="text-sm font-bold text-white truncate" id="soccer-home-name">GALATASARAY</div>
-                                <div class="text-xs text-slate-400">Ev Sahibi</div>
-                            </div>
-                            <div class="text-3xl font-black text-yellow-400 bg-slate-900 px-3 py-1 rounded" id="soccer-score">0 - 0</div>
-                            <div class="text-left flex-1">
-                                <div class="text-sm font-bold text-white truncate" id="soccer-away-name">FENERBAHÇE</div>
-                                <div class="text-xs text-slate-400">Deplasman</div>
-                            </div>
-                        </div>
-
-                        <div class="h-[120px] bg-emerald-950/80 border border-emerald-500/30 rounded-xl flex flex-col items-center justify-center p-4 text-center font-mono text-xs text-emerald-300 relative">
-                            <div id="soccer-field-animation" class="text-2xl mb-2 animate-bounce">⚽ 🏃‍♂️ 🏃‍♂️</div>
-                            <div id="soccer-commentary" class="font-semibold text-white tracking-wide">Bahis yapılması bekleniyor... Maç düdüğü çalmadı.</div>
+                        <span class="text-xl font-bold text-amber-400 tracking-wider font-serif">VIP CANLI SLOT ODASI YÜKLENİYOR...</span>
+                        <p class="text-xs text-slate-500 mt-2">Güvenli slot havuzuna bağlanılıyor.</p>
+                        <div class="mt-4 flex gap-1">
+                            <span class="w-8 h-1 bg-amber-500/30 rounded animate-pulse"></span>
+                            <span class="w-8 h-1 bg-amber-500/50 rounded animate-pulse" style="animation-delay: 0.2s"></span>
+                            <span class="w-8 h-1 bg-amber-500/70 rounded animate-pulse" style="animation-delay: 0.4s"></span>
                         </div>
                     </div>
-
-                    <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800">
-                        <h3 class="text-lg font-bold text-cyan-400 mb-1"><i class="fas fa-futbol"></i> Pixel Match Bet</h3>
-                        <p class="text-xs text-slate-400 mb-4">Türkiye Ligi takımlarının maç sonucunu tahmin et! Oranlar anlık olarak hesaplanır.</p>
-                        
-                        <div class="mb-3">
-                            <label class="text-xs text-slate-500 block mb-1">Tahminin (Maç Sonucu)</label>
-                            <div class="grid grid-cols-3 gap-1" id="soccer-odds-pool">
-                                <button onclick="selectSoccerPick('1', 2.15)" id="odds-1" class="bg-slate-900 border border-slate-800 p-2 rounded-xl text-center hover:border-cyan-400 transition-all">
-                                    <div class="text-[10px] text-slate-400">MS 1</div>
-                                    <div class="text-xs font-bold text-cyan-400">2.15</div>
-                                </button>
-                                <button onclick="selectSoccerPick('X', 3.25)" id="odds-X" class="bg-slate-900 border border-slate-800 p-2 rounded-xl text-center hover:border-cyan-400 transition-all">
-                                    <div class="text-[10px] text-slate-400">MS X</div>
-                                    <div class="text-xs font-bold text-cyan-400">3.25</div>
-                                </button>
-                                <button onclick="selectSoccerPick('2', 2.65)" id="odds-2" class="bg-slate-900 border border-slate-800 p-2 rounded-xl text-center hover:border-cyan-400 transition-all">
-                                    <div class="text-[10px] text-slate-400">MS 2</div>
-                                    <div class="text-xs font-bold text-cyan-400">2.65</div>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="text-xs text-slate-500 block mb-1">Bahis Tutarı (₺)</label>
-                            <input id="soccerBetAmount" type="number" value="1000" class="w-full bg-slate-900 p-3 rounded-xl border border-slate-800 text-cyan-400 font-bold focus:outline-none">
-                        </div>
-                        <button onclick="startSoccerMatch()" id="soccerStartBtn" class="w-full bg-gradient-to-r from-cyan-500 to-emerald-600 text-slate-950 font-black py-3.5 rounded-xl text-sm shadow-md uppercase">MAÇI BAŞLAT (BAHİS YAP)</button>
-                    </div>
+                    <iframe src="https://great.com/slots/" style="width: 100%; height: 650px; border: none; background: #020617;" onload="document.getElementById('slot-loading').style.opacity='0'; setTimeout(()=>{document.getElementById('slot-loading').style.display='none'}, 500)"></iframe>
                 </div>
             </div>
 
-        </div>
-
-        <div class="mt-12 bg-slate-950/80 border border-slate-800/80 rounded-3xl p-5 shadow-xl">
-            <div class="flex items-center gap-2 mb-4">
-                <span class="w-2 h-2 bg-red-500 rounded-full animate-ping"></span>
-                <h4 class="text-sm font-bold uppercase tracking-wider text-slate-300">Şu Anda Canlı VIP Kazananlar</h4>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="border-b border-slate-800 text-slate-500 text-xs uppercase font-semibold">
-                            <th class="pb-2">Kullanıcı</th>
-                            <th class="pb-2">Oyun</th>
-                            <th class="pb-2">Yatırılan</th>
-                            <th class="pb-2 text-right">Net Kazanç</th>
-                        </tr>
-                    </thead>
-                    <tbody id="live-wins-tbody" class="text-xs font-medium text-slate-300"></tbody>
-                </table>
-            </div>
         </div>
     </div>
 
-    <a href="https://wa.me/16395697826" target="_blank" class="fixed bottom-6 right-6 bg-emerald-600 hover:bg-emerald-500 text-white p-4 rounded-full shadow-2xl transition-all z-50 flex items-center justify-center gap-2 group">
-        <i class="fab fa-whatsapp text-3xl"></i>
-        <span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 whitespace-nowrap font-medium text-sm">WhatsApp Canlı Destek</span>
-    </a>
-
-    <footer class="bg-slate-950 border-t border-slate-900 text-center py-8 text-xs text-slate-500 mt-12">
-        <p>© 2026 NORDBET Entertainment Ltd. Curacao Licensing No: #2281/JAZ. Tüm hakları saklıdır.</p>
+    <!-- Footer -->
+    <footer class="bg-slate-950/80 border-t border-slate-800/40 py-6 mt-8 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-crown text-sm text-slate-950"></i>
+                </div>
+                <span class="text-sm font-bold text-slate-400">NORDBET</span>
+            </div>
+            <div class="flex gap-6 text-xs text-slate-500">
+                <a href="#" class="hover:text-amber-400 transition-colors">Gizlilik Politikası</a>
+                <a href="#" class="hover:text-amber-400 transition-colors">Kullanım Koşulları</a>
+                <a href="#" class="hover:text-amber-400 transition-colors">Sorumlu Oyun</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <i class="fas fa-shield-alt text-emerald-500 text-sm"></i>
+                <span class="text-xs text-slate-500">256-bit SSL Şifreleme</span>
+            </div>
+        </div>
     </footer>
 
-    <div id="notification" class="fixed top-24 right-6 bg-slate-900 border border-amber-500/40 text-slate-100 px-6 py-4 rounded-2xl shadow-2xl z-50 transform translate-x-96 transition-transform duration-300 max-w-sm flex items-center gap-3">
-        <i class="fas fa-info-circle text-amber-400 text-xl"></i>
-        <span id="notificationText" class="text-sm font-medium">İşlem Başarılı</span>
-    </div>
-
     <script>
-        let balance = 124850;
-        let isSpinning = false;
-        let audioCtx = null;
+        // === PARTICLE SYSTEM ===
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const colors = ['#d4af37', '#00f0ff', '#ff2d95', '#b026ff'];
+            const classes = ['particle-gold', 'particle-cyan', 'particle-pink', 'particle-purple'];
+            for (let i = 0; i < 80; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle ' + classes[Math.floor(Math.random() * classes.length)];
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (8 + Math.random() * 10) + 's';
+                particle.style.width = (2 + Math.random() * 4) + 'px';
+                particle.style.height = particle.style.width;
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
 
-        const bonanzaSymbols = ['🍬', '🍎', '🍇', '🍌', '🍉', '🍭', '💣'];
-        const olympusSymbols = ['🔱', '👑', '💎', '💍', '🏺', '⚡', '💥'];
-        const bigBassSymbols = ['⛵', '📦', '🐟', '🍤', '🐡', '🎣', '💵'];
-        const sugarRushSymbols = ['🧸', '🍇', '🍊', '🍓', '🍒', '🍬', '🍩'];
+        // === CONFETTI SYSTEM ===
+        function spawnConfetti() {
+            const container = document.getElementById('confetti-container');
+            const colors = ['#d4af37', '#00f0ff', '#ff2d95', '#b026ff', '#10b981', '#f59e0b'];
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
+                confetti.style.width = (5 + Math.random() * 8) + 'px';
+                confetti.style.height = (5 + Math.random() * 8) + 'px';
+                container.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 4000);
+            }
+        }
 
-        // Türkiye Ligindeki Takımlar Havuzu
-        const turkeyTeams = [
-            'GALATASARAY', 'FENERBAHÇE', 'BEŞİKTAŞ', 'TRABZONSPOR', 
-            'GÖZTEPE', 'KONYASPOR', 'BAŞAKŞEHİR', 'SAMSUNSPOR', 
-            'EYÜPSPOR', 'ANTALYASPOR', 'ALANYASPOR', 'RİZESPOR', 
-            'GAZİANTEP FK', 'SİVASSPOR', 'KASIMPAŞA', 'HATAYSPOR'
+        // === FLOATING COINS ===
+        function spawnFloatingCoins(x, y) {
+            for (let i = 0; i < 8; i++) {
+                const coin = document.createElement('div');
+                coin.className = 'floating-coin';
+                coin.textContent = '🪙';
+                coin.style.left = (x + (Math.random() - 0.5) * 100) + 'px';
+                coin.style.top = y + 'px';
+                coin.style.animationDelay = (i * 0.1) + 's';
+                document.body.appendChild(coin);
+                setTimeout(() => coin.remove(), 3000);
+            }
+        }
+
+        // === TRUST MESSAGES ROTATION ===
+        const trustMessages = [
+            '"Kazancınızı garanti altına alıyoruz — 50.000+ aktif üye bizi tercih ediyor"',
+            '"%100 Şeffaf Oyun — Her spin kayıtlı ve doğrulanabilir"',
+            '"Anında para çekim — Ortalama 3 dakikada hesabınızda"',
+            '"7/24 Canlı Destek — Profesyonel ekibimiz her zaman yanınızda"',
+            '"Lisanslı ve Güvenli — Curacao Gaming Authority onaylı"',
+            '"En yüksek RTP oranları — %97+ geri ödeme garantisi"'
         ];
+        let trustIndex = 0;
+        setInterval(() => {
+            trustIndex = (trustIndex + 1) % trustMessages.length;
+            const el = document.getElementById('trust-message');
+            if (el) {
+                el.style.opacity = '0';
+                setTimeout(() => {
+                    el.textContent = trustMessages[trustIndex];
+                    el.style.opacity = '1';
+                }, 300);
+            }
+        }, 5000);
 
-        let aviatorInterval = null;
-        let aviatorCurrentMultiplier = 1.00;
-        let aviatorBetActive = false;
-        let aviatorCurrentBet = 0;
-        let aviatorPoints = []; // Çarpan çizgisi noktaları
+        // === TAB SWITCHING ===
+        function switchTab(tabName) {
+            const containers = document.querySelectorAll('.game-container');
+            containers.forEach(c => {
+                c.classList.remove('block');
+                c.classList.add('hidden');
+            });
+            const activeGame = document.getElementById('game-' + tabName);
+            if(activeGame) {
+                activeGame.classList.remove('hidden');
+                activeGame.classList.add('block');
+            }
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(b => b.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
 
-        let minesArray = [];
-        let minesRevealed = 0;
-        let minesGameActive = false;
-        let minesCurrentBet = 0;
-        let minesSelectedCount = 3;
-        let minesTotalGemCount = 22;
+        // === WEB AUDIO API SYNTHESIZER ===
+        let audioCtx = null;
+        let bgMusicOsc = null;
+        let bgGain = null;
+        let isMusicPlaying = false;
 
-        let soccerSelectedPick = null;
-        let soccerSelectedOdds = 0.0;
-        let soccerGameActive = false;
-        let soccerCurrentBet = 0;
-
-        // --- WEB AUDIO API SES MOTORU ---
-        function initAudio() {
+        function initAudioContext() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             }
+            return audioCtx;
         }
 
-        // 1. Slot Çevirme Sesi
-        function playSlotSpinSound() {
-            initAudio();
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(120, audioCtx.currentTime);
-            osc.frequency.linearRampToValueAtTime(300, audioCtx.currentTime + 0.8);
-            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.8);
-        }
+        // === BACKGROUND MUSIC ===
+        const bgPlaylist = [
+            { bpm: 100, style: 'lounge' },
+            { bpm: 110, style: 'upbeat' },
+            { bpm: 95, style: 'chill' }
+        ];
+        let currentTrack = 0;
+        let bgInterval = null;
 
-        // 2. Şeker/Sembol Patlama Sesi
-        function playSugarPopSound() {
-            initAudio();
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.3);
-            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.3);
-        }
+        function playBackgroundMusic() {
+            const ctx = initAudioContext();
+            if (bgMusicOsc) { bgMusicOsc.stop(); bgMusicOsc = null; }
+            if (bgGain) { bgGain.disconnect(); }
 
-        // 3. Aviator Uçak Motor Sesi (Sürekli frekans artar)
-        let aviatorOsc = null;
-        let aviatorGain = null;
-        function startPlaneSound() {
-            initAudio();
-            try {
-                aviatorOsc = audioCtx.createOscillator();
-                aviatorGain = audioCtx.createGain();
-                aviatorOsc.type = 'triangle';
-                aviatorOsc.frequency.setValueAtTime(80, audioCtx.currentTime);
-                aviatorGain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-                aviatorOsc.connect(aviatorGain);
-                aviatorGain.connect(audioCtx.destination);
-                aviatorOsc.start();
-            } catch(e){}
-        }
-        function updatePlaneSoundPitch(mult) {
-            if (aviatorOsc) {
-                aviatorOsc.frequency.setValueAtTime(80 + (mult * 40), audioCtx.currentTime);
-            }
-        }
-        function stopPlaneSound() {
-            if (aviatorOsc) {
-                try {
-                    aviatorOsc.stop();
-                    aviatorOsc.disconnect();
-                } catch(e){}
-                aviatorOsc = null;
-            }
-        }
+            bgGain = ctx.createGain();
+            bgGain.gain.value = 0.08;
+            bgGain.connect(ctx.destination);
 
-        // 4. Aviator / Mayın Patlama Sesi
-        function playExplosionSound() {
-            initAudio();
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(90, audioCtx.currentTime);
-            osc.frequency.linearRampToValueAtTime(30, audioCtx.currentTime + 0.5);
-            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.5);
-        }
+            const track = bgPlaylist[currentTrack];
+            const notes = track.style === 'lounge' ? [261.63, 329.63, 392.00, 523.25, 440.00, 349.23] :
+                         track.style === 'upbeat' ? [293.66, 369.99, 440.00, 587.33, 493.88, 392.00] :
+                         [220.00, 261.63, 329.63, 440.00, 349.23, 293.66];
 
-        // 5. Mega Win Şimşek Çakma Sesi
-        function playLightningSound() {
-            initAudio();
-            // Gök gürültüsü / Şimşek efekti için çift osc bas yapısı
-            let osc1 = audioCtx.createOscillator();
-            let osc2 = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-            
-            osc1.type = 'sawtooth';
-            osc1.frequency.setValueAtTime(50, audioCtx.currentTime);
-            osc1.frequency.linearRampToValueAtTime(10, audioCtx.currentTime + 1.5);
-            
-            osc2.type = 'square';
-            osc2.frequency.setValueAtTime(45, audioCtx.currentTime);
-            osc2.frequency.linearRampToValueAtTime(15, audioCtx.currentTime + 1.2);
+            let noteIndex = 0;
+            const interval = 60000 / track.bpm / 2;
 
-            gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 1.5);
-            
-            osc1.connect(gain);
-            osc2.connect(gain);
-            gain.connect(audioCtx.destination);
-            
-            osc1.start();
-            osc2.start();
-            osc1.stop(audioCtx.currentTime + 1.5);
-            osc2.stop(audioCtx.currentTime + 1.5);
-            
-            // Şimşek görsel flaş animasyonu tetikle
-            const flash = document.getElementById('lightning-flash');
-            if(flash) {
-                flash.classList.add('flash-bang');
-                setTimeout(() => flash.classList.remove('flash-bang'), 400);
-            }
-        }
-
-        function enterVipCasino() {
-            initAudio();
-            const overlay = document.getElementById('vip-welcome-overlay');
-            if(overlay) overlay.style.opacity = '0';
-            setTimeout(() => { if(overlay) overlay.style.display = 'none'; }, 500);
-            showNotification("VIP Şifreli Lobiye Hoş Geldiniz!");
-            initGrids();
-        }
-
-        function redirectToWhatsApp() {
-            window.open("https://wa.me/16395697826", "_blank");
-        }
-
-        function showNotification(msg) {
-            const notif = document.getElementById('notification');
-            const notifText = document.getElementById('notificationText');
-            if(!notif || !notifText) return;
-            notifText.innerText = msg;
-            notif.classList.remove('translate-x-96');
-            setTimeout(() => { notif.classList.add('translate-x-96'); }, 3000);
-        }
-
-        function updateBalanceDisplay() {
-            const el = document.getElementById('balance');
-            if(el) el.innerText = "₺ " + balance.toLocaleString('tr-TR');
-        }
-
-        function triggerMegaWin(amount) {
-            playLightningSound(); // Mega Win sesi olarak şimşek sesi çalıyor
-            const winScreen = document.getElementById('mega-win-screen');
-            const winAmountText = document.getElementById('mega-win-amount');
-            if(!winScreen || !winAmountText) return;
-            
-            winAmountText.innerText = "+₺" + amount.toLocaleString('tr-TR');
-            winScreen.classList.add('active');
-            
-            for(let i=0; i<30; i++) {
-                createConfetti();
-            }
+            bgInterval = setInterval(() => {
+                if (!isMusicPlaying) return;
+                const osc = ctx.createOscillator();
+                const noteGain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = notes[noteIndex % notes.length];
+                noteGain.gain.setValueAtTime(0.05, ctx.currentTime);
+                noteGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+                osc.connect(noteGain);
+                noteGain.connect(bgGain);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.5);
+                noteIndex++;
+            }, interval);
 
             setTimeout(() => {
-                winScreen.classList.remove('active');
-            }, 3500);
+                if (isMusicPlaying) {
+                    currentTrack = (currentTrack + 1) % bgPlaylist.length;
+                    clearInterval(bgInterval);
+                    playBackgroundMusic();
+                }
+            }, 30000);
+
+            isMusicPlaying = true;
         }
 
-        function createConfetti() {
-            const c = document.createElement('div');
-            c.className = 'confetti';
-            c.style.left = Math.random() * 100 + 'vw';
-            c.style.backgroundColor = ['#ffe066','#f59e0b','#ef4444','#10b981','#3b82f6'][Math.floor(Math.random()*5)];
-            c.style.transform = `scale(${Math.random() * 1.5 + 0.5})`;
-            c.style.animationDuration = (Math.random() * 1.5 + 1) + 's';
-            document.body.appendChild(c);
-            setTimeout(() => c.remove(), 2000);
+        function stopBackgroundMusic() {
+            isMusicPlaying = false;
+            if (bgInterval) clearInterval(bgInterval);
+            if (bgMusicOsc) { bgMusicOsc.stop(); bgMusicOsc = null; }
+            if (bgGain) { bgGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5); }
         }
 
-        function switchTab(gameKey) {
-            if(isSpinning || aviatorBetActive || minesGameActive || soccerGameActive) {
-                showNotification("Aktif bir el varken lobi değiştiremezsiniz!");
-                return;
+        // === SLOT SPIN SOUND ===
+        function playSlotSpinSound() {
+            const ctx = initAudioContext();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(800, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.15, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.1);
+
+            setTimeout(() => {
+                const osc2 = ctx.createOscillator();
+                const gain2 = ctx.createGain();
+                osc2.type = 'square';
+                osc2.frequency.setValueAtTime(600, ctx.currentTime);
+                osc2.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.08);
+                gain2.gain.setValueAtTime(0.12, ctx.currentTime);
+                gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+                osc2.connect(gain2);
+                gain2.connect(ctx.destination);
+                osc2.start(ctx.currentTime);
+                osc2.stop(ctx.currentTime + 0.08);
+            }, 50);
+        }
+
+        // === MEGA WIN SOUND ===
+        function playMegaWinSound() {
+            const ctx = initAudioContext();
+            const startTime = ctx.currentTime;
+
+            for (let i = 0; i < 20; i++) {
+                const time = startTime + (i * 0.1);
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(1200 + Math.random() * 800, time);
+                osc.frequency.exponentialRampToValueAtTime(600, time + 0.15);
+                gain.gain.setValueAtTime(0.2, time);
+                gain.gain.exponentialRampToValueAtTime(0.001, time + 0.15);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(time);
+                osc.stop(time + 0.15);
             }
-            document.querySelectorAll('.game-container').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.game-container').forEach(el => el.classList.remove('block'));
-            
-            const target = document.getElementById('game-' + gameKey);
-            if(target) {
-                target.classList.remove('hidden');
-                target.classList.add('block');
-            }
 
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            if(event && event.currentTarget) event.currentTarget.classList.add('active');
+            const bass = ctx.createOscillator();
+            const bassGain = ctx.createGain();
+            bass.type = 'triangle';
+            bass.frequency.setValueAtTime(150, startTime);
+            bass.frequency.exponentialRampToValueAtTime(50, startTime + 2);
+            bassGain.gain.setValueAtTime(0.3, startTime);
+            bassGain.gain.exponentialRampToValueAtTime(0.001, startTime + 2);
+            bass.connect(bassGain);
+            bassGain.connect(ctx.destination);
+            bass.start(startTime);
+            bass.stop(startTime + 2);
+        }
 
-            if(gameKey === 'mines') {
-                renderMinesBoardPlaceholder();
+        function playCoinRainSound() {
+            const ctx = initAudioContext();
+            for (let i = 0; i < 15; i++) {
+                const time = ctx.currentTime + (i * 0.12);
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(1500, time);
+                osc.frequency.exponentialRampToValueAtTime(800, time + 0.1);
+                gain.gain.setValueAtTime(0.1, time);
+                gain.gain.exponentialRampToValueAtTime(0.001, time + 0.1);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(time);
+                osc.stop(time + 0.1);
             }
         }
 
-        function initGrids() {
-            fillGridWithRandom('bonanza-grid', bonanzaSymbols);
-            fillGridWithRandom('olympus-grid', olympusSymbols);
-            fillGridWithRandom('bigbass-grid', bigBassSymbols);
-            fillGridWithRandom('sugarrush-grid', sugarRushSymbols);
+        // === FREESPIN LIGHTNING SOUND ===
+        function playFreespinSound() {
+            const ctx = initAudioContext();
+            const startTime = ctx.currentTime;
+
+            const bufferSize = ctx.sampleRate * 2;
+            const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 3);
+            }
+            const noise = ctx.createBufferSource();
+            noise.buffer = buffer;
+            const noiseGain = ctx.createGain();
+            noiseGain.gain.setValueAtTime(0.4, startTime);
+            noiseGain.gain.exponentialRampToValueAtTime(0.001, startTime + 2);
+            noise.connect(noiseGain);
+            noiseGain.connect(ctx.destination);
+            noise.start(startTime);
+
+            const crack = ctx.createOscillator();
+            const crackGain = ctx.createGain();
+            crack.type = 'sawtooth';
+            crack.frequency.setValueAtTime(3000, startTime);
+            crack.frequency.exponentialRampToValueAtTime(100, startTime + 0.3);
+            crackGain.gain.setValueAtTime(0.3, startTime);
+            crackGain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.3);
+            crack.connect(crackGain);
+            crackGain.connect(ctx.destination);
+            crack.start(startTime);
+            crack.stop(startTime + 0.3);
+
+            setTimeout(() => {
+                const echo = ctx.createOscillator();
+                const echoGain = ctx.createGain();
+                echo.type = 'sine';
+                echo.frequency.setValueAtTime(800, ctx.currentTime);
+                echo.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.5);
+                echoGain.gain.setValueAtTime(0.15, ctx.currentTime);
+                echoGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+                echo.connect(echoGain);
+                echoGain.connect(ctx.destination);
+                echo.start(ctx.currentTime);
+                echo.stop(ctx.currentTime + 0.5);
+            }, 200);
         }
 
-        function fillGridWithRandom(gridId, symbols) {
-            const grid = document.getElementById(gridId);
-            if(!grid) return;
+        // === VIP ENTRY ===
+        function enterVipCasinoWithMusic() {
+            document.getElementById('vip-welcome-overlay').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('vip-welcome-overlay').style.display = 'none';
+            }, 600);
+
+            initAudioContext();
+            playBackgroundMusic();
+        }
+
+        // === MEGA WIN ===
+        function showMegaWin(amount) {
+            const screen = document.getElementById('mega-win-screen');
+            const amountEl = document.getElementById('mega-win-amount');
+            amountEl.textContent = '+₺' + amount.toLocaleString();
+            screen.classList.add('active');
+            spawnConfetti();
+            playMegaWinSound();
+            playCoinRainSound();
+            setTimeout(() => {
+                screen.classList.remove('active');
+            }, 4000);
+        }
+
+        // === REDIRECT ===
+        function redirectToWhatsApp() {
+            window.open('https://wa.me/', '_blank');
+        }
+
+        // === REALISTIC SLOT SYMBOLS ===
+        const bonanzaSymbols = [
+            { name: 'red-heart', class: 'symbol-red-heart', text: '♥' },
+            { name: 'purple-candy', class: 'symbol-purple-candy', text: '◆' },
+            { name: 'green-gem', class: 'symbol-green-gem', text: '♦' },
+            { name: 'blue-gem', class: 'symbol-blue-gem', text: '♠' },
+            { name: 'gold-star', class: 'symbol-gold-star', text: '★' },
+            { name: 'orange-fruit', class: 'symbol-orange-fruit', text: '●' },
+            { name: 'pink-lollipop', class: 'symbol-pink-lollipop', text: '✦' },
+        ];
+
+        const olympusSymbols = [
+            { name: 'zeus-bolt', class: 'symbol-zeus-bolt', text: '⚡' },
+            { name: 'crown', class: 'symbol-crown', text: '👑' },
+            { name: 'ring', class: 'symbol-ring', text: '💍' },
+            { name: 'hourglass', class: 'symbol-hourglass', text: '⏳' },
+            { name: 'vase', class: 'symbol-vase', text: '🏺' },
+            { name: 'gold-star', class: 'symbol-gold-star', text: '★' },
+            { name: 'blue-gem', class: 'symbol-blue-gem', text: '♠' },
+        ];
+
+        let bonanzaAutoSpin = false;
+        let olympusAutoSpin = false;
+
+        function createSlotSymbol(symbolData) {
+            const div = document.createElement('div');
+            div.className = `slot-symbol ${symbolData.class}`;
+            div.innerHTML = `<span style="position:relative;z-index:1;font-size:2rem;">${symbolData.text}</span>`;
+            return div;
+        }
+
+        function initBonanzaGrid() {
+            const grid = document.getElementById('bonanza-grid');
             grid.innerHTML = '';
-            for(let i=0; i<16; i++) {
+            for (let i = 0; i < 16; i++) {
                 const cell = document.createElement('div');
-                cell.className = 'slot-cell bg-slate-900 aspect-square flex items-center justify-center text-2xl border border-slate-800 rounded-xl';
-                cell.innerText = symbols[Math.floor(Math.random() * (symbols.length - 1))];
+                cell.className = 'slot-cell w-16 h-16 sm:w-20 sm:h-20 rounded-xl flex items-center justify-center cursor-pointer';
+                cell.id = 'bonanza-cell-' + i;
+                const symbol = bonanzaSymbols[Math.floor(Math.random() * bonanzaSymbols.length)];
+                cell.appendChild(createSlotSymbol(symbol));
+                cell.dataset.symbol = symbol.name;
                 grid.appendChild(cell);
             }
         }
 
-        // --- SLOT MASALARI ---
-        function playSweetBonanza() { playMockSlot('bonanza', bonanzaSymbols, 'bonanzaBetAmount'); }
-        function playGatesOfOlympus() { playMockSlot('olympus', olympusSymbols, 'olympusBetAmount'); }
-        function playBigBass() { playMockSlot('bigbass', bigBassSymbols, 'bigbassBetAmount'); }
-        function playSugarRush() { playMockSlot('sugarrush', sugarRushSymbols, 'sugarrushBetAmount'); }
+        function initOlympusGrid() {
+            const grid = document.getElementById('olympus-grid');
+            grid.innerHTML = '';
+            for (let i = 0; i < 16; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'slot-cell w-16 h-16 sm:w-20 sm:h-20 rounded-xl flex items-center justify-center cursor-pointer';
+                cell.id = 'olympus-cell-' + i;
+                const symbol = olympusSymbols[Math.floor(Math.random() * olympusSymbols.length)];
+                cell.appendChild(createSlotSymbol(symbol));
+                cell.dataset.symbol = symbol.name;
+                grid.appendChild(cell);
+            }
+        }
 
-        function playMockSlot(gameKey, symbols, inputId) {
-            if(isSpinning) return;
-            const betInput = document.getElementById(inputId);
-            let bet = parseInt(betInput.value) || 1000;
-            if(bet > balance) { showNotification("Yetersiz Bakiye!"); return; }
-            
-            balance -= bet;
-            updateBalanceDisplay();
-            isSpinning = true;
+        function playSweetBonanza() {
+            const btn = document.getElementById('bonanzaBtn');
+            const bet = parseInt(document.getElementById('bonanzaBetAmount').value) || 1000;
+            btn.disabled = true;
 
-            playSlotSpinSound(); // Slot kollarını çevirme sesi
+            playSlotSpinSound();
 
-            const grid = document.getElementById(gameKey + '-grid');
-            if(!grid) return;
-
-            Array.from(grid.children).forEach(c => c.classList.add('slot-blur'));
+            const cells = document.querySelectorAll('#bonanza-grid .slot-cell');
+            cells.forEach(cell => {
+                cell.classList.add('slot-blur');
+                cell.innerHTML = '';
+            });
 
             setTimeout(() => {
-                Array.from(grid.children).forEach(c => {
-                    c.classList.remove('slot-blur');
-                    c.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                cells.forEach(cell => {
+                    cell.classList.remove('slot-blur');
+                    const symbol = bonanzaSymbols[Math.floor(Math.random() * bonanzaSymbols.length)];
+                    cell.appendChild(createSlotSymbol(symbol));
+                    cell.dataset.symbol = symbol.name;
+                    cell.classList.remove('matched');
                 });
 
-                let r = Math.random();
-                if(r > 0.45) {
-                    playSugarPopSound(); // Kazanç kombinasyonu patlama sesi
-                    let multiplier = (Math.random() * 3 + 1.2);
-                    let win = Math.floor(bet * multiplier);
-                    balance += win;
-                    updateBalanceDisplay();
-                    if(multiplier > 2.5) {
-                        triggerMegaWin(win);
-                    } else {
-                        showNotification(`Tebrikler! ₺${win} Kazandınız.`);
-                    }
-                } else {
-                    showNotification("Bu el kazanç gelmedi, tekrar deneyin.");
+                let winAmount = 0;
+                const grid = [];
+                for (let i = 0; i < 16; i++) {
+                    grid.push(document.getElementById('bonanza-cell-' + i).dataset.symbol);
                 }
-                isSpinning = false;
-            }, 1200);
+
+                const counts = {};
+                grid.forEach(s => counts[s] = (counts[s] || 0) + 1);
+
+                for (let sym in counts) {
+                    if (counts[sym] >= 3) {
+                        const multiplier = counts[sym] >= 5 ? 10 : counts[sym] >= 4 ? 5 : 2;
+                        winAmount += bet * multiplier;
+
+                        for (let i = 0; i < 16; i++) {
+                            if (grid[i] === sym) {
+                                document.getElementById('bonanza-cell-' + i).classList.add('matched');
+                            }
+                        }
+                    }
+                }
+
+                if (winAmount > 0) {
+                    const balanceEl = document.getElementById('balance');
+                    let current = parseInt(balanceEl.textContent.replace(/[^0-9]/g, ''));
+                    balanceEl.textContent = '₺ ' + (current + winAmount).toLocaleString();
+
+                    if (winAmount >= bet * 5) {
+                        showMegaWin(winAmount);
+                    }
+                }
+
+                btn.disabled = false;
+
+                if (bonanzaAutoSpin) {
+                    setTimeout(() => playSweetBonanza(), 2000);
+                }
+            }, 800);
         }
 
-        function toggleAutoSpin(gameKey) {
-            showNotification("Otomatik oyun modu bu masada doludur.");
-        }
+        function playGatesOfOlympus() {
+            const btn = document.getElementById('olympusBtn');
+            const bet = parseInt(document.getElementById('olympusBetAmount').value) || 1000;
+            btn.disabled = true;
 
-        function playRoulette() {
-            const betAmt = parseInt(document.getElementById('rouletteBetAmount').value) || 1000;
-            if(betAmt > balance) { showNotification("Yetersiz Bakiye!"); return; }
-            balance -= betAmt;
-            updateBalanceDisplay();
+            playSlotSpinSound();
 
-            const wheel = document.getElementById('mainRouletteWheel');
-            const ball = document.getElementById('mainRouletteBall');
-            const res = document.getElementById('rouletteResultDisplay');
-            
-            res.innerText = "ÇARK DÖNÜYOR...";
-            let deg = Math.floor(Math.random() * 360) + 1440;
-            wheel.style.transform = `rotate(${deg}deg)`;
-            ball.style.transform = `rotate(-${deg * 1.5}deg)`;
+            const cells = document.querySelectorAll('#olympus-grid .slot-cell');
+            cells.forEach(cell => {
+                cell.classList.add('slot-blur');
+                cell.innerHTML = '';
+            });
 
             setTimeout(() => {
-                let types = ['red', 'black', 'zero'];
-                let picked = types[Math.floor(Math.random() * 2.1)];
-                let userType = document.getElementById('rouletteType').value;
+                cells.forEach(cell => {
+                    cell.classList.remove('slot-blur');
+                    const symbol = olympusSymbols[Math.floor(Math.random() * olympusSymbols.length)];
+                    cell.appendChild(createSlotSymbol(symbol));
+                    cell.dataset.symbol = symbol.name;
+                    cell.classList.remove('matched');
+                });
 
-                if(picked === 'zero') res.innerText = "KAZANAN: 0 YEŞİL";
-                else if(picked === 'red') res.innerText = "KAZANAN: 14 KIRMIZI";
-                else res.innerText = "KAZANAN: 22 SİYAH";
-
-                if(userType === picked) {
-                    let payout = userType === 'zero' ? betAmt * 35 : betAmt * 2;
-                    balance += payout;
-                    updateBalanceDisplay();
-                    triggerMegaWin(payout);
-                } else {
-                    showNotification("Kaybettiniz! Şansınızı tekrar deneyin.");
+                let winAmount = 0;
+                const grid = [];
+                for (let i = 0; i < 16; i++) {
+                    grid.push(document.getElementById('olympus-cell-' + i).dataset.symbol);
                 }
+
+                const zeusCount = grid.filter(s => s === 'zeus-bolt').length;
+                if (zeusCount >= 3) {
+                    playFreespinSound();
+                    document.getElementById('olympus-lightning-text').classList.remove('hidden');
+                    setTimeout(() => document.getElementById('olympus-lightning-text').classList.add('hidden'), 3000);
+                    winAmount += bet * (zeusCount >= 5 ? 15 : zeusCount >= 4 ? 8 : 3);
+                }
+
+                const counts = {};
+                grid.forEach(s => counts[s] = (counts[s] || 0) + 1);
+                for (let sym in counts) {
+                    if (counts[sym] >= 4 && sym !== 'zeus-bolt') {
+                        const multiplier = counts[sym] >= 6 ? 8 : counts[sym] >= 5 ? 4 : 2;
+                        winAmount += bet * multiplier;
+                        for (let i = 0; i < 16; i++) {
+                            if (grid[i] === sym) {
+                                document.getElementById('olympus-cell-' + i).classList.add('matched');
+                            }
+                        }
+                    }
+                }
+
+                if (winAmount > 0) {
+                    const balanceEl = document.getElementById('balance');
+                    let current = parseInt(balanceEl.textContent.replace(/[^0-9]/g, ''));
+                    balanceEl.textContent = '₺ ' + (current + winAmount).toLocaleString();
+
+                    if (winAmount >= bet * 5) {
+                        showMegaWin(winAmount);
+                    }
+                }
+
+                btn.disabled = false;
+
+                if (olympusAutoSpin) {
+                    setTimeout(() => playGatesOfOlympus(), 2000);
+                }
+            }, 800);
+        }
+
+        function toggleAutoSpin(game) {
+            if (game === 'bonanza') {
+                bonanzaAutoSpin = !bonanzaAutoSpin;
+                document.getElementById('bonanzaAutoBtn').textContent = bonanzaAutoSpin ? 'AUTO: ON' : 'AUTO: OFF';
+                if (bonanzaAutoSpin) playSweetBonanza();
+            } else if (game === 'olympus') {
+                olympusAutoSpin = !olympusAutoSpin;
+                document.getElementById('olympusAutoBtn').textContent = olympusAutoSpin ? 'AUTO: ON' : 'AUTO: OFF';
+                if (olympusAutoSpin) playGatesOfOlympus();
+            }
+        }
+
+        // === REALISTIC ROULETTE ===
+        let rouletteBet = 'red';
+        let isSpinning = false;
+
+        function betRoulette(color) {
+            rouletteBet = color;
+            document.querySelectorAll('#game-roulette button').forEach(btn => {
+                if (btn.textContent.includes('KIRMIZI') || btn.textContent.includes('YEŞİL') || btn.textContent.includes('SİYAH')) {
+                    btn.style.transform = 'scale(1)';
+                }
+            });
+            event.target.style.transform = 'scale(1.1)';
+        }
+
+        function spinRoulette() {
+            if (isSpinning) return;
+            isSpinning = true;
+
+            const wheel = document.getElementById('rouletteWheel');
+            const ball = document.getElementById('rouletteBall');
+            const btn = document.getElementById('rouletteSpinBtn');
+            const result = document.getElementById('rouletteResult');
+
+            btn.disabled = true;
+            result.textContent = '...';
+
+            const spinDegrees = 1800 + Math.random() * 1800;
+            const ballDegrees = -(spinDegrees + Math.random() * 360);
+
+            wheel.style.transform = `rotate(${spinDegrees}deg)`;
+            ball.style.transform = `rotate(${ballDegrees}deg)`;
+
+            const ctx = initAudioContext();
+            const spinOsc = ctx.createOscillator();
+            const spinGain = ctx.createGain();
+            spinOsc.type = 'triangle';
+            spinOsc.frequency.setValueAtTime(200, ctx.currentTime);
+            spinOsc.frequency.exponentialRampToValueAtTime(50, ctx.currentTime + 3);
+            spinGain.gain.setValueAtTime(0.2, ctx.currentTime);
+            spinGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 3);
+            spinOsc.connect(spinGain);
+            spinGain.connect(ctx.destination);
+            spinOsc.start(ctx.currentTime);
+            spinOsc.stop(ctx.currentTime + 3);
+
+            setTimeout(() => {
+                const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36];
+                const colors = ['green', 'red', 'black', 'red', 'black', 'red', 'black', 'red', 'black', 'red', 'black', 'black', 'red', 'black', 'red', 'black', 'red', 'black', 'red', 'red', 'black', 'red', 'black', 'red', 'black', 'red', 'black', 'red', 'black', 'black', 'red', 'black', 'red', 'black', 'red', 'black', 'red'];
+                const winningIndex = Math.floor(Math.random() * numbers.length);
+                const winningNumber = numbers[winningIndex];
+                const winningColor = colors[winningIndex];
+
+                result.textContent = winningNumber;
+                result.style.color = winningColor === 'red' ? '#dc2626' : winningColor === 'green' ? '#16a34a' : '#1f2937';
+
+                const history = document.getElementById('rouletteHistory');
+                const newBall = document.createElement('span');
+                newBall.className = `w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${winningColor === 'red' ? 'bg-red-600' : winningColor === 'green' ? 'bg-green-600' : 'bg-slate-800'}`;
+                newBall.textContent = winningNumber;
+                history.insertBefore(newBall, history.firstChild);
+                if (history.children.length > 10) history.removeChild(history.lastChild);
+
+                const bet = parseInt(document.getElementById('rouletteBetAmount').value) || 1000;
+                let winAmount = 0;
+                if ((rouletteBet === 'red' && winningColor === 'red') || 
+                    (rouletteBet === 'black' && winningColor === 'black')) {
+                    winAmount = bet * 2;
+                } else if (rouletteBet === 'green' && winningColor === 'green') {
+                    winAmount = bet * 14;
+                }
+
+                if (winAmount > 0) {
+                    const balanceEl = document.getElementById('balance');
+                    let current = parseInt(balanceEl.textContent.replace(/[^0-9]/g, ''));
+                    balanceEl.textContent = '₺ ' + (current + winAmount).toLocaleString();
+                    if (winAmount >= bet * 5) showMegaWin(winAmount);
+                }
+
+                isSpinning = false;
+                btn.disabled = false;
+                wheel.style.transition = 'none';
+                ball.style.transition = 'none';
+                wheel.style.transform = 'rotate(0deg)';
+                ball.style.transform = 'rotate(0deg)';
+                setTimeout(() => {
+                    wheel.style.transition = 'transform 4s cubic-bezier(0.1, 0.8, 0.1, 1)';
+                    ball.style.transition = 'transform 4s cubic-bezier(0.1, 0.8, 0.3, 1)';
+                }, 50);
             }, 4000);
         }
 
-        function startBlackjack() {
-            showNotification("Krupiye yeni desteyi karıştırıyor, lütfen bekleyin.");
-        }
+        // === FIXED BLACKJACK ===
+        let bjDeck = [];
+        let bjPlayerCards = [];
+        let bjDealerCards = [];
+        let bjGameActive = false;
+        let bjCurrentBet = 1000;
 
-        // ==========================================
-        //  AVIATOR (ÇARPAN ÇİZGİSİ VE SES ENTEGRASYONU)
-        // ==========================================
-        function startAviator() {
-            if(aviatorBetActive) return;
-            const betInput = document.getElementById('aviatorBetAmount');
-            let bet = parseInt(betInput.value) || 1000;
-            if(bet > balance) { showNotification("Yetersiz Bakiye!"); return; }
-
-            balance -= bet;
-            updateBalanceDisplay();
-
-            aviatorCurrentBet = bet;
-            aviatorBetActive = true;
-            aviatorCurrentMultiplier = 1.00;
-            aviatorPoints = [{x: 0, y: 320}]; // Çizgi koordinat sıfırlama
-
-            startPlaneSound(); // Uçak yükselme sesi başlatılıyor
-
-            const plane = document.getElementById('aviator-plane');
-            const multText = document.getElementById('aviator-multiplier');
-            const statusText = document.getElementById('aviator-status');
-            const ctrlContainer = document.getElementById('aviator-controls');
-            const pathEl = document.getElementById('aviator-path');
-
-            statusText.innerText = "UÇUŞ BAŞLADI";
-            statusText.classList.remove('text-red-500');
-            statusText.classList.add('text-emerald-400');
-            multText.style.color = '#ffffff';
-
-            plane.style.display = 'block';
-            plane.style.left = '0%';
-            plane.style.bottom = '0%';
-            pathEl.setAttribute('d', 'M 0 320');
-
-            ctrlContainer.innerHTML = `<button onclick="cashoutAviator()" id="aviatorCashoutBtn" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 font-black py-4 rounded-xl text-sm shadow-lg tracking-wider uppercase">NAKİT ÇEK (₺${bet})</button>`;
-
-            let crashPoint = (Math.random() * 6) + 1.05;
-            if(Math.random() < 0.12) crashPoint = 1.00;
-
-            let tickRate = 80;
-            let svgEl = document.getElementById('aviator-svg');
-
-            aviatorInterval = setInterval(() => {
-                if(aviatorCurrentMultiplier >= crashPoint) {
-                    // UÇAK KAÇTI / PATLADI
-                    clearInterval(aviatorInterval);
-                    stopPlaneSound();
-                    playExplosionSound(); // Patlama sesi
-
-                    aviatorBetActive = false;
-                    multText.innerText = "Flew Away! " + aviatorCurrentMultiplier.toFixed(2) + "x";
-                    multText.style.color = '#ef4444';
-                    statusText.innerText = "UÇAK KAÇTI!";
-                    statusText.classList.remove('text-emerald-400');
-                    statusText.classList.add('text-red-500');
-                    plane.style.display = 'none';
-                    
-                    document.getElementById('aviator-controls').innerHTML = `<button onclick="startAviator()" id="aviatorBtn" class="w-full bg-gradient-to-r from-red-600 to-rose-600 text-white font-extrabold py-4 rounded-xl text-sm shadow-lg tracking-wider uppercase">BAHİS YAP</button>`;
-                    showNotification("Uçak kaçtı! Bahis kaybedildi.");
-                } else {
-                    aviatorCurrentMultiplier += 0.02 + (aviatorCurrentMultiplier * 0.004);
-                    multText.innerText = aviatorCurrentMultiplier.toFixed(2) + "x";
-                    
-                    updatePlaneSoundPitch(aviatorCurrentMultiplier); // Uçak sesi frekansı katlanıyor
-
-                    let pct = (aviatorCurrentMultiplier / 7) * 100;
-                    if(pct > 88) pct = 88;
-                    
-                    let currentLeft = pct;
-                    let currentBottom = pct * 0.82;
-                    
-                    plane.style.left = currentLeft + '%';
-                    plane.style.bottom = currentBottom + '%';
-
-                    // SVG Grafik Çarpan Çizgisi Hesaplama
-                    let svgWidth = svgEl.clientWidth || 500;
-                    let svgHeight = 320;
-                    
-                    let drawX = (currentLeft / 100) * svgWidth;
-                    let drawY = svgHeight - ((currentBottom / 100) * svgHeight);
-
-                    aviatorPoints.push({x: drawX, y: drawY});
-                    
-                    // Bezier veya düz çizgi dizesi oluşturma
-                    let pathData = "M 0 320";
-                    for(let p of aviatorPoints) {
-                        pathData += ` L ${p.x} ${p.y}`;
-                    }
-                    pathEl.setAttribute('d', pathData);
-
-                    const cashBtn = document.getElementById('aviatorCashoutBtn');
-                    if(cashBtn) {
-                        let curWin = Math.floor(aviatorCurrentBet * aviatorCurrentMultiplier);
-                        cashBtn.innerText = `NAKİT ÇEK (₺${curWin.toLocaleString('tr-TR')})`;
-                    }
-                }
-            }, tickRate);
-        }
-
-        function cashoutAviator() {
-            if(!aviatorBetActive) return;
-            clearInterval(aviatorInterval);
-            stopPlaneSound(); // Motor sesini kes
-
-            aviatorBetActive = false;
-
-            let finalWin = Math.floor(aviatorCurrentBet * aviatorCurrentMultiplier);
-            balance += finalWin;
-            updateBalanceDisplay();
-
-            triggerMegaWin(finalWin);
-            
-            document.getElementById('aviator-multiplier').style.color = '#10b981';
-            document.getElementById('aviator-status').innerText = "BAHİS BOZDURULDU";
-            document.getElementById('aviator-plane').style.display = 'none';
-
-            document.getElementById('aviator-controls').innerHTML = `<button onclick="startAviator()" id="aviatorBtn" class="w-full bg-gradient-to-r from-red-600 to-rose-600 text-white font-extrabold py-4 rounded-xl text-sm shadow-lg tracking-wider uppercase">BAHİS YAP</button>`;
-        }
-
-        // ==========================================
-        //  MINES
-        // ==========================================
-        function renderMinesBoardPlaceholder() {
-            const grid = document.getElementById('mines-grid');
-            if(!grid) return;
-            grid.innerHTML = '';
-            for(let i=0; i<25; i++) {
-                const btn = document.createElement('button');
-                btn.className = 'mine-btn aspect-square rounded-lg flex items-center justify-center text-xl text-slate-600 disabled:opacity-40';
-                btn.innerHTML = `<i class="fas fa-star text-xs opacity-20"></i>`;
-                btn.disabled = true;
-                grid.appendChild(btn);
-            }
-        }
-
-        function startMines() {
-            if(minesGameActive) return;
-            const betInput = document.getElementById('minesBetAmount');
-            let bet = parseInt(betInput.value) || 1000;
-            if(bet > balance) { showNotification("Yetersiz Bakiye!"); return; }
-
-            balance -= bet;
-            updateBalanceDisplay();
-
-            minesCurrentBet = bet;
-            minesSelectedCount = parseInt(document.getElementById('minesCount').value) || 3;
-            minesTotalGemCount = 25 - minesSelectedCount;
-            minesRevealed = 0;
-            minesGameActive = true;
-
-            minesArray = Array(25).fill('gem');
-            let count = 0;
-            while(count < minesSelectedCount) {
-                let idx = Math.floor(Math.random() * 25);
-                if(minesArray[idx] !== 'mine') {
-                    minesArray[idx] = 'mine';
-                    count++;
+        function createDeck() {
+            const suits = ['♠', '♥', '♦', '♣'];
+            const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+            const deck = [];
+            for (let suit of suits) {
+                for (let value of values) {
+                    let numeric = value === 'A' ? 11 : ['J', 'Q', 'K'].includes(value) ? 10 : parseInt(value);
+                    deck.push({ suit, value, numeric });
                 }
             }
-
-            const grid = document.getElementById('mines-grid');
-            grid.innerHTML = '';
-            for(let i=0; i<25; i++) {
-                const btn = document.createElement('button');
-                btn.className = 'mine-btn aspect-square rounded-lg flex items-center justify-center text-xl text-white font-bold font-mono';
-                btn.dataset.index = i;
-                btn.innerHTML = '';
-                btn.onclick = function() { clickMineTile(this, i); };
-                grid.appendChild(btn);
+            // Fisher-Yates shuffle
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
             }
-
-            document.getElementById('mines-current-multiplier').innerText = "1.00x";
-            document.getElementById('minesStartBtn').classList.add('hidden');
-            
-            const cashBtn = document.getElementById('minesCashoutBtn');
-            cashBtn.classList.remove('hidden');
-            cashBtn.innerText = `NAKİT ÇEK (₺${minesCurrentBet})`;
+            return deck;
         }
 
-        function clickMineTile(btn, idx) {
-            if(!minesGameActive) return;
-            btn.onclick = null;
-
-            if(minesArray[idx] === 'mine') {
-                playExplosionSound(); // Mayın patlama efekti
-                btn.className = 'aspect-square bg-red-600 rounded-lg flex items-center justify-center text-xl text-white animate-bounce shadow-lg border border-red-400';
-                btn.innerHTML = `<i class="fas fa-bomb"></i>`;
-                revealAllMines(false);
-                showNotification("Mayına bastınız! Bahis kaybedildi.");
+        function createCardElement(card, hidden = false, delay = 0) {
+            const cardDiv = document.createElement('div');
+            if (hidden) {
+                cardDiv.className = 'playing-card card-back';
             } else {
-                playSugarPopSound(); // Başarılı elmas bulma sesi
-                btn.className = 'aspect-square bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center text-xl text-slate-950 font-bold border border-amber-300 shadow-md';
-                btn.innerHTML = `💎`;
-                minesRevealed++;
+                const isRed = card.suit === '♥' || card.suit === '♦';
+                cardDiv.className = `playing-card ${isRed ? 'card-red' : 'card-black'} card-deal-anim`;
+                cardDiv.style.animationDelay = delay + 's';
 
-                let mult = 1 + (minesRevealed * (minesSelectedCount * 0.28));
-                document.getElementById('mines-current-multiplier').innerText = mult.toFixed(2) + "x";
-
-                let currentPayout = Math.floor(minesCurrentBet * mult);
-                document.getElementById('minesCashoutBtn').innerText = `NAKİT ÇEK (₺${currentPayout.toLocaleString('tr-TR')})`;
-
-                if(minesRevealed === minesTotalGemCount) {
-                    cashoutMines();
-                }
+                // Kart içeriği
+                cardDiv.innerHTML = `
+                    <div class="card-value-top">${card.value}${card.suit}</div>
+                    <div class="card-suit-center">${card.suit}</div>
+                    <div class="card-value-bottom">${card.value}${card.suit}</div>
+                `;
             }
+            return cardDiv;
         }
 
-        function cashoutMines() {
-            if(!minesGameActive) return;
-            let mult = 1 + (minesRevealed * (minesSelectedCount * 0.28));
-            let finalWin = Math.floor(minesCurrentBet * mult);
-            
-            balance += finalWin;
-            updateBalanceDisplay();
-            triggerMegaWin(finalWin);
-
-            revealAllMines(true);
-        }
-
-        function revealAllMines(isWin) {
-            minesGameActive = false;
-            const grid = document.getElementById('mines-grid');
-            const cells = grid.children;
-
-            for(let i=0; i<25; i++) {
-                let cell = cells[i];
-                cell.onclick = null;
-                if(minesArray[i] === 'mine') {
-                    cell.innerHTML = `<i class="fas fa-bomb text-red-500 text-sm"></i>`;
-                    if(!isWin) cell.style.background = '#270c12';
-                } else {
-                    if(cell.innerHTML === '') {
-                        cell.innerHTML = `<i class="fas fa-gem text-amber-500/40 text-xs"></i>`;
-                    }
-                }
-            }
-
-            document.getElementById('minesStartBtn').classList.remove('hidden');
-            document.getElementById('minesCashoutBtn').classList.add('hidden');
-        }
-
-        // ==========================================
-        //  PIXEL SOCCER MATCH (TÜM TÜRKİYE TAKIMLARI)
-        // ==========================================
-        function selectSoccerPick(pick, odds) {
-            soccerSelectedPick = pick;
-            soccerSelectedOdds = odds;
-
-            document.querySelectorAll('#soccer-odds-pool button').forEach(btn => {
-                btn.className = "bg-slate-900 border border-slate-800 p-2 rounded-xl text-center hover:border-cyan-400 transition-all";
+        function bjCalculateScore(cards) {
+            let score = 0;
+            let aces = 0;
+            cards.forEach(card => {
+                score += card.numeric;
+                if (card.value === 'A') aces++;
             });
-            const selectedBtn = document.getElementById('odds-' + pick);
-            if(selectedBtn) selectedBtn.className = "bg-slate-800 border-2 border-cyan-400 p-2 rounded-xl text-center transition-all";
-            showNotification(`MS ${pick} tercihi seçildi. Oran: ${odds}`);
+            while (score > 21 && aces > 0) {
+                score -= 10;
+                aces--;
+            }
+            return score;
         }
 
-        function startSoccerMatch() {
-            if(soccerGameActive) return;
-            if(!soccerSelectedPick) { showNotification("Lütfen bir maç sonucu tahmini seçin!"); return; }
+        function updateBJControls() {
+            const hitBtn = document.getElementById('bjHitBtn');
+            const standBtn = document.getElementById('bjStandBtn');
+            const doubleBtn = document.getElementById('bjDoubleBtn');
+            const dealBtn = document.getElementById('bjDealBtn');
 
-            const betInput = document.getElementById('soccerBetAmount');
-            let bet = parseInt(betInput.value) || 1000;
-            if(bet > balance) { showNotification("Yetersiz Bakiye!"); return; }
+            if (bjGameActive) {
+                hitBtn.disabled = false;
+                standBtn.disabled = false;
+                doubleBtn.disabled = bjPlayerCards.length !== 2;
+                dealBtn.disabled = true;
+            } else {
+                hitBtn.disabled = true;
+                standBtn.disabled = true;
+                doubleBtn.disabled = true;
+                dealBtn.disabled = false;
+            }
+        }
 
-            // Tüm Türkiye takımları arasından rastgele ev sahibi ve deplasman seç
-            let homeIdx = Math.floor(Math.random() * turkeyTeams.length);
-            let awayIdx = Math.floor(Math.random() * turkeyTeams.length);
-            while(awayIdx === homeIdx) {
-                awayIdx = Math.floor(Math.random() * turkeyTeams.length);
+        function bjDeal() {
+            // Bahis kontrolü
+            bjCurrentBet = parseInt(document.getElementById('blackjackBetAmount').value) || 1000;
+            const balanceEl = document.getElementById('balance');
+            let currentBalance = parseInt(balanceEl.textContent.replace(/[^0-9]/g, ''));
+
+            if (bjCurrentBet > currentBalance) {
+                document.getElementById('bjStatus').textContent = 'Yetersiz bakiye! Lütfen daha düşük bahis girin.';
+                return;
             }
 
-            const homeName = turkeyTeams[homeIdx];
-            const awayName = turkeyTeams[awayIdx];
+            // Bahis düş
+            currentBalance -= bjCurrentBet;
+            balanceEl.textContent = '₺ ' + currentBalance.toLocaleString();
 
-            document.getElementById('soccer-home-name').innerText = homeName;
-            document.getElementById('soccer-away-name').innerText = awayName;
+            // Yeni deste oluştur
+            bjDeck = createDeck();
+            bjPlayerCards = [];
+            bjDealerCards = [];
+            bjGameActive = true;
 
-            balance -= bet;
-            updateBalanceDisplay();
+            // Ses efekti
+            const ctx = initAudioContext();
+            for (let i = 0; i < 4; i++) {
+                setTimeout(() => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(600, ctx.currentTime);
+                    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(ctx.currentTime);
+                    osc.stop(ctx.currentTime + 0.05);
+                }, i * 200);
+            }
 
-            soccerCurrentBet = bet;
-            soccerGameActive = true;
+            // Kartları dağıt (animasyonlu)
+            const playerDiv = document.getElementById('playerCards');
+            const dealerDiv = document.getElementById('dealerCards');
+            playerDiv.innerHTML = '';
+            dealerDiv.innerHTML = '';
 
-            const timeEl = document.getElementById('soccer-time');
-            const scoreEl = document.getElementById('soccer-score');
-            const commEl = document.getElementById('soccer-commentary');
-            const animEl = document.getElementById('soccer-field-animation');
-            const startBtn = document.getElementById('soccerStartBtn');
+            // 1. Oyuncu kartı
+            setTimeout(() => {
+                bjPlayerCards.push(bjDeck.pop());
+                playerDiv.appendChild(createCardElement(bjPlayerCards[0], false, 0));
+                document.getElementById('playerScore').textContent = bjCalculateScore(bjPlayerCards);
+            }, 100);
 
-            startBtn.disabled = true;
-            startBtn.innerText = "MAÇ OYNANIYOR...";
+            // 2. Krupiye kartı (kapalı)
+            setTimeout(() => {
+                bjDealerCards.push(bjDeck.pop());
+                dealerDiv.appendChild(createCardElement(bjDealerCards[0], true, 0));
+                document.getElementById('dealerScore').textContent = '?';
+            }, 400);
 
-            let homeScore = 0;
-            let awayScore = 0;
-            let currentMinute = 0;
+            // 3. Oyuncu kartı
+            setTimeout(() => {
+                bjPlayerCards.push(bjDeck.pop());
+                playerDiv.appendChild(createCardElement(bjPlayerCards[1], false, 0));
+                const pScore = bjCalculateScore(bjPlayerCards);
+                document.getElementById('playerScore').textContent = pScore;
 
-            scoreEl.innerText = "0 - 0";
-            commEl.innerText = `Hakem düdüğü çaldı! ${homeName} - ${awayName} derbisi büyük bir atmosferde başladı.`;
-
-            let matchInterval = setInterval(() => {
-                currentMinute += 15;
-                if(currentMinute > 90) currentMinute = 90;
-                timeEl.innerText = `Süre: ${currentMinute}'`;
-
-                let r = Math.random();
-                if(r < 0.24) {
-                    homeScore++;
-                    scoreEl.innerText = `${homeScore} - ${awayScore}`;
-                    commEl.innerText = `${currentMinute}' HARİKA GOL! ${homeName} pixel adamların paslaşmasında ceza sahası dışından sert vurdu ve golü attı!`;
-                    animEl.innerText = "⚽ 🔥 🏃‍♂️ GOOOOL!";
-                    playSugarPopSound(); // Gol sevinci efekti
-                } else if(r > 0.76) {
-                    awayScore++;
-                    scoreEl.innerText = `${homeScore} - ${awayScore}`;
-                    commEl.innerText = `${currentMinute}' TOP AĞLARDA! ${awayName} hızlı hücumda pixel savunmayı çizgi halinde avlayarak skoru değiştirdi!`;
-                    animEl.innerText = "⚽ 🔥 🏃‍♂️ GOOOOL!";
-                    playSugarPopSound();
-                } else {
-                    commEl.innerText = `${currentMinute}' Orta saha mücadelesi devam ediyor, pixel adamlar top kapma yarışında kıyasıya mücadelede.`;
-                    animEl.innerText = "🏃‍♂️ ⚽ 🏃‍♂️";
+                // Blackjack kontrolü
+                if (pScore === 21) {
+                    setTimeout(() => bjStand(), 500);
                 }
+            }, 700);
 
-                if(currentMinute === 90) {
-                    clearInterval(matchInterval);
-                    commEl.innerText = `Maç bitti! Skor: ${homeScore} - ${awayScore}. Derbinin kazananı ve kupon sonuçları netleşti.`;
-                    animEl.innerText = "🏁 🏃‍♂️ 🏃‍♂️";
-
-                    let finalResult = 'X';
-                    if(homeScore > awayScore) finalResult = '1';
-                    else if(awayScore > homeScore) finalResult = '2';
-
-                    if(soccerSelectedPick === finalResult) {
-                        let win = Math.floor(soccerCurrentBet * soccerSelectedOdds);
-                        balance += win;
-                        updateBalanceDisplay();
-                        triggerMegaWin(win);
-                    } else {
-                        showNotification("Kupon yattı! Pixel takımların bu haftaki skoru tahmine uymadı.");
-                    }
-
-                    soccerGameActive = false;
-                    startBtn.disabled = false;
-                    startBtn.innerText = "MAÇI BAŞLAT (BAHİS YAP)";
-                }
+            // 4. Krupiye kartı (açık)
+            setTimeout(() => {
+                bjDealerCards.push(bjDeck.pop());
+                dealerDiv.appendChild(createCardElement(bjDealerCards[1], false, 0));
+                updateBJControls();
+                document.getElementById('bjStatus').textContent = 'Kart çek veya bekle. 21'e ulaşmaya çalış!';
             }, 1000);
         }
 
-        // CANLI SİMÜLASYON VERİLERİ
-        const sampleUsers = ['Ahmet', 'Mehmet', 'Can', 'Ece', 'Selin', 'Burak', 'Hakan', 'Merve', 'Kaan', 'Arda'];
-        const sampleGames = ['Sweet Bonanza', 'Gates of Olympus', 'Big Bass Bonanza', 'Sugar Rush 1000', 'Aviator VIP', 'Mines Gold', 'Pixel Soccer'];
-        
-        function addLiveWinRow() {
-            const tbody = document.getElementById('live-wins-tbody');
-            if(!tbody) return;
-            if(tbody.children.length > 4) tbody.removeChild(tbody.lastChild);
-            
-            const user = sampleUsers[Math.floor(Math.random()*sampleUsers.length)];
-            const maskedUser = user.substring(0, 3) + '***';
-            const game = sampleGames[Math.floor(Math.random()*sampleGames.length)];
-            const bet = Math.floor(Math.random() * 2000) + 1000;
-            const win = Math.floor(bet * (Math.random() * 1.8 + 1.1));
-            
-            const tr = document.createElement('tr');
-            tr.className = 'border-b border-slate-900/60 py-2';
-            tr.innerHTML = `
-                <td class="py-2.5 font-bold text-slate-200"><i class="fas fa-user text-[10px] text-amber-500 mr-1.5"></i> ${maskedUser}</td>
-                <td class="py-2.5 text-slate-400">${game}</td>
-                <td class="py-2.5 text-slate-400">₺${bet}</td>
-                <td class="py-2.5 text-emerald-400 font-bold text-right">+₺${win}</td>
-            `;
-            tbody.insertBefore(tr, tbody.firstChild);
+        function bjHit() {
+            if (!bjGameActive) return;
+
+            bjPlayerCards.push(bjDeck.pop());
+            const playerDiv = document.getElementById('playerCards');
+            playerDiv.appendChild(createCardElement(bjPlayerCards[bjPlayerCards.length - 1], false, 0));
+
+            const score = bjCalculateScore(bjPlayerCards);
+            document.getElementById('playerScore').textContent = score;
+
+            // Ses efekti
+            const ctx = initAudioContext();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(500, ctx.currentTime);
+            gain.gain.setValueAtTime(0.1, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.05);
+
+            if (score > 21) {
+                bjGameActive = false;
+                document.getElementById('bjStatus').textContent = 'Battın! ' + score + ' puan. Krupiye kazandı.';
+
+                // Krupiye kapalı kartı aç
+                const dealerDiv = document.getElementById('dealerCards');
+                dealerDiv.innerHTML = '';
+                bjDealerCards.forEach(card => {
+                    dealerDiv.appendChild(createCardElement(card, false, 0));
+                });
+                document.getElementById('dealerScore').textContent = bjCalculateScore(bjDealerCards);
+
+                updateBJControls();
+            }
         }
 
-        setInterval(addLiveWinRow, 4000);
+        function bjStand() {
+            if (!bjGameActive) return;
+            bjGameActive = false;
 
-        window.onload = function() {
-            updateBalanceDisplay();
-        };
+            // Krupiye kapalı kartı aç
+            const dealerDiv = document.getElementById('dealerCards');
+            dealerDiv.innerHTML = '';
+            bjDealerCards.forEach(card => {
+                dealerDiv.appendChild(createCardElement(card, false, 0));
+            });
+
+            // Krupiye oynar (17'ye kadar çeker)
+            let dealerScore = bjCalculateScore(bjDealerCards);
+            document.getElementById('dealerScore').textContent = dealerScore;
+
+            const dealInterval = setInterval(() => {
+                if (dealerScore < 17) {
+                    bjDealerCards.push(bjDeck.pop());
+                    dealerDiv.appendChild(createCardElement(bjDealerCards[bjDealerCards.length - 1], false, 0));
+                    dealerScore = bjCalculateScore(bjDealerCards);
+                    document.getElementById('dealerScore').textContent = dealerScore;
+                } else {
+                    clearInterval(dealInterval);
+                    bjEndGame();
+                }
+            }, 600);
+
+            updateBJControls();
+        }
+
+        function bjEndGame() {
+            const playerScore = bjCalculateScore(bjPlayerCards);
+            const dealerScore = bjCalculateScore(bjDealerCards);
+            const balanceEl = document.getElementById('balance');
+            let currentBalance = parseInt(balanceEl.textContent.replace(/[^0-9]/g, ''));
+
+            let result = '';
+            let winAmount = 0;
+
+            if (playerScore > 21) {
+                result = 'Battın! Krupiye kazandı.';
+            } else if (dealerScore > 21) {
+                result = 'Krupiye battı! Kazandın!';
+                winAmount = bjCurrentBet * 2;
+            } else if (playerScore === dealerScore) {
+                result = 'Berabere! Bahis iade edildi.';
+                winAmount = bjCurrentBet;
+            } else if (playerScore > dealerScore) {
+                if (playerScore === 21 && bjPlayerCards.length === 2) {
+                    result = 'BLACKJACK! 2.5x kazanç!';
+                    winAmount = bjCurrentBet * 2.5;
+                } else {
+                    result = 'Kazandın! ' + playerScore + ' vs ' + dealerScore;
+                    winAmount = bjCurrentBet * 2;
+                }
+            } else {
+                result = 'Krupiye kazandı! ' + dealerScore + ' vs ' + playerScore;
+            }
+
+            document.getElementById('bjStatus').textContent = result;
+
+            if (winAmount > 0) {
+                currentBalance += winAmount;
+                balanceEl.textContent = '₺ ' + currentBalance.toLocaleString();
+
+                // Kazanan kartları vurgula
+                if (winAmount > bjCurrentBet) {
+                    document.querySelectorAll('#playerCards .playing-card').forEach(card => {
+                        card.classList.add('card-win');
+                    });
+
+                    // Floating coins
+                    const rect = document.getElementById('playerCards').getBoundingClientRect();
+                    spawnFloatingCoins(rect.left + rect.width / 2, rect.top);
+                }
+
+                if (winAmount >= bjCurrentBet * 2.5) {
+                    showMegaWin(winAmount);
+                }
+            }
+
+            updateBJControls();
+        }
+
+        function bjDouble() {
+            if (!bjGameActive || bjPlayerCards.length !== 2) return;
+
+            const balanceEl = document.getElementById('balance');
+            let currentBalance = parseInt(balanceEl.textContent.replace(/[^0-9]/g, ''));
+
+            if (bjCurrentBet > currentBalance) {
+                document.getElementById('bjStatus').textContent = 'Yetersiz bakiye!';
+                return;
+            }
+
+            // Bahis ikiye katla
+            currentBalance -= bjCurrentBet;
+            balanceEl.textContent = '₺ ' + currentBalance.toLocaleString();
+            bjCurrentBet *= 2;
+
+            // Bir kart çek ve bekle
+            bjHit();
+            if (bjGameActive) {
+                setTimeout(() => bjStand(), 500);
+            }
+        }
+
+        // === INITIALIZE ===
+        document.addEventListener('DOMContentLoaded', function() {
+            initBonanzaGrid();
+            initOlympusGrid();
+            updateBJControls();
+        });
     </script>
 </body>
 </html>
