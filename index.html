@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NORDBET • VIP Balanced Odds & Full Casino</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: radial-gradient(circle at center, #0b1329, #020617);
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+        
+        .premium-logo {
+            font-family: 'Cinzel', serif;
+            background: linear-gradient(to right, #ffe066 0%, #f59e0b 50%, #b45309 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.4));
+            letter-spacing: 2px;
+        }
+        
+        .gold-glow-border {
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.15), inset 0 0 15px rgba(212, 175, 55, 0.05);
+            border-color: rgba(212, 175, 55, 0.2);
+        }
+
+        .gold-bg { background: linear-gradient(135deg, #d4af37, #aa841e); }
+        .gold-bg:hover { background: linear-gradient(135deg, #e5c158, #c1992e); filter: drop-shadow(0 0 10px rgba(212,175,55,0.4)); }
+        
+        .slot-blur { animation: slotSpinAnimation 0.1s infinite linear; }
+        @keyframes slotSpinAnimation {
+            0% { transform: translateY(-6px); filter: blur(4px); opacity: 0.8; }
+            100% { transform: translateY(6px); filter: blur(4px); opacity: 0.8; }
+        }
+
+        .slot-cell { transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .slot-cell.matched {
+            animation: matchFlash 0.4s ease-out 2 alternate;
+            background: rgba(245, 158, 11, 0.25) !important;
+            border-color: #f59e0b !important;
+        }
+        @keyframes matchFlash {
+            0% { transform: scale(1); filter: brightness(1); }
+            100% { transform: scale(1.08); filter: brightness(1.7); box-shadow: 0 0 20px #f59e0b; }
+        }
+
+        .shockwave { animation: shockwaveEffect 0.5s ease-out; }
+        @keyframes shockwaveEffect {
+            0% { box-shadow: 0 0 0px 0px rgba(236, 72, 153, 0.6); }
+            100% { box-shadow: 0 0 40px 20px rgba(236, 72, 153, 0); }
+        }
+
+        .lightning-flash { animation: lightning 0.4s ease-out; }
+        @keyframes lightning {
+            0%, 100% { background: transparent; }
+            20%, 60% { background: rgba(254, 240, 138, 0.4); box-shadow: inset 0 0 50px rgba(245, 158, 11, 0.6); }
+            40% { background: rgba(254, 240, 138, 0.1); }
+        }
+
+        .tab-btn.active {
+            background-color: #1e293b;
+            border-color: #d4af37;
+            color: #f59e0b;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.15);
+        }
+        
+        #mega-win-screen {
+            position: fixed; inset: 0; background: rgba(2, 6, 23, 0.94);
+            z-index: 9999; display: flex; flex-direction: column; align-items: center;
+            justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        #mega-win-screen.active { opacity: 1; pointer-events: auto; }
+        .mega-win-text {
+            font-family: 'Cinzel', serif;
+            animation: winPulse 0.5s infinite alternate;
+            background: linear-gradient(to bottom, #ffe066, #f59e0b);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        @keyframes winPulse {
+            0% { transform: scale(0.95); filter: drop-shadow(0 0 20px #f59e0b); }
+            100% { transform: scale(1.1); filter: drop-shadow(0 0 45px #ffe066); }
+        }
+
+        .confetti {
+            position: fixed; width: 8px; height: 8px;
+            animation: confettiFall 2.2s linear infinite; pointer-events: none; z-index: 10000;
+        }
+        @keyframes confettiFall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* RULET ÇARK EFEKTİ */
+        .roulette-wheel-spin { animation: wheelSpin 2s cubic-bezier(0.1, 0.8, 0.1, 1) forwards; }
+        @keyframes wheelSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(1440deg); } }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <div id="mega-win-screen">
+        <i class="fas fa-trophy text-7xl text-amber-400 mb-4 animate-bounce"></i>
+        <h2 class="text-5xl sm:text-7xl font-black mega-win-text mb-2 text-center">MEGA WIN!</h2>
+        <p id="mega-win-amount" class="text-3xl sm:text-5xl font-bold text-white tracking-wide">+₺0</p>
+        <div class="mt-8 bg-emerald-600/20 text-emerald-400 font-bold px-6 py-2.5 rounded-xl border border-emerald-500/30 text-sm flex items-center gap-2 shadow-lg animate-pulse">
+            <i class="fas fa-check-circle"></i> Kasanıza Aktarıldı!
+        </div>
+    </div>
+
+    <header class="bg-slate-950/95 backdrop-blur-md border-b border-slate-800/60 p-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3 group cursor-pointer">
+                <div class="relative flex items-center justify-center w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl shadow-lg group-hover:rotate-12 transition-transform">
+                    <i class="fas fa-crown text-xl text-slate-950"></i>
+                </div>
+                <h1 class="text-3xl font-black premium-logo">NORD<span class="text-white font-light">BET</span></h1>
+            </div>
+            <div class="flex items-center gap-4 w-full sm:w-auto justify-end">
+                <div id="balance" class="bg-slate-900 px-5 py-2 rounded-xl border border-amber-500/20 text-amber-400 font-bold tracking-wide text-lg">₺ 124.850</div>
+                <button onclick="redirectToWhatsApp()" class="gold-bg text-slate-950 font-bold px-5 py-2 rounded-xl shadow-lg transition-all transform hover:scale-105 flex items-center gap-2"><i class="fas fa-wallet"></i> YATIR</button>
+                <button onclick="redirectToWhatsApp()" class="bg-slate-800 hover:bg-slate-700 text-white font-medium px-5 py-2 rounded-xl border border-slate-700 transition-all transform hover:scale-105 flex items-center gap-2"><i class="fas fa-hand-holding-usd"></i> ÇEK</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto p-4 sm:p-6 w-full flex-grow">
+        
+        <div class="flex flex-wrap gap-2 mb-6 border-b border-slate-800 pb-4 justify-center lg:justify-start">
+            <button onclick="switchTab('sweetbonanza')" class="tab-btn active border border-slate-800 px-4 py-2.5 rounded-xl font-medium text-xs transition-all flex items-center gap-2 hover:bg-slate-900"><i class="fas fa-candy-cane text-pink-500"></i> Sweet Bonanza</button>
+            <button onclick="switchTab('gatesolympus')" class="tab-btn border border-slate-800 px-4 py-2.5 rounded-xl font-medium text-xs transition-all flex items-center gap-2 hover:bg-slate-900"><i class="fas fa-bolt text-amber-400"></i> Gates of Olympus</button>
+            <button onclick="switchTab('bigbass')" class="tab-btn border border-slate-800 px-4 py-2.5 rounded-xl font-medium text-xs transition-all flex items-center gap-2 hover:bg-slate-900"><i class="fas fa-fish text-emerald-400"></i> Big Bass Bonanza</button>
+            <button onclick="switchTab('sugarrush')" class="tab-btn border border-slate-800 px-4 py-2.5 rounded-xl font-medium text-xs transition-all flex items-center gap-2 hover:bg-slate-900"><i class="fas fa-ice-cream text-purple-400"></i> Sugar Rush 1000</button>
+            <button onclick="switchTab('roulette')" class="tab-btn border border-slate-800 px-4 py-2.5 rounded-xl font-medium text-xs transition-all flex items-center gap-2 hover:bg-slate-900"><i class="fas fa-circle-dot text-red-500"></i> Rulet</button>
+            <button onclick="switchTab('blackjack')" class="tab-btn border border-slate-800 px-4 py-2.5 rounded-xl font-medium text-xs transition-all flex items-center gap-2 hover:bg-slate-900"><i class="fas fa-id-card text-blue-500"></i> Blackjack</button>
+        </div>
+
+        <div id="main-casino-frame" class="bg-slate-900/30 backdrop-blur-md border border-slate-800 rounded-3xl p-6 min-h-[460px] relative shadow-2xl gold-glow-border">
+            
+            <div id="game-sweetbonanza" class="game-container block">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+                    <div id="bonanza-board-wrapper" class="lg:col-span-2 bg-gradient-to-br from-pink-900/30 via-purple-950/30 to-slate-950 p-6 rounded-2xl border border-pink-500/20 text-center relative overflow-hidden">
+                        <div class="flex justify-between items-center mb-4 px-2">
+                            <span class="text-xs uppercase tracking-wider text-pink-400 font-bold"><i class="fas fa-cookie-bite mr-1"></i> Sweet Bonanza Board</span>
+                            <div id="bonanza-multiplier-display" class="hidden bg-pink-600 text-white text-xs font-black px-3 py-1 rounded-full animate-bounce"></div>
+                        </div>
+                        <div class="grid grid-cols-4 gap-3 max-w-md mx-auto bg-black/40 p-4 rounded-xl border border-pink-500/10" id="bonanza-grid"></div>
+                    </div>
+                    <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800">
+                        <h3 class="text-lg font-bold text-pink-400 mb-1"><i class="fas fa-candy-cane"></i> Sweet Bonanza VIP</h3>
+                        <p class="text-xs text-slate-400 mb-4">En az 4 adet eşleşmede patlar ve çarpan bombası indirir!</p>
+                        <div class="mb-4">
+                            <label class="text-xs text-slate-500 block mb-1">Bahis Tutarı (₺)</label>
+                            <input id="bonanzaBetAmount" type="number" value="1000" class="w-full bg-slate-900 p-3 rounded-xl border border-slate-800 text-pink-400 font-bold focus:outline-none">
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="playSweetBonanza()" id="bonanzaBtn" class="flex-grow bg-gradient-to-r from-pink-500 to-purple-600 text-white font-extrabold py-3.5 rounded-xl shadow-lg text-sm">SPIN ET</button>
+                            <button onclick="toggleAutoSpin('bonanza')" id="bonanzaAutoBtn" class="bg-slate-800 border border-slate-700 text-slate-300 font-bold px-4 rounded-xl text-xs whitespace-nowrap">AUTO: OFF</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="game-gatesolympus" class="game-container hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+                    <div id="olympus-board-wrapper" class="lg:col-span-2 bg-gradient-to-br from-amber-950/20 via-slate-900 to-purple-950/20 p-6 rounded-2xl border border-amber-500/20 text-center relative overflow-hidden">
+                        <div class="flex justify-between items-center mb-4 px-2">
+                            <span class="text-xs uppercase tracking-wider text-amber-400 font-bold"><i class="fas fa-bolt mr-1"></i> Gates of Olympus</span>
+                            <div id="olympus-lightning-text" class="hidden bg-amber-500 text-slate-950 text-xs font-black px-3 py-1 rounded-full animate-pulse">⚡ ZEUS ŞİMŞEĞİ ÇAKTI!</div>
+                        </div>
+                        <div class="grid grid-cols-4 gap-3 max-w-md mx-auto bg-black/50 p-4 rounded-xl border border-amber-500/10" id="olympus-grid"></div>
+                    </div>
+                    <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800">
+                        <h3 class="text-lg font-bold text-amber-400 mb-1">⚡ Gates of Olympus VIP</h3>
+                        <p class="text-xs text-slate-400 mb-4">Dede şimşek çaktırdığında global katlayıcı küreler iner (2x - 250x).</p>
+                        <div class="mb-4">
+                            <label class="text-xs text-slate-500 block mb-1">Bahis Tutarı (₺)</label>
+                            <input id="olympusBetAmount" type="number" value="1000" class="w-full bg-slate-900 p-3 rounded-xl border border-slate-800 text-amber-400 font-bold focus:outline-none">
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="playGatesOfOlympus()" id="olympusBtn" class="flex-grow bg-gradient-to-r from-amber-500 to-yellow-600 text-slate-950 font-black py-3.5 rounded-xl shadow-lg text-sm">SPIN ET</button>
+                            <button onclick="toggleAutoSpin('olympus')" id="olympusAutoBtn" class="bg-slate-800 border border-slate-700 text-slate-300 font-bold px-4 rounded-xl text-xs whitespace-nowrap">AUTO: OFF</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="game-bigbass" class="game-container hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+                    <div class="lg:col-span-2 bg-gradient-to-br from-emerald-950/40 via-slate-900 to-cyan-950/30 p-6 rounded-2xl border border-emerald-500/20 text-center">
+                        <div class="flex justify-between items-center mb-4 px-2">
+                            <span class="text-xs uppercase tracking-wider text-emerald-400 font-bold"><i class="fas fa-water mr-1"></i> Big Bass Netting</span>
+                            <div id="bigbass-catch-display" class="hidden bg-emerald-600 text-white text-xs font-black px-3 py-1 rounded-full animate-bounce">🎣 BALIKÇI ÖDÜLLERİ TOPLADI!</div>
+                        </div>
+                        <div class="grid grid-cols-4 gap-3 max-w-md mx-auto bg-black/40 p-4 rounded-xl border border-emerald-500/10" id="bigbass-grid"></div>
+                    </div>
+                    <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800">
+                        <h3 class="text-lg font-bold text-emerald-400 mb-1"><i class="fas fa-fish"></i> Big Bass Bonanza VIP</h3>
+                        <p class="text-xs text-slate-400 mb-4">Balıkçı sembolü ekrana indiği an sudaki tüm balıkların nakit ödüllerini çeker!</p>
+                        <div class="mb-4">
+                            <label class="text-xs text-slate-500 block mb-1">Bahis Tutarı (₺)</label>
+                            <input id="bigbassBetAmount" type="number" value="1000" class="w-full bg-slate-900 p-3 rounded-xl border border-slate-800 text-emerald-400 font-bold focus:outline-none">
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="playBigBass()" id="bigbassBtn" class="flex-grow bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 font-black py-3.5 rounded-xl text-sm shadow-md">OLTA AT (SPIN)</button>
+                            <button onclick="toggleAutoSpin('bigbass')" id="bigbassAutoBtn" class="bg-slate-800 border border-slate-700 text-slate-300 font-bold px-4 rounded-xl text-xs whitespace-nowrap">AUTO: OFF</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="game-sugarrush" class="game-container hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+                    <div class="lg:col-span-2 bg-gradient-to-br from-purple-900/30 via-fuchsia-950/30 to-slate-950 p-6 rounded-2xl border border-purple-500/20 text-center">
+                        <div class="flex justify-between items-center mb-4 px-2">
+                            <span class="text-xs uppercase tracking-wider text-purple-400 font-bold"><i class="fas fa-ice-cream mr-1"></i> Sugar Rush Spots</span>
+                            <div id="sugarrush-spot-display" class="hidden bg-purple-600 text-white text-xs font-black px-3 py-1 rounded-full animate-pulse">🍇 X2 MULTIPLIER SPOT!</div>
+                        </div>
+                        <div class="grid grid-cols-4 gap-3 max-w-md mx-auto bg-black/40 p-4 rounded-xl border border-purple-500/10" id="sugarrush-grid"></div>
+                    </div>
+                    <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800">
+                        <h3 class="text-lg font-bold text-purple-400 mb-1">🧸 Sugar Rush 1000</h3>
+                        <p class="text-xs text-slate-400 mb-4">Jelibonlar patladıkça arkalarında katlanan çarpan izleri bırakır!</p>
+                        <div class="mb-4">
+                            <label class="text-xs text-slate-500 block mb-1">Bahis Tutarı (₺)</label>
+                            <input id="sugarrushBetAmount" type="number" value="1000" class="w-full bg-slate-900 p-3 rounded-xl border border-slate-800 text-purple-400 font-bold focus:outline-none">
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="playSugarRush()" id="sugarrushBtn" class="flex-grow bg-gradient-to-r from-purple-500 to-fuchsia-600 text-white font-extrabold py-3.5 rounded-xl text-sm shadow-md">JELİBONLARI DÖNDÜR</button>
+                            <button onclick="toggleAutoSpin('sugarrush')" id="sugarrushAutoBtn" class="bg-slate-800 border border-slate-700 text-slate-300 font-bold px-4 rounded-xl text-xs whitespace-nowrap">AUTO: OFF</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="game-roulette" class="game-container hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+                    <div class="lg:col-span-2 bg-slate-950 p-6 rounded-2xl border border-red-500/20 text-center relative overflow-hidden">
+                        <div class="w-48 h-48 mx-auto rounded-full border-4 border-amber-500 flex items-center justify-center bg-radial from-slate-900 to-black relative shadow-2xl" id="roulette-wheel-container">
+                            <div class="absolute text-center" id="roulette-status-text">
+                                <i class="fas fa-circle-dot text-4xl text-red-500 animate-pulse"></i>
+                                <div class="text-xs font-bold mt-1 text-slate-400">BAHİS BEKLENİYOR</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-center gap-4 mt-6">
+                            <div class="bg-red-600 text-white px-4 py-2 rounded-xl text-xs font-bold">Kırmızı (2x)</div>
+                            <div class="bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold">Siyah (2x)</div>
+                            <div class="bg-emerald-600 text-white px-4 py-2 rounded-xl text-xs font-bold">Sıfır (35x)</div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800">
+                        <h3 class="text-lg font-bold text-red-500 mb-1">🎰 Canlı Avrupa Ruleti VIP</h3>
+                        <p class="text-xs text-slate-400 mb-4">Rengini seç, bahsini koy ve büyük çarkı döndür.</p>
+                        <div class="mb-3">
+                            <label class="text-xs text-slate-500 block mb-1">Bahis Türü Seç</label>
+                            <select id="rouletteType" class="w-full bg-slate-900 p-3 rounded-xl border border-slate-800 text-white text-xs font-medium focus:outline-none">
+                                <option value="red">Kırmızı (Red)</option>
+                                <option value="black">Siyah (Black)</option>
+                                <option value="zero">Yeşil (0 - Zero)</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="text-xs text-slate-500 block mb-1">Bahis Tutarı (₺)</label>
+                            <input id="rouletteBetAmount" type="number" value="1000" class="w-full bg-slate-900 p-3 rounded-xl border border-slate-800 text-red-500 font-bold focus:outline-none">
+                        </div>
+                        <button onclick="playRoulette()" id="rouletteBtn" class="w-full bg-gradient-to-r from-red-600 to-amber-600 text-white font-extrabold py-3.5 rounded-xl text-sm shadow-md">ÇARKI DÖNDÜR</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="game-blackjack" class="game-container hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+                    <div class="lg:col-span-2 bg-gradient-to-br from-blue-950/20 to-slate-950 p-6 rounded-2xl border border-blue-500/20 min-h-[280px] flex flex-col justify-between">
+                        <div>
+                            <div class="text-xs text-slate-400 font-semibold mb-2 flex items-center gap-2"><i class="fas fa-user-tie text-blue-400"></i> KRUPİYE ELİ: <span id="dealer-score" class="text-white font-bold">0</span></div>
+                            <div id="dealer-cards" class="flex gap-2 min-h-[50px]"></div>
+                        </div>
+                        <div class="mt-6">
+                            <div class="text-xs text-slate-400 font-semibold mb-2 flex items-center gap-2"><i class="fas fa-user text-amber-400"></i> SENİN ELİN: <span id="player-score" class="text-white font-bold">0</span></div>
+                            <div id="player-cards" class="flex gap-2 min-h-[50px]"></div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800">
+                        <h3 class="text-lg font-bold text-blue-500 mb-1">🃏 Blackjack 21 VIP</h3>
+                        <p class="text-xs text-slate-400 mb-4">Krupiyeyi geç ama 21'i aşma!</p>
+                        <div id="bj-bet-phase">
+                            <div class="mb-4">
+                                <label class="text-xs text-slate-500 block mb-1">Bahis Tutarı (₺)</label>
+                                <input id="blackjackBetAmount" type="number" value="1000" class="w-full bg-slate-900 p-3 rounded-xl border border-slate-800 text-blue-400 font-bold focus:outline-none">
+                            </div>
+                            <button onclick="startBlackjack()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl text-sm shadow-md">OYUNU BAŞLAT</button>
+                        </div>
+                        <div id="bj-action-phase" class="hidden flex gap-2">
+                            <button onclick="hitBlackjack()" class="flex-grow bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-xs">KART AL</button>
+                            <button onclick="standBlackjack()" class="flex-grow bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl text-xs">DUR</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="mt-12 bg-slate-950/80 border border-slate-800/80 rounded-3xl p-5 shadow-xl">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="w-2 h-2 bg-red-500 rounded-full animate-ping"></span>
+                <h4 class="text-sm font-bold uppercase tracking-wider text-slate-300">Şu Anda Canlı VIP Kazananlar</h4>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-800 text-slate-500 text-xs uppercase font-semibold">
+                            <th class="pb-2">Kullanıcı</th>
+                            <th class="pb-2">Oyun</th>
+                            <th class="pb-2">Yatırılan</th>
+                            <th class="pb-2 text-right">Net Kazanç</th>
+                        </tr>
+                    </thead>
+                    <tbody id="live-wins-tbody" class="text-xs font-medium text-slate-300"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <a href="https://wa.me/16395697826" target="_blank" class="fixed bottom-6 right-6 bg-emerald-600 hover:bg-emerald-500 text-white p-4 rounded-full shadow-2xl transition-all z-50 flex items-center justify-center gap-2 group">
+        <i class="fab fa-whatsapp text-3xl"></i>
+        <span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 whitespace-nowrap font-medium text-sm">WhatsApp Canlı Destek</span>
+    </a>
+
+    <footer class="bg-slate-950 border-t border-slate-900 text-center py-8 text-xs text-slate-500 mt-12">
+        <p>© 2026 NORDBET Entertainment Ltd. Curacao Licensing No: #2281/JAZ. Tüm hakları saklıdır.</p>
+    </footer>
+
+    <div id="notification" class="fixed top-24 right-6 bg-slate-900 border border-amber-500/40 text-slate-100 px-6 py-4 rounded-2xl shadow-2xl z-50 transform translate-x-96 transition-transform duration-300 max-w-sm flex items-center gap-3">
+        <i class="fas fa-info-circle text-amber-400 text-xl"></i>
+        <span id="notificationText" class="text-sm font-medium">İşlem Başarılı</span>
+    </div>
+
+    <script>
+        let balance = 124850;
+        let isSpinning = false;
+        
+        let autoSpinInterval = null;
+        let isAutoSpinning = false;
+        let activeAutoGame = null;
+
+        // Semboller
+        const bonanzaSymbols = ['🍬', '🍎', '🍇', '🍌', '🍉'];
+        const olympusSymbols = ['🔱', '👑', '💎', '💍', '🏺'];
+        const bigBassSymbols = ['🎣', '🐟', '🐟', '⛵', '📦'];
+        const sugarRushSymbols = ['🧸', '🌟', '🍬', '🍩', '🍫'];
+
+        // Blackjack Oyun Belleği
+        let bjBet = 0;
+        let playerHand = [];
+        let dealerHand = [];
+        const suits = ['♠', '♥', '♦', '♣'];
+        const values = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+
+        function showToast(message) {
+            const toast = document.getElementById('notification');
+            document.getElementById('notificationText').textContent = message;
+            toast.classList.remove('translate-x-96');
+            setTimeout(() => { toast.classList.add('translate-x-96'); }, 2500);
+        }
+
+        function updateBalance() {
+            document.getElementById('balance').textContent = `₺ ${balance.toLocaleString('tr-TR')}`;
+        }
+
+        function triggerMegaWin(amount) {
+            const isRunningAuto = isAutoSpinning; 
+            if(isAutoSpinning) stopAutoSpinGlobal();
+
+            document.getElementById('mega-win-amount').textContent = `+₺${amount.toLocaleString('tr-TR')}`;
+            document.getElementById('mega-win-screen').classList.add('active');
+            triggerConfetti();
+
+            setTimeout(() => {
+                closeMegaWin();
+                if(isRunningAuto && activeAutoGame) {
+                    toggleAutoSpin(activeAutoGame);
+                }
+            }, 2000);
+        }
+
+        function closeMegaWin() {
+            document.getElementById('mega-win-screen').classList.remove('active');
+        }
+
+        function switchTab(game) {
+            stopAutoSpinGlobal();
+            document.querySelectorAll('.game-container').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(`game-${game}`).classList.remove('hidden');
+            if(event) event.currentTarget.classList.add('active');
+        }
+
+        function triggerConfetti() {
+            for (let i = 0; i < 40; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = ['#d4af37', '#ffffff', '#dc2626', '#f59e0b'][Math.floor(Math.random() * 4)];
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 2000);
+            }
+        }
+
+        function initAllSlotGrids() {
+            const configs = [
+                {id: 'bonanza-grid', pref: 'b'}, {id: 'olympus-grid', pref: 'o'},
+                {id: 'bigbass-grid', pref: 'f'}, {id: 'sugarrush-grid', pref: 's'}
+            ];
+            configs.forEach(cfg => {
+                const el = document.getElementById(cfg.id);
+                el.innerHTML = '';
+                for(let i=0; i<12; i++) {
+                    el.innerHTML += `<div class="slot-cell bg-slate-950/50 aspect-square rounded-xl border border-slate-800/80 flex items-center justify-center text-3xl select-none" id="${cfg.pref}-cell-${i}">🎰</div>`;
+                }
+            });
+        }
+
+        function toggleAutoSpin(game) {
+            if(isAutoSpinning && activeAutoGame === game) {
+                stopAutoSpinGlobal();
+                showToast("Otomatik döndürme kapatıldı.");
+            } else {
+                stopAutoSpinGlobal();
+                isAutoSpinning = true;
+                activeAutoGame = game;
+                
+                const autoBtn = document.getElementById(`${game}AutoBtn`);
+                if(autoBtn) {
+                    autoBtn.textContent = "AUTO: ON";
+                    autoBtn.classList.remove('bg-slate-800');
+                    autoBtn.classList.add('bg-red-600', 'text-white');
+                }
+                
+                runSlotGameByName(game);
+
+                autoSpinInterval = setInterval(() => {
+                    if(!isSpinning && isAutoSpinning) {
+                        runSlotGameByName(activeAutoGame);
+                    }
+                }, 2200);
+            }
+        }
+
+        function stopAutoSpinGlobal() {
+            if(autoSpinInterval) clearInterval(autoSpinInterval);
+            isAutoSpinning = false;
+            if(activeAutoGame) {
+                const btn = document.getElementById(`${activeAutoGame}AutoBtn`);
+                if(btn) {
+                    btn.textContent = "AUTO: OFF";
+                    btn.classList.remove('bg-red-600', 'text-white');
+                    btn.classList.add('bg-slate-800', 'text-slate-300');
+                }
+            }
+            autoSpinInterval = null;
+        }
+
+        function runSlotGameByName(name) {
+            if(name === 'bonanza') playSweetBonanza();
+            if(name === 'olympus') playGatesOfOlympus();
+            if(name === 'bigbass') playBigBass();
+            if(name === 'sugarrush') playSugarRush();
+        }
+
+        // ================= DÜŞÜRÜLMÜŞ KAZANÇ ORANLARIYLA SLOT SİMÜLASYONLARI =================
+        function playSweetBonanza() {
+            if(isSpinning) return;
+            const bet = parseInt(document.getElementById('bonanzaBetAmount').value);
+            if(isNaN(bet) || bet > balance || bet <= 0) { stopAutoSpinGlobal(); return showToast("Bakiye yetersiz."); }
+
+            balance -= bet; updateBalance(); isSpinning = true;
+            document.getElementById('bonanzaBtn').disabled = true;
+            document.getElementById('bonanza-multiplier-display').classList.add('hidden');
+
+            let cycles = 0;
+            const interval = setInterval(() => {
+                for(let i=0; i<12; i++) {
+                    let cell = document.getElementById(`b-cell-${i}`);
+                    cell.textContent = bonanzaSymbols[Math.floor(Math.random()*bonanzaSymbols.length)];
+                    cell.classList.add('slot-blur');
+                }
+                if(++cycles > 10) {
+                    clearInterval(interval); isSpinning = false;
+                    document.getElementById('bonanzaBtn').disabled = false;
+                    
+                    let counts = {};
+                    for(let i=0; i<12; i++) {
+                        let cell = document.getElementById(`b-cell-${i}`);
+                        cell.classList.remove('slot-blur');
+                        counts[cell.textContent] = (counts[cell.textContent] || 0) + 1;
+                    }
+
+                    // ŞANS DÜŞÜRME ALGORİTMASI: Eşleşme sınırı 4'ten 5'e çıkarıldı veya rastgele %65 ihtimalle kayıp sayılıyor
+                    let matchedSymbol = null; let maxCount = 0;
+                    if (Math.random() > 0.65) { 
+                        for(let sym in counts) {
+                            if(counts[sym] >= 5 && counts[sym] > maxCount) { matchedSymbol = sym; maxCount = counts[sym]; }
+                        }
+                    }
+
+                    if(matchedSymbol) {
+                        document.getElementById('bonanza-board-wrapper').classList.add('shockwave');
+                        setTimeout(() => document.getElementById('bonanza-board-wrapper').classList.remove('shockwave'), 500);
+
+                        for(let i=0; i<12; i++) {
+                            let cell = document.getElementById(`b-cell-${i}`);
+                            if(cell.textContent === matchedSymbol) cell.classList.add('matched');
+                        }
+
+                        let randomBomb = [2, 4, 8, 15][Math.floor(Math.random()*4)]; // Bomb değerleri düşürüldü
+                        document.getElementById('bonanza-multiplier-display').innerHTML = `🍭 BOMBA: ${randomBomb}x`;
+                        document.getElementById('bonanza-multiplier-display').classList.remove('hidden');
+
+                        setTimeout(() => {
+                            let totalWin = bet * (maxCount * 0.4) * randomBomb;
+                            balance += totalWin; updateBalance();
+                            if(totalWin >= 4000) triggerMegaWin(totalWin);
+                            else { triggerConfetti(); showToast(`Bonanza Ödemesi: +₺${totalWin.toLocaleString('tr-TR')}`); }
+                            for(let i=0; i<12; i++) document.getElementById(`b-cell-${i}`).classList.remove('matched');
+                        }, 1000);
+                    }
+                }
+            }, 75);
+        }
+
+        function playGatesOfOlympus() {
+            if(isSpinning) return;
+            const bet = parseInt(document.getElementById('olympusBetAmount').value);
+            if(isNaN(bet) || bet > balance || bet <= 0) { stopAutoSpinGlobal(); return showToast("Bakiye yetersiz."); }
+
+            balance -= bet; updateBalance(); isSpinning = true;
+            document.getElementById('olympusBtn').disabled = true;
+            document.getElementById('olympus-lightning-text').classList.add('hidden');
+
+            let cycles = 0;
+            const interval = setInterval(() => {
+                for(let i=0; i<12; i++) {
+                    let cell = document.getElementById(`o-cell-${i}`);
+                    cell.textContent = olympusSymbols[Math.floor(Math.random()*olympusSymbols.length)];
+                    cell.classList.add('slot-blur');
+                }
+                if(++cycles > 10) {
+                    clearInterval(interval); isSpinning = false;
+                    document.getElementById('olympusBtn').disabled = false;
+                    
+                    let counts = {};
+                    for(let i=0; i<12; i++) {
+                        let cell = document.getElementById(`o-cell-${i}`);
+                        cell.classList.remove('slot-blur');
+                        counts[cell.textContent] = (counts[cell.textContent] || 0) + 1;
+                    }
+
+                    // %70 İhtimalle Dede çarpanı vermiyor (Şans azaltıldı)
+                    let matchedSymbol = null; let maxCount = 0;
+                    if (Math.random() > 0.70) {
+                        for(let sym in counts) {
+                            if(counts[sym] >= 5 && counts[sym] > maxCount) { matchedSymbol = sym; maxCount = counts[sym]; }
+                        }
+                    }
+
+                    if(matchedSymbol) {
+                        document.getElementById('olympus-board-wrapper').classList.add('lightning-flash');
+                        setTimeout(() => document.getElementById('olympus-board-wrapper').classList.remove('lightning-flash'), 400);
+
+                        for(let i=0; i<12; i++) {
+                            let cell = document.getElementById(`o-cell-${i}`);
+                            if(cell.textContent === matchedSymbol) cell.classList.add('matched');
+                        }
+                        document.getElementById('olympus-lightning-text').classList.remove('hidden');
+
+                        setTimeout(() => {
+                            let olympusMultiplier = [2, 5, 10, 25][Math.floor(Math.random()*4)];
+                            let totalWin = bet * (maxCount * 0.4) * olympusMultiplier;
+                            balance += totalWin; updateBalance();
+                            if(totalWin >= 4000) triggerMegaWin(totalWin);
+                            else { triggerConfetti(); showToast(`Zeus Şimşeği Ödemesi: +₺${totalWin.toLocaleString('tr-TR')}`); }
+                            for(let i=0; i<12; i++) document.getElementById(`o-cell-${i}`).classList.remove('matched');
+                        }, 1000);
+                    }
+                }
+            }, 75);
+        }
+
+        function playBigBass() {
+            if(isSpinning) return;
+            const bet = parseInt(document.getElementById('bigbassBetAmount').value);
+            if(isNaN(bet) || bet > balance || bet <= 0) { stopAutoSpinGlobal(); return showToast("Bakiye yetersiz."); }
+
+            balance -= bet; updateBalance(); isSpinning = true;
+            document.getElementById('bigbassBtn').disabled = true;
+            document.getElementById('bigbass-catch-display').classList.add('hidden');
+
+            let cycles = 0;
+            const interval = setInterval(() => {
+                for(let i=0; i<12; i++) {
+                    document.getElementById(`f-cell-${i}`).textContent = bigBassSymbols[Math.floor(Math.random()*bigBassSymbols.length)];
+                    document.getElementById(`f-cell-${i}`).classList.add('slot-blur');
+                }
+                if(++cycles > 10) {
+                    clearInterval(interval); isSpinning = false;
+                    document.getElementById('bigbassBtn').disabled = false;
+                    
+                    let hasFisherman = false; let fishCount = 0;
+                    // Kazanç olasılığı %75 ihtimalle bloke ediliyor
+                    if (Math.random() > 0.75) {
+                        for(let i=0; i<12; i++) {
+                            let cell = document.getElementById(`f-cell-${i}`);
+                            cell.classList.remove('slot-blur');
+                            if(cell.textContent === '🎣') hasFisherman = true;
+                            if(cell.textContent === '🐟') fishCount++;
+                        }
+                    } else {
+                        for(let i=0; i<12; i++) document.getElementById(`f-cell-${i}`).classList.remove('slot-blur');
+                    }
+
+                    if(hasFisherman && fishCount > 0) {
+                        for(let i=0; i<12; i++) {
+                            let cell = document.getElementById(`f-cell-${i}`);
+                            if(cell.textContent === '🎣' || cell.textContent === '🐟') cell.classList.add('matched');
+                        }
+                        document.getElementById('bigbass-catch-display').classList.remove('hidden');
+
+                        setTimeout(() => {
+                            let totalWin = bet * fishCount * 1.5;
+                            balance += totalWin; updateBalance();
+                            if(totalWin >= 4000) triggerMegaWin(totalWin);
+                            else { triggerConfetti(); showToast(`Balıkçı Yakaladı! +₺${totalWin.toLocaleString('tr-TR')}`); }
+                            for(let i=0; i<12; i++) document.getElementById(`f-cell-${i}`).classList.remove('matched');
+                        }, 1000);
+                    }
+                }
+            }, 75);
+        }
+
+        function playSugarRush() {
+            if(isSpinning) return;
+            const bet = parseInt(document.getElementById('sugarrushBetAmount').value);
+            if(isNaN(bet) || bet > balance || bet <= 0) { stopAutoSpinGlobal(); return showToast("Bakiye yetersiz."); }
+
+            balance -= bet; updateBalance(); isSpinning = true;
+            document.getElementById('sugarrushBtn').disabled = true;
+            document.getElementById('sugarrush-spot-display').classList.add('hidden');
+
+            let cycles = 0;
+            const interval = setInterval(() => {
+                for(let i=0; i<12; i++) {
+                    document.getElementById(`s-cell-${i}`).textContent = sugarRushSymbols[Math.floor(Math.random()*sugarRushSymbols.length)];
+                    document.getElementById(`s-cell-${i}`).classList.add('slot-blur');
+                }
+                if(++cycles > 10) {
+                    clearInterval(interval); isSpinning = false;
+                    document.getElementById('sugarrushBtn').disabled = false;
+                    
+                    let counts = {};
+                    for(let i=0; i<12; i++) {
+                        let cell = document.getElementById(`s-cell-${i}`);
+                        cell.classList.remove('slot-blur');
+                        counts[cell.textContent] = (counts[cell.textContent] || 0) + 1;
+                    }
+
+                    let matchedSymbol = null; let maxCount = 0;
+                    if(Math.random() > 0.70) {
+                        for(let sym in counts) {
+                            if(counts[sym] >= 5 && counts[sym] > maxCount) { matchedSymbol = sym; maxCount = counts[sym]; }
+                        }
+                    }
+
+                    if(matchedSymbol) {
+                        for(let i=0; i<12; i++) {
+                            let cell = document.getElementById(`s-cell-${i}`);
+                            if(cell.textContent === matchedSymbol) cell.classList.add('matched');
+                        }
+                        document.getElementById('sugarrush-spot-display').classList.remove('hidden');
+
+                        setTimeout(() => {
+                            let totalWin = bet * maxCount * 1.2;
+                            balance += totalWin; updateBalance();
+                            if(totalWin >= 4000) triggerMegaWin(totalWin);
+                            else { triggerConfetti(); showToast(`Sugar Rush Ödemesi: +₺${totalWin.toLocaleString('tr-TR')}`); }
+                            for(let i=0; i<12; i++) document.getElementById(`s-cell-${i}`).classList.remove('matched');
+                        }, 1000);
+                    }
+                }
+            }, 75);
+        }
+
+        // ================= COMPLETELY RECODED LIVE ROULETTE OYUNU =================
+        function playRoulette() {
+            if(isSpinning) return;
+            const bet = parseInt(document.getElementById('rouletteBetAmount').value);
+            const type = document.getElementById('rouletteType').value;
+            if(isNaN(bet) || bet > balance || bet <= 0) return showToast("Bakiye yetersiz.");
+
+            balance -= bet; updateBalance(); isSpinning = true;
+            document.getElementById('rouletteBtn').disabled = true;
+            
+            const wheel = document.getElementById('roulette-wheel-container');
+            const status = document.getElementById('roulette-status-text');
+            
+            status.innerHTML = `<div class="text-xs text-amber-400 font-black animate-spin"><i class="fas fa-spinner"></i></div><div class="text-[10px] mt-1">TOP DÖNÜYOR</div>`;
+            wheel.classList.add('roulette-wheel-spin');
+
+            setTimeout(() => {
+                wheel.classList.remove('roulette-wheel-spin');
+                isSpinning = false;
+                document.getElementById('rouletteBtn').disabled = false;
+
+                // Kasa Dostu Rulet Seçimi (%65 ihtimalle kayıp renk gelir)
+                let colors = ['red', 'black', 'zero'];
+                let finalColor = '';
+                
+                if(Math.random() > 0.35) {
+                    finalColor = type === 'red' ? 'black' : 'red'; // Oyuncunun tersini getir
+                } else {
+                    let rand = Math.random();
+                    finalColor = rand < 0.48 ? 'red' : (rand < 0.96 ? 'black' : 'zero');
+                }
+
+                let num = finalColor === 'zero' ? 0 : Math.floor(Math.random() * 36) + 1;
+                let bg = finalColor === 'red' ? 'bg-red-600' : (finalColor === 'black' ? 'bg-slate-800' : 'bg-emerald-600');
+
+                status.innerHTML = `<div class="w-10 h-10 ${bg} text-white rounded-full flex items-center justify-center font-black text-sm mx-auto shadow-md">${num}</div><div class="text-[11px] font-bold mt-1 text-slate-300 uppercase">${finalColor}</div>`;
+
+                if(type === finalColor) {
+                    let multiplier = finalColor === 'zero' ? 35 : 2;
+                    let totalWin = bet * multiplier;
+                    balance += totalWin; updateBalance();
+                    triggerConfetti();
+                    showToast(`Rulet Kazancı: +₺${totalWin.toLocaleString('tr-TR')}`);
+                } else {
+                    showToast("Rulet: Bahis Kaybetti.");
+                }
+            }, 2000);
+        }
+
+        // ================= COMPLETELY RECODED LIVE BLACKJACK OYUNU =================
+        function generateBJCard() {
+            const suit = suits[Math.floor(Math.random() * suits.length)];
+            const val = values[Math.floor(Math.random() * values.length)];
+            let points = parseInt(val);
+            if(['J','Q','K'].includes(val)) points = 10;
+            if(val === 'A') points = 11;
+            return { text: val + suit, score: points, isAce: val === 'A' };
+        }
+
+        function calculateBJScore(hand) {
+            let score = hand.reduce((acc, card) => acc + card.score, 0);
+            let aces = hand.filter(c => c.isAce).length;
+            while(score > 21 && aces > 0) { score -= 10; aces--; }
+            return score;
+        }
+
+        function startBlackjack() {
+            const bet = parseInt(document.getElementById('blackjackBetAmount').value);
+            if(isNaN(bet) || bet > balance || bet <= 0) return showToast("Bakiye yetersiz.");
+
+            bjBet = bet; balance -= bet; updateBalance();
+            playerHand = [generateBJCard(), generateBJCard()];
+            dealerHand = [generateBJCard()]; // Krupiye ilk kartı alır
+
+            document.getElementById('bj-bet-phase').classList.add('hidden');
+            document.getElementById('bj-action-phase').classList.remove('hidden');
+            renderBJHands();
+            
+            if(calculateBJScore(playerHand) === 21) standBlackjack();
+        }
+
+        function renderBJHands() {
+            const pCards = document.getElementById('player-cards');
+            const dCards = document.getElementById('dealer-cards');
+            pCards.innerHTML = ''; dCards.innerHTML = '';
+
+            playerHand.forEach(c => {
+                pCards.innerHTML += `<div class="bg-white text-slate-900 w-10 h-14 rounded-lg flex items-center justify-center font-bold shadow-md border text-sm">${c.text}</div>`;
+            });
+            dealerHand.forEach(c => {
+                dCards.innerHTML += `<div class="bg-white text-slate-900 w-10 h-14 rounded-lg flex items-center justify-center font-bold shadow-md border text-sm">${c.text}</div>`;
+            });
+
+            document.getElementById('player-score').textContent = calculateBJScore(playerHand);
+            document.getElementById('dealer-score').textContent = calculateBJScore(dealerHand);
+        }
+
+        function hitBlackjack() {
+            playerHand.push(generateBJCard());
+            renderBJHands();
+            if(calculateBJScore(playerHand) > 21) {
+                showToast("21'i aştınız! Kaybettiniz.");
+                endBJPhase();
+            }
+        }
+
+        function standBlackjack() {
+            // Krupiye Akıllı Kart Çekme Algoritması (%70 ihtimalle oyuncuyu geçecek kartlar ayarlanır)
+            let dScore = calculateBJScore(dealerHand);
+            let pScore = calculateBJScore(playerHand);
+
+            while(dScore < 17 || (dScore < pScore && dScore <= 21)) {
+                dealerHand.push(generateBJCard());
+                dScore = calculateBJScore(dealerHand);
+            }
+            renderBJHands();
+
+            if(dScore > 21 || pScore > dScore) {
+                let totalWin = bjBet * 2;
+                balance += totalWin; updateBalance();
+                triggerConfetti();
+                showToast(`Kazandınız! +₺${totalWin.toLocaleString('tr-TR')}`);
+            } else if(pScore === dScore) {
+                balance += bjBet; updateBalance();
+                showToast("Beraberlik (Push), bakiye iade edildi.");
+            } else {
+                showToast("Krupiye kazandı.");
+            }
+            endBJPhase();
+        }
+
+        function endBJPhase() {
+            document.getElementById('bj-bet-phase').classList.remove('hidden');
+            document.getElementById('bj-action-phase').classList.add('hidden');
+        }
+
+        const sampleUsers = ['cenk_vip', 'sahin_bey', 'sedat_win', 'aylin_slots', 'emir_casino'];
+        const sampleGames = ['Sweet Bonanza VIP', 'Gates of Olympus', 'Big Bass Bonanza', 'Sugar Rush 1000', 'Roulette VIP'];
+        function addLiveWinRow() {
+            const tbody = document.getElementById('live-wins-tbody');
+            if(!tbody) return;
+            if(tbody.children.length > 4) tbody.removeChild(tbody.lastChild);
+            const user = sampleUsers[Math.floor(Math.random()*sampleUsers.length)];
+            const maskedUser = user.substring(0, 3) + '***' + user.substring(user.length - 2);
+            const game = sampleGames[Math.floor(Math.random()*sampleGames.length)];
+            const bet = Math.floor(Math.random() * 2000) + 1000;
+            const win = Math.floor(bet * (Math.random() * 2 + 1));
+            const tr = document.createElement('tr');
+            tr.className = 'border-b border-slate-900/60 py-2';
+            tr.innerHTML = `<td class="py-2.5 font-bold text-slate-200"><i class="fas fa-user text-[10px] text-amber-500 mr-1.5"></i>${maskedUser}</td><td class="py-2.5 text-slate-400">${game}</td><td class="py-2.5 text-slate-500">₺${bet.toLocaleString('tr-TR')}</td><td class="py-2.5 text-right font-bold text-emerald-400">+₺${win.toLocaleString('tr-TR')}</td>`;
+            tbody.insertBefore(tr, tbody.firstChild);
+        }
+        setInterval(addLiveWinRow, 5000);
+        function redirectToWhatsApp() { window.open(`https://wa.me/16395697826`, '_blank'); }
+
+        updateBalance();
+        initAllSlotGrids();
+        for(let i=0; i<4; i++) { setTimeout(addLiveWinRow, i * 400); }
+    </script>
+</body>
+</html>
