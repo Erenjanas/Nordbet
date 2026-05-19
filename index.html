@@ -1329,7 +1329,7 @@
 
             <!-- Canlı Slot -->
             <div id="game-canlislot" class="game-container hidden">
-                <div class="live-frame-wrapper">
+                <div class="live-frame-wrapper" id="live-slot-wrapper">
                     <div id="slot-loading" class="animated-loading-bg">
                         <div class="relative">
                             <i class="fas fa-circle-notch fa-spin text-6xl text-amber-500 mb-4"></i>
@@ -1343,7 +1343,12 @@
                             <span class="w-8 h-1 bg-amber-500/70 rounded animate-pulse" style="animation-delay: 0.4s"></span>
                         </div>
                     </div>
-                    <iframe src="https://great.com/slots/" class="live-iframe" sandbox="allow-scripts allow-same-origin allow-popups" onload="document.getElementById('slot-loading').style.opacity='0'; setTimeout(()=>{document.getElementById('slot-loading').style.display='none'}, 500)"></iframe>
+                    <iframe id="live-slot-iframe" src="https://great.com/slots/" class="live-iframe" 
+                        allow="fullscreen; autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                        loading="eager"
+                        importance="high"
+                        onload="document.getElementById('slot-loading').style.opacity='0'; setTimeout(()=>{document.getElementById('slot-loading').style.display='none'}, 500)">
+                    </iframe>
                 </div>
             </div>
 
@@ -2656,6 +2661,77 @@
             }
         }
 
+        // === LIVE SLOT MOBILE FIX ===
+        function initLiveSlot() {
+            const iframe = document.getElementById('live-slot-iframe');
+            const wrapper = document.getElementById('live-slot-wrapper');
+
+            if (!iframe || !wrapper) return;
+
+            // Detect mobile device
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                          (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+            // For mobile, use a more compatible approach
+            if (isMobile || isIOS) {
+                // Add sandbox with all necessary permissions for mobile
+                iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation-by-user-activation allow-modals allow-popups-to-escape-sandbox');
+
+                // iOS specific: prevent scrolling issues
+                if (isIOS) {
+                    iframe.style.webkitOverflowScrolling = 'touch';
+                    wrapper.style.webkitOverflowScrolling = 'touch';
+                }
+            }
+
+            // Retry loading if failed
+            let loadAttempts = 0;
+            const maxAttempts = 3;
+
+            function checkLoad() {
+                loadAttempts++;
+                try {
+                    // Try to access iframe content to verify it loaded
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+                    if (!iframeDoc || iframeDoc.body.innerHTML === '') {
+                        if (loadAttempts < maxAttempts) {
+                            setTimeout(checkLoad, 2000);
+                        } else {
+                            // Show fallback message
+                            document.getElementById('slot-loading').innerHTML = `
+                                <div class="text-center p-8">
+                                    <i class="fas fa-exclamation-triangle text-4xl text-amber-500 mb-4"></i>
+                                    <p class="text-lg font-bold text-amber-400 mb-2">Canlı Slot Yüklenemedi</p>
+                                    <p class="text-xs text-slate-400 mb-4">Tarayıcı kısıtlamaları nedeniyle iframe yüklenemedi.</p>
+                                    <a href="https://great.com/slots/" target="_blank" 
+                                       class="btn-premium px-6 py-3 rounded-xl text-sm font-bold inline-block">
+                                        <i class="fas fa-external-link-alt mr-2"></i>Tarayıcıda Aç
+                                    </a>
+                                </div>
+                            `;
+                        }
+                    }
+                } catch (e) {
+                    // Cross-origin error expected, means iframe loaded
+                    document.getElementById('slot-loading').style.opacity = '0';
+                    setTimeout(() => {
+                        document.getElementById('slot-loading').style.display = 'none';
+                    }, 500);
+                }
+            }
+
+            iframe.addEventListener('load', function() {
+                setTimeout(checkLoad, 1000);
+            });
+
+            iframe.addEventListener('error', function() {
+                if (loadAttempts < maxAttempts) {
+                    iframe.src = iframe.src;
+                }
+            });
+        }
+
         // === INITIALIZE ALL GAMES ===
         document.addEventListener('DOMContentLoaded', function() {
             initBonanzaGrid();
@@ -2664,6 +2740,7 @@
             initSugarRushGrid();
             initMinesGrid();
             initAviatorCanvas();
+            initLiveSlot();
 
             // Disable blackjack buttons initially
             document.getElementById('bj-hit-btn').disabled = true;
